@@ -7,7 +7,7 @@
     <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="人难免天生有自怜的情绪，唯有时刻保持清醒，才能看清真正的价值在哪里。">
-    <meta name="keywords"  content="日记, 待办事项, 学习笔记, 思考">
+    <meta name="keywords"  content="待办事项, 学习笔记, 思考随笔">
     <meta name="theme-color" content="#000000">
     
     <title>思过崖 - 晴耕三亩，雨读千年。</title>
@@ -204,8 +204,364 @@
 -->
 
 
+<div class="post-preview">
+    <a href="/2021/09/09/Matrix/">
+        <h2 class="post-title">
+            矩阵求导笔记
+        </h2>
+        
+        <div class="post-content-preview">
+            
+
+
+
+Matrix
+
+计算字典 Matrix Cook Book
+
+微分法则
+
+\[\begin{aligned}
+	&amp;转置&amp; &amp;\mathbf{d}(\boldsymbol{X}^T)=(\mathbf{d}\boldsymbol{X})^T\\
+	&amp;迹&amp; &amp;\mathbf{d}\mathrm{tr}(\boldsymbol{X})=\ma...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on September 9, 2021
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2021/09/08/FFT/">
+        <h2 class="post-title">
+            FFT笔记
+        </h2>
+        
+        <h3 class="post-subtitle">
+            (副标题)
+        </h3>
+        
+        <div class="post-content-preview">
+            
+
+
+
+快速傅里叶变换(FFT)
+
+原理介绍
+
+什么是离散傅里叶
+
+\[连续周期信号的傅里叶级数\ c_n=\frac{1}{T}\int_0^Tf(t)e^{-j\frac{2\pi}{T}nt}\mathbf{d}t\]
+
+​		傅里叶变换是用来处理连续系统的，那离散系统如何处理呢？假如 $x(t)$ 为连续系统信号，要转换成离散系统，就要先进行采样，采样频率为 $f_s$，对于连续信号...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on September 8, 2021
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2021/09/04/ML/">
+        <h2 class="post-title">
+            ML读书随笔
+        </h2>
+        
+        <h3 class="post-subtitle">
+            (副标题)
+        </h3>
+        
+        <div class="post-content-preview">
+            
+
+
+
+Machine Learning
+
+多变量线性回归
+
+正规方程
+
+\[\begin{aligned}
+	&amp;&amp; &amp;\theta=(X^TX)^{-1}X^Ty\\
+	&amp;s.t.&amp; &amp;训练集特征矩阵为X，训练集结果为向量y\\
+\end{aligned}\]
+
+正规方程推导过程
+
+\[\begin{aligned}
+	&amp;首先变换&a...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on September 4, 2021
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2021/09/01/HTML/">
+        <h2 class="post-title">
+            HTML学习笔记
+        </h2>
+        
+        <h3 class="post-subtitle">
+            (副标题)
+        </h3>
+        
+        <div class="post-content-preview">
+            
+
+
+
+HTML
+
+&lt;html&gt;
+&lt;body&gt;
+&lt;!--   标题   --&gt;
+&lt;h1&gt;This is a heading&lt;/h1&gt;
+&lt;h2&gt;This is a heading&lt;/h2&gt;
+&lt;h3&gt;This is a heading&lt;/h3&gt;
+&lt;!--   段落   --&gt;
+...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on September 1, 2021
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2021/08/27/Git/">
+        <h2 class="post-title">
+            Git笔记
+        </h2>
+        
+        <h3 class="post-subtitle">
+            Git常用指令
+        </h3>
+        
+        <div class="post-content-preview">
+            Git教程
+
+https://www.liaoxuefeng.com/wiki/896043488029600
+
+时光机穿梭
+
+工作区和暂存区
+
+第一步是用git add把文件添加进去，实际上就是把文件修改添加到暂存区；
+
+第二步是用git commit提交更改，实际上就是把暂存区的所有内容提交到当前分支。
+
+## 添加全局配置
+git config --global user.email ...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on August 27, 2021
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2021/08/21/CS/">
+        <h2 class="post-title">
+            CS读书随笔
+        </h2>
+        
+        <h3 class="post-subtitle">
+            (副标题)
+        </h3>
+        
+        <div class="post-content-preview">
+            
+
+
+
+《计算机是怎样跑起来的》
+
+
+  
+    PIO：parallel I/O中的寄存器：赋予 $B/\overline{A}$ 引脚1则表示选中B端口，反之则表示选中A端口；$C/\overline{D}$​ 引脚C表示Control控制模式，D表示Data数据模式。
+  
+  
+    CPU的A0和A1引脚与内存和PIO均有连接，为了区分访问的对象，需要CPU上MREQ引脚和IO...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on August 21, 2021
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2021/08/20/ANSYS/">
+        <h2 class="post-title">
+            ANSYS
+        </h2>
+        
+        <h3 class="post-subtitle">
+            (副标题)
+        </h3>
+        
+        <div class="post-content-preview">
+            
+
+
+
+安装及使用
+
+
+  Microsoft账户名应为英文
+  Linux平台目前Ubuntu未受支持
+
+
+Geometry
+
+
+  SW作图后导入，推荐$x_T$格式
+  流体域抽取：
+    
+      Fills 内流域：By Cavity不需要流道封闭，而By Caps要求封闭
+      Enclosure 外流域
+    
+  
+
+
+Mesh
+
+注意Physics Prefe...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on August 20, 2021
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2021/08/03/oneAPI/">
+        <h2 class="post-title">
+            oneAPI学习笔记
+        </h2>
+        
+        <h3 class="post-subtitle">
+            (副标题)
+        </h3>
+        
+        <div class="post-content-preview">
+            
+
+
+
+oneAPI
+
+因为项目中有矩阵计算的需要，所以选择了Intel的MKL，想在这里记录一下Intel的oneAPI Base Toolkit学习使用过程。
+
+下载安装
+
+https://software.intel.com/content/www/us/en/develop/tools/oneapi/components/onemkl.html#gs.852ahl
+
+进入官网后注册账...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on August 3, 2021
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2021/08/02/SQL/">
+        <h2 class="post-title">
+            SQL
+        </h2>
+        
+        <h3 class="post-subtitle">
+            (副标题)
+        </h3>
+        
+        <div class="post-content-preview">
+            
+
+
+
+SQL
+
+https://www.liaoxuefeng.com/wiki/1177760294764384
+
+
+  数据关系库  域
+  索引 如何实现
+
+
+
+  DDL：Data Definition Language，允许用户定义数据，也就是创建表、删除表、修改表结构这些操作。通常，DDL由数据库管理员执行。
+  DML：Data Manipulation Language，为...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on August 2, 2021
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2021/07/28/Pyecharts/">
+        <h2 class="post-title">
+            Pyecharts
+        </h2>
+        
+        <h3 class="post-subtitle">
+            (副标题)
+        </h3>
+        
+        <div class="post-content-preview">
+            
+
+
+
+Pyecharts
+
+
+
+配置
+
+phantomjs安装
+
+windows下安装phantomjs实战（亲测有效）-2020年5月2日_lunhui601的博客-CSDN博客
+
+Python - pyecharts：直接将图片保存为 png, pdf, gif 格式的文件 - 共感的艺术 - 博客园 (cnblogs.com)
+
+
+
+Snapshot使用
+
+from snapshot...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on July 28, 2021
+    </p>
+</div>
+<hr>
+
 
 <!-- Pager -->
+
+<ul class="pager">
+    
+    
+    <li class="next">
+        <a href="/page2">Older Posts &rarr;</a>
+    </li>
+    
+</ul>
 
 
     		</div>
@@ -274,7 +630,7 @@
                     <div class="short-about">
                         
                             <a href="/3-about">
-                                <img src="/img/about-HJ.jpg"/>
+                                <img src="/img/avatar.jpg"/>
                             </a>
                         
                         
@@ -302,6 +658,8 @@
                 <hr>
                 <h5>MORE SITES</h5>
                 <ul class="list-inline">
+                    
+                        <li><a href="https://github.com/Chen-WH">GitHub</a></li>
                     
                         <li><a href="https://www.zhihu.com/people/spectre-40">知乎</a></li>
                     

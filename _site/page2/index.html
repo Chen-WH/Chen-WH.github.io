@@ -10,7 +10,7 @@
     <meta name="keywords"  content="待办事项, 学习笔记, 思考随笔">
     <meta name="theme-color" content="#000000">
     
-    <title>ML读书随笔 - 思过崖 - 晴耕三亩，雨读千年。</title>
+    <title>思过崖 - 晴耕三亩，雨读千年。</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -22,7 +22,7 @@
     <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://Chen-WH.github.io/2021/09/04/ML/">
+    <link rel="canonical" href="https://Chen-WH.github.io/page2/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -156,214 +156,527 @@
 </script>
 
 
-    <!-- Image to hack wechat -->
-<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
-<!-- <img src="/img/the-first.png" width="0" height="0"> -->
-
-<!-- Post Header -->
-<style type="text/css">
-    header.intro-header{
-        position: relative;
-        background-image: url('/img/the-first.png')
-    }
-
-    
-</style>
-<header class="intro-header" >
-    <div class="header-mask"></div>
+    <!-- Page Header -->
+<header class="intro-header" style="background-image: url('/img/post-bg-desk.jpg')">
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="post-heading">
-                    <div class="tags">
-                        
-                        <a class="tag" href="/2-tags/#Essay" title="Essay">Essay</a>
-                        
-                    </div>
-                    <h1>ML读书随笔</h1>
-                    
-                    
-                    <h2 class="subheading">(副标题)</h2>
-                    
-                    <span class="meta">Posted by ChenWH on September 4, 2021</span>
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
+                <div class="site-heading">
+                    <h1>思过崖</h1>
+                    <!--<hr class="small">-->
+                    <span class="subheading">人难免天生有自怜的情绪，唯有时刻保持清醒，才能看清真正的价值在哪里。</span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Post Content -->
-<article>
-    <div class="container">
-        <div class="row">
-
-    <!-- Post Container -->
-            <div class="
-                col-lg-8 col-lg-offset-2
-                col-md-10 col-md-offset-1
-                post-container">
-
-				<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-      processEscapes: true
-    }
-  });
-</script>
-
-<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
-
-<h1 id="machine-learning">Machine Learning</h1>
-
-<h2 id="多变量线性回归">多变量线性回归</h2>
-
-<h3 id="正规方程">正规方程</h3>
-
-\[\begin{aligned}
-	&amp;&amp; &amp;\theta=(X^TX)^{-1}X^Ty\\
-	&amp;s.t.&amp; &amp;训练集特征矩阵为X，训练集结果为向量y\\
-\end{aligned}\]
-
-<h3 id="正规方程推导过程">正规方程推导过程</h3>
-
-\[\begin{aligned}
-	&amp;首先变换&amp; J(\theta)&amp;=\frac{1}{2}(X\theta-y)^T(X\theta-y)\\
-	&amp;&amp; &amp;=\frac{1}{2}(\theta^TX^TX\theta-\theta^TX^Ty-y^TX\theta-y^Ty)\\
-	&amp;矩阵求导法则&amp; &amp;\frac{\mathbf{d}AB}{\mathbf{d}B}=A^T&amp; &amp;\frac{\mathbf{d}X^TAX}{\mathbf{d}X}=2AX\\
-	&amp;得到&amp; \frac{\partial{J(\theta)}}{\partial \theta}&amp;=\frac{1}{2}(2X^TX\theta-X^Ty)
-\end{aligned}\]
-
-
-
-                <hr style="visibility: hidden;">
-
-                <ul class="pager">
-                    
-                    <li class="previous">
-                        <a href="/2021/09/01/HTML/" data-toggle="tooltip" data-placement="top" title="HTML学习笔记">
-                        Previous<br>
-                        <span>HTML学习笔记</span>
-                        </a>
-                    </li>
-                    
-                    
-                    <li class="next">
-                        <a href="/2021/09/08/FFT/" data-toggle="tooltip" data-placement="top" title="FFT笔记">
-                        Next<br>
-                        <span>FFT笔记</span>
-                        </a>
-                    </li>
-                    
-                </ul>
-
-
-                <!--Gitalk评论start  -->
-                
-                <!-- 引入Gitalk评论插件  -->
-                <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-                <script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
-                <div id="gitalk-container"></div>
-                <!-- 引入一个生产md5的js，用于对id值进行处理，防止其过长 -->
-                <!-- Thank DF:https://github.com/NSDingFan/NSDingFan.github.io/issues/3#issuecomment-407496538 -->
-                <script src="/js/md5.min.js"></script>
-                <script type="text/javascript">
-                    var gitalk = new Gitalk({
-                    clientID: 'd18b343dd9c7ca49518a',
-                    clientSecret: '539e88b8a7feffaddbb553b9c421dfefcbc6eced',
-                    repo: 'Chen-WH.github.io',
-                    owner: 'Chen-WH',
-                    admin: ['Chen-WH'],
-                    distractionFreeMode: true,
-                    id: md5(location.pathname),
-                    });
-                    gitalk.render('gitalk-container');
-                </script>
-                
-                <!-- Gitalk end -->
-
-                
-
-            </div>  
-
-    <!-- Side Catalog Container -->
-        
-            <div class="
-                col-lg-2 col-lg-offset-0
-                visible-lg-block
-                sidebar-container
-                catalog-container">
-                <div class="side-catalog">
-                    <hr class="hidden-sm hidden-xs">
-                    <h5>
-                        <a class="catalog-toggle" href="#">CATALOG</a>
-                    </h5>
-                    <ul class="catalog-body"></ul>
-                </div>
-            </div>
+<!-- Main Content -->
+<div class="container">
+	<div class="row">
         
 
+<!-- USE SIDEBAR -->
+    <!-- PostList Container -->
+    		<div class="
+                col-lg-8 col-lg-offset-1
+                col-md-8 col-md-offset-1
+                col-sm-12
+                col-xs-12
+                postlist-container
+            ">
+    			<!--
+<ul class="pager">
+  
+    <li class="next">
+        <a href="https://klovien.github.io/1-resources/" data-toggle="tooltip" data-placement="top" title="学习资料集">
+                        开始学习<br>
+        </a>
+    </li>           
+  
+    <li class="next">
+        <a href="https://klovien.github.io/2018/12/10/三叶语简介/" data-toggle="tooltip" data-placement="top" title="三叶语简介">
+                        了解更多<br>
+        </a>
+    </li>
+                    
+</ul>
+-->
+
+
+<div class="post-preview">
+    <a href="/2021/07/17/Quaternion/">
+        <h2 class="post-title">
+            Quaternion
+        </h2>
+        
+        <h3 class="post-subtitle">
+            (副标题)
+        </h3>
+        
+        <div class="post-content-preview">
+            
+
+
+
+四元数与空间旋转
+
+欧拉角
+
+
+
+Roll桶滚，Pitch俯仰，Yaw偏航
+
+万向节死锁
+
+
+
+（图示为万向节）当俯角为±90时，整个旋转表示系统被限制在只能绕竖直轴旋转，丢失了一个表示维度。称为万向节死锁，并不是说不能旋转了，而是会导致旋转不自然。要规避万向节死锁，需要选择合适的旋转顺序。在编程中很难规避死锁问题，所以需要引入四元数
+
+四元数
+
+参考资料：https://githu...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on July 17, 2021
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2021/07/12/Gazebo_ROS/">
+        <h2 class="post-title">
+            Gazebo/ROS
+        </h2>
+        
+        <h3 class="post-subtitle">
+            (副标题)
+        </h3>
+        
+        <div class="post-content-preview">
+            
+
+
+
+配置安装
+
+Ubuntu18.04安装PX4并与ROS联合实验_boyhoodme的博客-CSDN博客_ubuntu18.04安装px4
+
+ROS安装
+
+http://wiki.ros.org/Installation/Ubuntu  注意版本号，完全安装即可，包含Gazebo
+
+Gazebo与ROS连接
+
+https://www.geek-share.com/detail/2807...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on July 12, 2021
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2021/07/01/Windows/">
+        <h2 class="post-title">
+            Windows配置
+        </h2>
+        
+        <h3 class="post-subtitle">
+            (副标题)
+        </h3>
+        
+        <div class="post-content-preview">
+            Windows配置笔记
+
+
+  acrobat
+  faststone
+  formatfactory
+  bandizip
+  腾讯会议
+  clash
+  potplayer
+  typora
+  迅雷
+  百度网盘
+  endnote
+  UU
+  steam
+  雷电模拟器
+  VS
+  VScode
+  CAD
+  SW
+  PR
+  MATLAB
+  MMA
+  几何画板
+  A...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on July 1, 2021
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2021/06/13/NO/">
+        <h2 class="post-title">
+            Numerical Optimization
+        </h2>
+        
+        <h3 class="post-subtitle">
+            最优化读书笔记
+        </h3>
+        
+        <div class="post-content-preview">
+            
+
+
+
+第一章 引论
+
+问题背景
+
+\[\begin{aligned}
+	\min\ &amp;f(x)\\
+	s.t.\ &amp;c_i(x)=0,\ \ i\in E\\
+	      &amp;c_i(x)\geq0,\ \ i\in I\\
+	      
+\end{aligned}\]
+
+
+
+第二章 一维搜索
+
+精确一维搜索
+
+直接方法
+
+$0.618$法和$Fibonacci$...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on June 13, 2021
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2021/06/13/C_C++/">
+        <h2 class="post-title">
+            C/C++笔记
+        </h2>
+        
+        <h3 class="post-subtitle">
+            (副标题)
+        </h3>
+        
+        <div class="post-content-preview">
+            
+
+
+
+https://blog.csdn.net/MaybeTnT/article/details/109841378?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.control&amp;dist_request_id=1328602.40184.16150835415...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on June 13, 2021
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2021/05/25/Matlab/">
+        <h2 class="post-title">
+            Matlab
+        </h2>
+        
+        <h3 class="post-subtitle">
+            (副标题)
+        </h3>
+        
+        <div class="post-content-preview">
+            
+
+
+
+Matlab
+
+Matlab基础
+
+基础操作建议《Matlab揭秘》
+
+
+
+Matlab进阶
+
+进阶操作建议官网文档，一般随用随查。
+
+MATLAB Documentation - MathWorks 中国
+
+
+
+数据读写
+
+fid = fopen("1.txt", 'a');   % 要想存的文件名是自己输入的，这个地方就得这样写
+fprintf(fid,'%d\t%d\t%d\r...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on May 25, 2021
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2021/04/24/SQP/">
+        <h2 class="post-title">
+            SQP
+        </h2>
+        
+        <h3 class="post-subtitle">
+            顺序二次规划
+        </h3>
+        
+        <div class="post-content-preview">
+            
+
+
+
+理论部分
+Background
+
+\[\begin{aligned}
+	\min\ &amp;f(\boldsymbol{x})\\
+	s.t.\ &amp;h_i(\boldsymbol{x})=0,\ \ i\in E\\
+	      &amp;g_i(\boldsymbol{x})\leq0,\ \ i\in I\\
+\end{aligned}\\
+E和I分别是等式约束的指标...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on April 24, 2021
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2021/04/24/GPM/">
+        <h2 class="post-title">
+            GPM
+        </h2>
+        
+        <h3 class="post-subtitle">
+            高斯伪谱法
+        </h3>
+        
+        <div class="post-content-preview">
+            
+
+
+
+GPM
+
+
+问题陈述
+
+\[\min\ J=\int_0^{t_f}h(\boldsymbol{x}(t),\boldsymbol{u}(t),t)\boldsymbol{d}t\\
+s.t.\ \boldsymbol{\dot{x}}=\boldsymbol{f}(\boldsymbol{x}(t),\boldsymbol{u}(t),\boldsymbol{x}(0))=\bol...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on April 24, 2021
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2021/04/20/Ubuntu/">
+        <h2 class="post-title">
+            Ubuntu配置
+        </h2>
+        
+        <h3 class="post-subtitle">
+            (副标题)
+        </h3>
+        
+        <div class="post-content-preview">
+            
+
+
+
+Ubuntu
+
+Ubuntu开机自启小键盘
+
+https://blog.csdn.net/artourins/article/details/86411786
+
+sudo -i
+su gdm -s /bin/bash
+gsettings set org.gnome.settings-daemon.peripherals.keyboard numlock-state 'on'
+
+
+软链...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on April 20, 2021
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2021/02/06/Python_igraph/">
+        <h2 class="post-title">
+            Igraph
+        </h2>
+        
+        <h3 class="post-subtitle">
+            Python
+        </h3>
+        
+        <div class="post-content-preview">
+            
+
+
+
+Python-igraph
+
+官网：Tutorial (igraph.org)
+
+
+
+创建图形
+
+g = Graph()
+g = Graph.Full(10)  #满边图
+#添加顶点
+add_vertices(3)
+#添加边
+add_edges()[(0,1), (1,2)]
+#顶点数、边数和图形的名称；summary略去边列表
+print(g)
+summary(g)
+#删除边及顶点...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on February 6, 2021
+    </p>
+</div>
+<hr>
+
+
+<!-- Pager -->
+
+<ul class="pager">
+    
+    <li class="previous">
+        <a href="/">&larr; Newer Posts</a>
+    </li>
+    
+    
+</ul>
+
+
+    		</div>
     <!-- Sidebar Container -->
             <div class="
-                col-lg-8 col-lg-offset-2
-                col-md-10 col-md-offset-1
-                sidebar-container">
-
+                col-lg-3 col-lg-offset-0
+                col-md-3 col-md-offset-0
+                col-sm-12
+                col-xs-12
+                sidebar-container
+            ">
                 <!-- Featured Tags -->
                 
                 <section>
                     <hr class="hidden-sm hidden-xs">
                     <h5><a href="/2-tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
-        				
+                        
                             
-                				<a href="/2-tags/#Visualization" title="Visualization" rel="2">
+                                <a href="/2-tags/#Visualization" title="Visualization" rel="2">
                                     Visualization
                                 </a>
                             
-        				
+                        
                             
-                				<a href="/2-tags/#Note" title="Note" rel="3">
+                                <a href="/2-tags/#Note" title="Note" rel="3">
                                     Note
                                 </a>
                             
-        				
+                        
                             
-                				<a href="/2-tags/#Math" title="Math" rel="6">
+                                <a href="/2-tags/#Math" title="Math" rel="6">
                                     Math
                                 </a>
                             
-        				
+                        
                             
-        				
+                        
                             
-                				<a href="/2-tags/#Coding" title="Coding" rel="2">
+                                <a href="/2-tags/#Coding" title="Coding" rel="2">
                                     Coding
                                 </a>
                             
-        				
+                        
                             
-        				
+                        
                             
-        				
+                        
                             
-        				
+                        
                             
-                				<a href="/2-tags/#Essay" title="Essay" rel="2">
+                                <a href="/2-tags/#Essay" title="Essay" rel="2">
                                     Essay
                                 </a>
                             
-        				
+                        
                             
-        				
-        			</div>
+                        
+                    </div>
                 </section>
                 
 
+                <!-- Short About -->
+                <section class="visible-md visible-lg">
+                    <hr><h5><a href="/3-about/">ABOUT ME</a></h5>
+                    <div class="short-about">
+                        
+                            <a href="/3-about">
+                                <img src="/img/avatar.jpg"/>
+                            </a>
+                        
+                        
+                            <p>Goals determine what you're going to be!</p>
+                        
+                        <!-- SNS Link -->
+                        <ul class="list-inline">
+                            
+                            <!-- add jianshu add target = "_blank" to <a> by BY -->
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                        </ul>
+                        
+                            <p>✉️ 1773904345@qq.com</p>
+                        
+                    </div>
+                </section>
                 <!-- Friends Blog -->
                 
                 <hr>
-                <h5>FRIENDS</h5>
+                <h5>MORE SITES</h5>
                 <ul class="list-inline">
                     
                         <li><a href="https://github.com/Chen-WH">GitHub</a></li>
@@ -372,51 +685,10 @@
                     
                 </ul>
                 
-            </div>
-        </div>
-    </div>
-</article>
-
-
-
-
-
-
-<!-- async load function -->
-<script>
-    function async(u, c) {
-      var d = document, t = 'script',
-          o = d.createElement(t),
-          s = d.getElementsByTagName(t)[0];
-      o.src = u;
-      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
-      s.parentNode.insertBefore(o, s);
-    }
-</script>
-<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
-<script>
-    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
-        // BY Fix:去除标题前的‘#’ issues:<https://github.com/qiubaiying/qiubaiying.github.io/issues/137>
-        // anchors.options = {
-        //   visible: 'always',
-        //   placement: 'right',
-        //   icon: '#'
-        // };
-        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
-    })
-</script>
-<style>
-    /* place left on bigger screen */
-    @media all and (min-width: 800px) {
-        .anchorjs-link{
-            position: absolute;
-            left: -0.75em;
-            font-size: 1.1em;
-            margin-top : -0.1em;
-        }
-    }
-</style>
-
+    		</div>
+        
+	</div>
+</div>
 
 
     <!-- Footer -->
@@ -542,50 +814,6 @@
 
 
 <!-- Side Catalog -->
-
-<script type="text/javascript">
-    function generateCatalog (selector) {
-        var P = $('div.post-container'),a,n,t,l,i,c;
-        a = P.find('h1,h2,h3,h4,h5,h6');
-        a.each(function () {
-            n = $(this).prop('tagName').toLowerCase();
-            i = "#"+$(this).prop('id');
-            t = $(this).text();
-            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
-            l = $('<li class="'+n+'_nav"></li>').append(c);
-            $(selector).append(l);
-        });
-        return true;    
-    }
-
-    generateCatalog(".catalog-body");
-
-    // toggle side catalog
-    $(".catalog-toggle").click((function(e){
-        e.preventDefault();
-        $('.side-catalog').toggleClass("fold")
-    }))
-
-    /*
-     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
-     * Fork by Hux to support padding
-     */
-    async("/js/jquery.nav.js", function () {
-        $('.catalog-body').onePageNav({
-            currentClass: "active",
-            changeHash: !1,
-            easing: "swing",
-            filter: "",
-            scrollSpeed: 700,
-            scrollOffset: 0,
-            scrollThreshold: .2,
-            begin: null,
-            end: null,
-            scrollChange: null,
-            padding: 80
-        });
-    });
-</script>
 
 
 
