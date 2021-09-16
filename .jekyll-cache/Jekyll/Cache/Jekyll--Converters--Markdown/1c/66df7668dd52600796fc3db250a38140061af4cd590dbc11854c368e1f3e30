@@ -1,0 +1,177 @@
+I"h<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+<h1 id="ubuntu">Ubuntu</h1>
+
+<h2 id="ubuntu开机自启小键盘">Ubuntu开机自启小键盘</h2>
+
+<p>https://blog.csdn.net/artourins/article/details/86411786</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo</span> <span class="nt">-i</span>
+su gdm <span class="nt">-s</span> /bin/bash
+gsettings <span class="nb">set </span>org.gnome.settings-daemon.peripherals.keyboard numlock-state <span class="s1">'on'</span>
+</code></pre></div></div>
+
+<h2 id="软链接">软链接</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">ln</span> <span class="nt">-s</span> ~/OneDrive/ ./
+</code></pre></div></div>
+
+<h2 id="更新">更新</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt-get update: 升级安装包相关的命令,刷新可安装的软件列表<span class="o">(</span>但是不做任何实际的安装动作<span class="o">)</span>
+
+<span class="nb">sudo </span>apt-get upgrade: 进行安装包的更新<span class="o">(</span>软件版本的升级<span class="o">)</span>
+
+<span class="nb">sudo </span>apt-get dist-upgrade: 进行系统版本的升级<span class="o">(</span>Ubuntu版本的升级<span class="o">)</span>
+
+<span class="nb">sudo </span><span class="k">do</span><span class="nt">-release-upgrade</span>: Ubuntu官方推荐的系统升级方式,若加参数-d还可以升级到开发版本,但会不稳定
+</code></pre></div></div>
+
+<h2 id="隐藏echo">隐藏echo</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>您可以重定向任何程序的输出，使其不会被看到。
+
+<span class="nv">$ </span>program <span class="o">&gt;</span> /dev/null
+这将重定向标准输出-您仍然会看到任何错误
+
+<span class="nv">$ </span>program &amp;&gt; /dev/null
+这将重定向所有输出，包括错误
+</code></pre></div></div>
+
+<h2 id="tmux">tmux</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Ctrl+B 方向键 换窗口
+Ctrl+B shift+5 左右分割
+Ctrl+B shift+' 上下分割
+Ctrl+B x 关闭当前窗口
+</code></pre></div></div>
+
+<h2 id="simplescreenrecorder">SimpleScreenRecorder</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>add-apt-repository ppa:maarten-baert/simplescreenrecorder
+<span class="nb">sudo </span>apt-get update
+<span class="nb">sudo </span>apt-get <span class="nb">install </span>simplescreenrecorder
+</code></pre></div></div>
+
+<h2 id="onedrive">Onedrive</h2>
+
+<p>https://github.com/abraunegg/onedrive</p>
+
+<h2 id="wps-office">WPS office</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt remove libreoffice-common
+</code></pre></div></div>
+
+<p>而后官网安装即可</p>
+
+<h2 id="微信qq">微信/QQ</h2>
+
+<p>https://github.com/zq1997/deepin-wine</p>
+
+<h2 id="shutter">Shutter</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>__安装依赖包__
+打开网站
+http://launchpadlibrarian.net/226687719/libgoocanvas-common_1.0.0-1_all.deb
+http://launchpadlibrarian.net/226687722/libgoocanvas3_1.0.0-1_amd64.deb
+http://launchpadlibrarian.net/330848267/libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
+
+__开始安装__
+sudo dpkg -i libgoocanvas-common_1.0.0-1_all.deb
+sudo dpkg -i libgoocanvas3_1.0.0-1_amd64.deb
+sudo dpkg -i libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb 
+sudo apt -f install     修复依赖
+sudo apt-get install shutter
+
+__删除卸载__
+sudo apt-get remove shutter
+sudo add-apt-repository --remove ppa:linuxuprising/shutter
+</code></pre></div></div>
+
+<p><img src="1585117-20191020004658876-1968565684.png" alt="img" /></p>
+
+<h2 id="freecad">FreeCAD</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>add-apt-repository ppa:freecad-maintainers/freecad-stable
+<span class="nb">sudo </span>apt-get update
+<span class="nb">sudo </span>apt <span class="nb">install </span>freecad
+
+这个PPA源不太稳定，如果遇到下载失败会提示加 <span class="nt">--fix-missing</span>
+也就是重新执行命令   <span class="nb">sudo </span>apt <span class="nb">install </span>freecad <span class="nt">--fix-missing</span>
+
+安装gmsh，有限元分析需要用到网格划分
+<span class="nb">sudo </span>apt <span class="nb">install </span>gmsh
+安装calculix，有限元求解
+<span class="nb">sudo </span>apt <span class="nb">install </span>calculix-ccx
+</code></pre></div></div>
+
+<h2 id="搜狗拼音输入法">搜狗拼音输入法</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>安装Fcitx输入框架
+sudo apt install fcitx
+官网安装搜狗拼音输入法
+</code></pre></div></div>
+
+<p>按照官网设置后，将当前用户进行注销后再进行登录（注销没有效果，重启就可以了）。</p>
+
+<p>登陆后在右上角出现一个键盘标志，点击进入，选择Configure Current Input Method</p>
+
+<p>进入下面的Input Method界面后，选择+号</p>
+
+<p>进入到Add input method界面，将下面的Only Show Current Language 点掉后，在搜索栏搜索搜狗拼音，选中之后进行添加。添加成功后，将搜狗拼音移到第一位。</p>
+
+<h2 id="matlab">MATLAB</h2>
+
+<p>https://www.cnblogs.com/MingruiYu/p/12367846.html</p>
+
+<h2 id="goldendict">Goldendict</h2>
+
+<p>http://einverne.github.io/post/2018/08/goldendict.html</p>
+
+<p>https://github.com/skywind3000/ECDICT/wiki/%E7%AE%80%E6%98%8E%E8%8B%B1%E6%B1%89%E5%AD%97%E5%85%B8%E5%A2%9E%E5%BC%BA%E7%89%88   离线字典链接</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt-get <span class="nb">install </span>goldendict
+</code></pre></div></div>
+
+<h2 id="anbox安卓模拟器">Anbox(安卓模拟器)</h2>
+
+<p>https://docs.anbox.io/userguide/install.html</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>adb <span class="nb">install </span>my-app.apk
+</code></pre></div></div>
+
+<h2 id="gnome-shell-extension">gnome-shell-extension</h2>
+
+<p>plank (dock)</p>
+
+<ol>
+  <li>bing wallpaper</li>
+  <li>clipboard indicator</li>
+  <li>lock key</li>
+  <li>openweather</li>
+  <li>removable drive menu</li>
+  <li>screenshot tool</li>
+  <li>topicon plus</li>
+  <li>ubuntu appindicator</li>
+  <li>user themes</li>
+  <li>vitals</li>
+  <li>ubuntu dock</li>
+</ol>
+
+<h2 id="主题美化">主题美化</h2>
+
+<p>https://zhuanlan.zhihu.com/p/71588449</p>
+
+<h2 id="vim设置">Vim设置</h2>
+
+<p>https://www.ruanyifeng.com/blog/2018/09/vimrc.html</p>
+:ET

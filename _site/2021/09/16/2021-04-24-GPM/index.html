@@ -1,0 +1,199 @@
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+<h1 id="gpm">GPM</h1>
+
+<hr />
+<h2 id="问题陈述">问题陈述</h2>
+
+\[\min\ J=\int_0^{t_f}h(\boldsymbol{x}(t),\boldsymbol{u}(t),t)\boldsymbol{d}t\\
+s.t.\ \boldsymbol{\dot{x}}=\boldsymbol{f}(\boldsymbol{x}(t),\boldsymbol{u}(t),\boldsymbol{x}(0))=\boldsymbol{x_0}\\
+\text{式中：}\boldsymbol{\dot{x}}=\boldsymbol{f}(\boldsymbol{x}(t),\boldsymbol{u}(t))=[x_3,x_4,gu_2-c_1x_5,u_1-g-c_2x_5,gu_2-c_1x_5]^T\\
+h=\frac{1}{2}(u_1-g)^2+\frac{1}{2}u_2^2+k_1(x_1+3)^2+k_2(x_2+x_1u_2)^2\\
+t_f=2,g=9.8,k_1=k_2=50,c_1=1.5,c_2=0.38\]
+
+<hr />
+
+<h2 id="continuous-bolza-problem">Continuous Bolza Problem</h2>
+
+\[\begin{aligned}
+	&amp;J=\Phi\left[\mathbf{x}(-1), t_{0}, \mathbf{x}(1), t_{f}\right]+\frac{t_{f}-t_{0}}{2} \int_{-1}^{1} g\left[\mathbf{x}(\tau), \mathbf{u}(\tau), \tau ; t_{0}, t_{f}\right] \mathrm{d} \tau\ \ \ (目标函数)\\
+	&amp;\frac{\mathrm{d} \mathbf{x}}{\mathrm{d} \tau}=\frac{t_{f}-t_{0}}{2} \mathbf{f}\left[\mathbf{x}(\tau), \mathbf{u}(\tau), \tau ; t_{0}, t_{f}\right] \\
+	&amp;\phi\left[\mathbf{x}(-1), t_{0}, \mathbf{x}(1), t_{f}\right]=\mathbf{0} \in \mathbb{R}^{q}\ \ \ (边界约束) \\
+	&amp;\mathbf{C}\left[\mathbf{x}(\tau), \mathbf{u}(\tau), \tau ; t_{0}, t_{f}\right] \leq \mathbf{0} \in \mathbb{R}^{c}\ \ \ (路径约束)
+\end{aligned}\]
+
+<p>$\mathbf{x}(\tau)状态函数，\mathbf{u}(\tau)控制函数求取极值$</p>
+
+<hr />
+
+<h2 id="问题化简">问题化简</h2>
+
+<ol>
+  <li>拉格朗日插值多项式，化简$\mathbf{x}(\tau)和\mathbf{u}(\tau)$</li>
+</ol>
+
+\[\begin{aligned}
+	&amp;\sum_{i=0}^{N} D_{k i} \mathbf{X}_{i}-\frac{t_{f}}{2} \mathbf{f}\left(\mathbf{X}_{k}, \mathbf{U}_{k}, \tau_{k} ; t_{0}, t_{f}\right)=\mathbf{0} \quad(k=1, \ldots, N)\\
+	
+\Longrightarrow&amp;\sum^{N}_{i=0}X_{\tau_{i}}\left[\sum^{N}_{l=0,l\not=i}\frac{\prod^{N}_{j=0,j\not=i,l}(\tau_{k}-\tau_{j})}{\prod^{N}_{j=0,j\not=i}(\tau_{i}-\tau_{j})} \right] -\frac{t_{f}}{2}X_{\tau_{k}}=0\\
+\end{aligned}\]
+
+<ol>
+  <li>计算微分逼近矩阵$D$和高斯权重$w$，其中LG点$\tau$由legendre多项式取零点得到</li>
+</ol>
+
+<p>\(D_{ki}=\sum^{N}_{l=0,l\not=i}\frac{\prod^{N}_{j=0,j\not=i,l}(\tau_{k}-\tau_{j})}{\prod^{N}_{j=0,j\not=i}(\tau_{i}-\tau_{j})}\\
+	w_{i}=\frac{2}{(1-\tau_{i}^2)\left[ P_n'(\tau_i)^2\right]},其中P_n(\tau)=\prod_{1\leq i\leq N}(\tau-\tau_i)\)
+\(\begin{aligned}
+	\mathbf{X}_{f} &amp;\equiv \mathbf{X}_{0}+\frac{t_{f}-t_{0}}{2} \sum_{k=1}^{N} w_{k} \mathbf{f}\left(\mathbf{X}_{k}, \mathbf{U}_{k}, \tau_{k} ; t_{0}, t_{f}\right)\\
+	J&amp;=\Phi\left(\mathbf{X}_{0}, t_{0}, \mathbf{X}_{f}, t_{f}\right)+\frac{t_{f}-t_{0}}{2} \sum_{k=1}^{N} w_{k} g\left(\mathbf{X}_{k}, \mathbf{U}_{k}, \tau_{k} ; t_{0}, t_{f}\right)
+\end{aligned}\)</p>
+
+<ol>
+  <li>原连续Bolza问题转化为NLP如下</li>
+</ol>
+
+\[\begin{aligned}
+	min\ J&amp;=\frac{t_{f}}{2} w^T\left[ \frac{1}{2}(U_1-g)\odot(U_1-g)+\frac{1}{2}U_2\odot U_2+k_1(X_1+3)\odot(X_1+3)+k_2(X_1\odot U_2+X_2)\odot(X_1\odot U_2+X_2) \right]\\
+	s.t.&amp;D\widetilde X_1-\frac{t_f}{2}X_3=0 \\
+	&amp;D\widetilde X_2-\frac{t_f}{2}X_4=0\\
+	&amp;D\widetilde X_3-\frac{t_f}{2}(gU_2-c_1X_5)=0\\
+	&amp;D\widetilde X_4-\frac{t_f}{2}(U_1-g-c_2X_5)=0\\
+	&amp;D\widetilde X_5-\frac{t_f}{2}(gU_2-c_1X_5)=0\\
+\end{aligned}\]
+
+<p>其中$\odot$为数组乘法,$\widetilde X_i$为$X$的拓展矩阵，即$\widetilde X_i=[X_{0,i};X_i]$</p>
+
+<hr />
+
+<h2 id="规划结果">规划结果</h2>
+
+<p>高斯权重$w$</p>
+
+<p><img src="image-20210119173519786.png" alt="image-20210119173519786" /></p>
+
+<p>矩阵D</p>
+
+<p><img src="image-20210119173649646.png" alt="image-20210119173649646" /></p>
+
+<p>Local minimum
+\(J\approx0.0000000000000110633051702719\)
+<img src="image-20210119174626666.png" alt="image-20210119174626666" /></p>
+
+<p><img src="image-20210119174650393.png" alt="image-20210119174650393" /></p>
+
+<hr />
+
+<h2 id="代码部分">代码部分</h2>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">%%目标函数fun1</span>
+<span class="k">function</span> <span class="p">[</span><span class="n">J</span><span class="p">]</span> <span class="o">=</span> <span class="n">fun1</span><span class="p">(</span><span class="n">variable</span><span class="p">)</span>
+<span class="n">tf</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+<span class="n">g</span><span class="o">=</span><span class="mf">9.8</span><span class="p">;</span>
+<span class="n">k1</span><span class="o">=</span><span class="mi">50</span><span class="p">;</span><span class="n">k2</span><span class="o">=</span><span class="mi">50</span><span class="p">;</span>
+<span class="n">x</span><span class="o">=</span><span class="n">variable</span><span class="p">(:,</span><span class="mi">1</span><span class="p">:</span><span class="mi">5</span><span class="p">);</span>
+<span class="n">u</span><span class="o">=</span><span class="n">variable</span><span class="p">(:,</span><span class="mi">6</span><span class="p">:</span><span class="mi">7</span><span class="p">);</span>
+<span class="nb">load</span><span class="p">(</span><span class="s1">'w.mat'</span><span class="p">,</span><span class="s1">'w'</span><span class="p">);</span>
+<span class="n">J</span><span class="o">=</span><span class="n">tf</span><span class="p">/</span><span class="mi">2</span><span class="o">*</span><span class="n">w</span><span class="o">'*</span><span class="p">(</span> <span class="p">(</span><span class="n">u</span><span class="p">(:,</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="n">g</span><span class="p">)</span><span class="o">.*</span><span class="p">(</span><span class="n">u</span><span class="p">(:,</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="n">g</span><span class="p">)/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">u</span><span class="p">(:,</span><span class="mi">2</span><span class="p">)</span><span class="o">.*</span><span class="n">u</span><span class="p">(:,</span><span class="mi">2</span><span class="p">)/</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span><span class="p">(:,</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">3</span><span class="p">)</span><span class="o">.*</span><span class="p">(</span><span class="n">x</span><span class="p">(:,</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">k1</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span><span class="p">(:,</span><span class="mi">1</span><span class="p">)</span><span class="o">.*</span><span class="n">u</span><span class="p">(:,</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="n">x</span><span class="p">(:,</span><span class="mi">2</span><span class="p">))</span><span class="o">.*</span><span class="p">(</span><span class="n">x</span><span class="p">(:,</span><span class="mi">1</span><span class="p">)</span><span class="o">.*</span><span class="n">u</span><span class="p">(:,</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="n">x</span><span class="p">(:,</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="n">k2</span> <span class="p">);</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">%%约束条件fun2</span>
+<span class="k">function</span> <span class="p">[</span><span class="n">G</span><span class="p">,</span><span class="n">H</span><span class="p">]</span> <span class="o">=</span> <span class="n">fun2</span><span class="p">(</span><span class="n">variable</span><span class="p">)</span>
+<span class="n">tf</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+<span class="n">g</span><span class="o">=</span><span class="mf">9.8</span><span class="p">;</span>
+<span class="n">c1</span><span class="o">=</span><span class="mf">1.5</span><span class="p">;</span><span class="n">c2</span><span class="o">=</span><span class="mf">0.38</span><span class="p">;</span>
+<span class="n">x0</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">];</span>
+<span class="n">x</span><span class="o">=</span><span class="n">variable</span><span class="p">(:,</span><span class="mi">1</span><span class="p">:</span><span class="mi">5</span><span class="p">);</span>
+<span class="n">u</span><span class="o">=</span><span class="n">variable</span><span class="p">(:,</span><span class="mi">6</span><span class="p">:</span><span class="mi">7</span><span class="p">);</span>
+<span class="nb">load</span><span class="p">(</span><span class="s1">'D.mat'</span><span class="p">,</span><span class="s1">'D'</span><span class="p">);</span>
+<span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="n">x0</span><span class="p">;</span><span class="n">x</span><span class="p">];</span>
+<span class="n">G</span><span class="o">=</span><span class="p">[];</span>
+<span class="n">H</span><span class="o">=</span><span class="p">[</span><span class="n">D</span><span class="o">*</span><span class="n">y</span><span class="p">(:,</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="n">tf</span><span class="p">/</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="p">(:,</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">D</span><span class="o">*</span><span class="n">y</span><span class="p">(:,</span><span class="mi">2</span><span class="p">)</span><span class="o">-</span><span class="n">tf</span><span class="p">/</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="p">(:,</span><span class="mi">4</span><span class="p">)</span>
+    <span class="n">D</span><span class="o">*</span><span class="n">y</span><span class="p">(:,</span><span class="mi">3</span><span class="p">)</span><span class="o">-</span><span class="n">tf</span><span class="p">/</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">g</span><span class="o">*</span><span class="n">u</span><span class="p">(:,</span><span class="mi">2</span><span class="p">)</span><span class="o">-</span><span class="n">c1</span><span class="o">*</span><span class="n">x</span><span class="p">(:,</span><span class="mi">5</span><span class="p">))</span>
+    <span class="n">D</span><span class="o">*</span><span class="n">y</span><span class="p">(:,</span><span class="mi">4</span><span class="p">)</span><span class="o">-</span><span class="n">tf</span><span class="p">/</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">u</span><span class="p">(:,</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="n">g</span><span class="o">-</span><span class="n">c2</span><span class="o">*</span><span class="n">x</span><span class="p">(:,</span><span class="mi">5</span><span class="p">))</span>
+    <span class="n">D</span><span class="o">*</span><span class="n">y</span><span class="p">(:,</span><span class="mi">5</span><span class="p">)</span><span class="o">-</span><span class="n">tf</span><span class="p">/</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">g</span><span class="o">*</span><span class="n">u</span><span class="p">(:,</span><span class="mi">2</span><span class="p">)</span><span class="o">-</span><span class="n">c1</span><span class="o">*</span><span class="n">x</span><span class="p">(:,</span><span class="mi">5</span><span class="p">))];</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">%%主函数GPM</span>
+<span class="c1">%%程序初始化</span>
+<span class="nb">clc</span><span class="p">,</span><span class="nb">clear</span><span class="p">;</span>
+<span class="nb">format</span> <span class="n">long</span><span class="p">;</span>
+<span class="c1">%%设定参数</span>
+<span class="n">syms</span> <span class="n">x</span>
+<span class="n">N</span><span class="o">=</span><span class="mi">7</span><span class="p">;</span>
+<span class="n">D</span><span class="o">=</span><span class="nb">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+<span class="c1">%%求取LG点</span>
+<span class="nb">legendre</span><span class="o">=</span><span class="n">legendreP</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="n">x</span><span class="p">);</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="nb">legendre</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span><span class="n">x</span><span class="p">);</span>
+<span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="n">t</span><span class="p">];</span>
+<span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="o">'</span><span class="p">;</span>
+<span class="n">t</span><span class="o">=</span><span class="nb">sort</span><span class="p">(</span> <span class="n">vpa</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="p">);</span>
+<span class="c1">%%求取t_minus矩阵</span>
+<span class="n">t_minus</span><span class="o">=</span><span class="nb">zeros</span><span class="p">(</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+<span class="k">for</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">:</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span>
+    <span class="k">for</span> <span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">:</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span>
+        <span class="n">t_minus</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="o">=</span><span class="n">t</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-</span><span class="n">t</span><span class="p">(</span><span class="n">j</span><span class="p">);</span>
+    <span class="k">end</span>
+<span class="k">end</span>
+<span class="c1">%%求取D矩阵</span>
+<span class="k">for</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">:</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">:</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span>
+        <span class="k">for</span> <span class="n">l</span><span class="o">=</span><span class="mi">1</span><span class="p">:</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span>
+            <span class="k">if</span> <span class="n">l</span><span class="o">==</span><span class="n">i</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="k">else</span>
+            <span class="n">tmp</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+            <span class="k">for</span> <span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">:</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span>
+                <span class="k">if</span> <span class="n">j</span><span class="o">==</span><span class="n">i</span>
+                    <span class="k">continue</span><span class="p">;</span>
+                <span class="k">elseif</span> <span class="n">j</span><span class="o">==</span><span class="n">l</span>
+                        <span class="n">tmp</span><span class="o">=</span><span class="n">tmp</span><span class="p">/</span><span class="n">t_minus</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">);</span>
+                    <span class="k">else</span>
+                        <span class="n">tmp</span><span class="o">=</span><span class="n">tmp</span><span class="o">*</span><span class="n">t_minus</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">)/</span><span class="n">t_minus</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">);</span>
+                <span class="k">end</span>
+            <span class="k">end</span>
+            <span class="n">D</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">i</span><span class="p">)</span><span class="o">=</span><span class="n">D</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="n">tmp</span><span class="p">;</span>
+            <span class="k">end</span>
+        <span class="k">end</span>
+    <span class="k">end</span>
+<span class="k">end</span>
+<span class="nb">save</span><span class="p">(</span><span class="s1">'D.mat'</span><span class="p">,</span><span class="s1">'D'</span><span class="p">);</span>
+<span class="c1">%%求取高斯权重</span>
+<span class="n">w</span> <span class="o">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+<span class="k">for</span> <span class="n">m</span><span class="o">=</span><span class="mi">2</span><span class="p">:</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span>
+    <span class="n">tp</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="n">i</span><span class="o">=</span><span class="mi">2</span><span class="p">:</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span>
+        <span class="n">tmp</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+        <span class="k">for</span> <span class="n">j</span><span class="o">=</span><span class="mi">2</span><span class="p">:</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span>
+            <span class="k">if</span> <span class="n">j</span><span class="o">==</span><span class="n">i</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">tmp</span><span class="o">=</span><span class="n">tmp</span><span class="o">*</span><span class="n">t_minus</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">j</span><span class="p">);</span>
+            <span class="k">end</span>
+        <span class="k">end</span>
+        <span class="n">tp</span><span class="o">=</span><span class="n">tp</span><span class="o">+</span><span class="n">tmp</span><span class="p">;</span>
+    <span class="k">end</span>
+    <span class="n">w</span><span class="p">(</span><span class="n">m</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mi">2</span><span class="p">/(</span><span class="n">tp</span><span class="o">^</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">t</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="p">));</span>
+<span class="k">end</span>
+<span class="n">tmp</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="n">w</span><span class="p">);</span>
+<span class="k">for</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">:</span><span class="n">N</span>
+     <span class="n">w</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="n">w</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">)/</span><span class="n">tmp</span><span class="o">*</span><span class="mi">2</span><span class="p">;</span>
+<span class="k">end</span>
+<span class="nb">save</span><span class="p">(</span><span class="s1">'w.mat'</span><span class="p">,</span><span class="s1">'w'</span><span class="p">);</span>
+<span class="c1">%%进行GPM</span>
+<span class="n">options</span><span class="o">=</span><span class="nb">optimset</span><span class="p">(</span><span class="s1">'largescale'</span><span class="p">,</span><span class="s1">'off'</span><span class="p">);</span>
+<span class="p">[</span><span class="n">variable</span><span class="p">,</span><span class="n">J</span><span class="p">]</span><span class="o">=</span><span class="n">fmincon</span><span class="p">(</span><span class="s1">'fun1'</span><span class="p">,</span><span class="nb">rand</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">7</span><span class="p">),[],[],[],[],[],[],</span><span class="s1">'fun2'</span><span class="p">,</span> <span class="n">options</span><span class="p">);</span>
+</code></pre></div></div>
+

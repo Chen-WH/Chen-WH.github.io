@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="人难免天生有自怜的情绪，唯有时刻保持清醒，才能看清真正的价值在哪里。">
+    <meta name="keywords"  content="日记, 待办事项, 学习笔记, 思考">
+    <meta name="theme-color" content="#000000">
+    
+    <title>Gazebo/ROS - 思过崖 - 晴耕三亩，雨读千年。</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <!-- Safari Webpage Icon    by-BY -->
+    <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://Chen-WH.github.io/2021/07/12/Gazebo_ROS/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">思过崖</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/1-resources/">Resources</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/2-tags/">Blog</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/4-about/">About</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/the-first.png" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/the-first.png')
+    }
+
+    
+</style>
+<header class="intro-header" >
+    <div class="header-mask"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/2-tags/#Robotics" title="Robotics">Robotics</a>
+                        
+                    </div>
+                    <h1>Gazebo/ROS</h1>
+                    
+                    
+                    <h2 class="subheading">(副标题)</h2>
+                    
+                    <span class="meta">Posted by ChenWH on July 12, 2021</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+				<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+<h1 id="配置安装">配置安装</h1>
+
+<p><a href="https://blog.csdn.net/boyhoodme/article/details/96611182">Ubuntu18.04安装PX4并与ROS联合实验_boyhoodme的博客-CSDN博客_ubuntu18.04安装px4</a></p>
+
+<h2 id="ros安装">ROS安装</h2>
+
+<p>http://wiki.ros.org/Installation/Ubuntu  注意版本号，完全安装即可，包含Gazebo</p>
+
+<h2 id="gazebo与ros连接">Gazebo与ROS连接</h2>
+
+<p>https://www.geek-share.com/detail/2807627991.html</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 安装ROS-Gazebo接口</span>
+<span class="nb">sudo </span>apt <span class="nb">install </span>ros-melodic-gazebo-ros-pkgs ros-melodic-gazebo-msgs ros-melodic-gazebo-plugins
+<span class="c"># 验证是否连接成功</span>
+roscore
+rosrun gazebo_ros gazebo
+rostopic list
+</code></pre></div></div>
+
+<h2 id="mavros">MAVROS</h2>
+
+<p>https://github.com/mavlink/mavros/blob/master/mavros/README.md#installation</p>
+
+<p>创建存放mavros的工作空间，这里推荐放在一个新建的单独的工作空间，因为按照这个教程走下去后，该工作空间只能用catkin build指令编译而不能用catkin_make了。</p>
+
+<h2 id="安装fastrtps和nuttx及他们的依赖">安装FastRTPS和Nuttx及他们的依赖</h2>
+
+<p>https://github.com/eProsima/Fast-DDS</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 注意 -j12  cpu线程数</span>
+</code></pre></div></div>
+
+<h1 id="ros-tutorials">ROS Tutorials</h1>
+
+<h2 id="创建ros功能包">创建ROS功能包</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 创建工作空间</span>
+<span class="nb">cd</span> ~/catkin_ws
+catkin_make                       //创建工作空间
+<span class="nb">.</span> ~/catkin_ws/devel/setup.bash    //将这个工作空间添加到环境环境中，source一下
+<span class="nb">source</span> /home/chenwh/catkin_ws/devel/setup.bash
+<span class="c"># 创建功能包</span>
+<span class="nb">cd</span> ~/catkin_ws/src
+catkin_create_pkg drone std_msgs rospy roscpp   //功能包的依赖
+catkin_create_pkg offboard roscpp mavros geometry_msgs
+//eg: catkin_create_pkg &lt;package_name&gt; <span class="o">[</span>depend1] <span class="o">[</span>depend2] <span class="o">[</span>depend3]
+</code></pre></div></div>
+
+<h3 id="软件包依赖关系">软件包依赖关系</h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//rospack depends1 beginner_tutorials   查看一级依赖包，这些依赖关系存储在package.xml文件中。
+//roscd beginner_tutorials
+//cat package.xml
+
+//rospack depends1 rospy               间接依赖
+//rospack depends beginner_tutorials   递归检测出所有嵌套的依赖包
+</code></pre></div></div>
+
+<h3 id="自定义packagexml">自定义package.xml</h3>
+
+<p>不能缺少，定义了package的属性，相当于一个包的自我描述。</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0"?&gt;</span>
+<span class="nt">&lt;package</span> <span class="na">format=</span><span class="s">"2"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;name&gt;</span>basic<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;version&gt;</span>0.0.0<span class="nt">&lt;/version&gt;</span>
+  <span class="nt">&lt;description&gt;</span>The basic package<span class="nt">&lt;/description&gt;</span> <span class="c">&lt;!-- 描述信息，应当简短 --&gt;</span>
+  <span class="c">&lt;!-- 维护者信息，例如&lt;maintainer email="you@yourdomain.tld"&gt;Your Name&lt;/maintainer&gt; --&gt;</span>
+  <span class="nt">&lt;maintainer</span> <span class="na">email=</span><span class="s">"chenwh@todo.todo"</span><span class="nt">&gt;</span>chenwh<span class="nt">&lt;/maintainer&gt;</span>
+  <span class="c">&lt;!-- 许可证标签，一般使用BSD许可证，因为其他核心ROS组件已经在使用它，例如&lt;license&gt;BSD&lt;/license&gt; --&gt;</span>
+  <span class="nt">&lt;license&gt;</span>TODO<span class="nt">&lt;/license&gt;</span>
+
+  <span class="c">&lt;!-- 依赖项标签，参考http://wiki.ros.org/catkin/package.xml#Build.2C_Run.2C_and_Test_Dependencies --&gt;</span>
+  <span class="nt">&lt;buildtool_depend&gt;</span>catkin<span class="nt">&lt;/buildtool_depend&gt;</span>
+  <span class="nt">&lt;build_depend&gt;</span>geometry_msgs<span class="nt">&lt;/build_depend&gt;</span>
+  <span class="nt">&lt;build_depend&gt;</span>mavros<span class="nt">&lt;/build_depend&gt;</span>
+  <span class="nt">&lt;build_depend&gt;</span>roscpp<span class="nt">&lt;/build_depend&gt;</span>
+  <span class="nt">&lt;build_export_depend&gt;</span>geometry_msgs<span class="nt">&lt;/build_export_depend&gt;</span>
+  <span class="nt">&lt;build_export_depend&gt;</span>mavros<span class="nt">&lt;/build_export_depend&gt;</span>
+  <span class="nt">&lt;build_export_depend&gt;</span>roscpp<span class="nt">&lt;/build_export_depend&gt;</span>
+  <span class="nt">&lt;exec_depend&gt;</span>geometry_msgs<span class="nt">&lt;/exec_depend&gt;</span>
+  <span class="nt">&lt;exec_depend&gt;</span>mavros<span class="nt">&lt;/exec_depend&gt;</span>
+  <span class="nt">&lt;exec_depend&gt;</span>roscpp<span class="nt">&lt;/exec_depend&gt;</span>
+
+  <span class="nt">&lt;export&gt;</span>
+      
+  <span class="nt">&lt;/export&gt;</span>
+<span class="nt">&lt;/package&gt;</span>
+</code></pre></div></div>
+
+<h2 id="构建ros功能包">构建ROS功能包</h2>
+
+<p><code class="language-plaintext highlighter-rouge">build</code> 目录是构建空间的默认位置，同时<code class="language-plaintext highlighter-rouge">cmake</code>和<code class="language-plaintext highlighter-rouge">make</code>也是在这里被调用来配置和构建你的软件包。而<code class="language-plaintext highlighter-rouge">devel</code>目录是开发空间的默认位置, 在安装软件包之前，这里可以存放可执行文件和库。</p>
+
+<h2 id="使用roslaunch">使用roslaunch</h2>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;launch&gt;</span>
+
+   <span class="nt">&lt;group</span> <span class="na">ns=</span><span class="s">"turtlesim1"</span><span class="nt">&gt;</span> # 两个分组，利用 namespace 命名空间标签区分
+     <span class="c">&lt;!-- node pkg 功能包   name为运行时的名称   type为实际运行的节点名称 --&gt;</span>
+     <span class="nt">&lt;node</span> <span class="na">pkg=</span><span class="s">"turtlesim"</span> <span class="na">name=</span><span class="s">"sim"</span> <span class="na">type=</span><span class="s">"turtlesim_node"</span><span class="nt">/&gt;</span>
+   <span class="nt">&lt;/group&gt;</span>
+ 
+   <span class="nt">&lt;group</span> <span class="na">ns=</span><span class="s">"turtlesim2"</span><span class="nt">&gt;</span>
+     <span class="nt">&lt;node</span> <span class="na">pkg=</span><span class="s">"turtlesim"</span> <span class="na">name=</span><span class="s">"sim"</span> <span class="na">type=</span><span class="s">"turtlesim_node"</span><span class="nt">/&gt;</span>
+   <span class="nt">&lt;/group&gt;</span>
+   模仿节点
+   <span class="nt">&lt;node</span> <span class="na">pkg=</span><span class="s">"turtlesim"</span> <span class="na">name=</span><span class="s">"mimic"</span> <span class="na">type=</span><span class="s">"mimic"</span><span class="nt">&gt;</span>
+     <span class="nt">&lt;remap</span> <span class="na">from=</span><span class="s">"input"</span> <span class="na">to=</span><span class="s">"turtlesim1/turtle1"</span><span class="nt">/&gt;</span>
+     <span class="nt">&lt;remap</span> <span class="na">from=</span><span class="s">"output"</span> <span class="na">to=</span><span class="s">"turtlesim2/turtle1"</span><span class="nt">/&gt;</span>
+   <span class="nt">&lt;/node&gt;</span>
+ 
+<span class="nt">&lt;/launch&gt;</span>
+
+<span class="cp">&lt;![CDATA[
+	arg标签为设置launch文件内部的局部变量，运行时可以指定值或默认
+	include为包含其他launch文件
+	remap为重映射，类似重命名  eg:  &lt;remap from="/talk" to="/re_talk" /&gt;</span>
+	machine为设置运行该节点的PC名称、address、ros-root还有ros-package-path等
+	env为设置环境变量，如路径和IP
+	group用于分组正在运行的节点
+	rosparam可以load yaml文件（xml）来导入参数，xml语法较launch简单
+	param标签定义要在上设置的参数参数服务器。
+		1.textfile="$(find pkg-name)/path/file.txt" （可选）
+		文件的内容将被读取并存储为字符串。该文件必须可在本地访问，但强烈建议您使用与包相关$(find)/file.txt语法来指定位置。
+		2.binfile="$(find pkg-name)/path/file" （可选）
+		该文件的内容将被读取并存储为 base64 编码的 XML-RPC 二进制对象。该文件必须可在本地访问，但强烈建议您使用与包相关的$(find)/file.txt语法来指定位置。
+		3.command="$(find pkg-name)/exe '$(find pkg-name)/arg.txt'" (可选)
+		命令的输出将被读取并存储为字符串。强烈建议您使用与包相关的$(find)/file.txt语法来指定文件参数。由于 XML 转义要求，您还应该使用单引号引用文件参数。
+]]&gt;
+</code></pre></div></div>
+
+<h2 id="使用rosed">使用rosed</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rosed <span class="o">[</span>package_name] <span class="o">[</span>filename] <span class="c"># 快速定位功能包</span>
+</code></pre></div></div>
+
+<h2 id="创建ros消息和服务">创建ROS消息和服务</h2>
+
+<ol>
+  <li>msg（消息）：msg文件就是文本文件，用于描述ROS消息的字段。它们用于为不同编程语言编写的消息生成源代码。</li>
+  <li>srv（服务）：一个srv文件描述一个服务。它由两部分组成：请求（request）和响应（response）。</li>
+</ol>
+
+<p>msg文件存放在软件包的msg目录下，srv文件则存放在srv目录下。</p>
+
+<p>ROS中还有一个特殊的数据类型：<code class="language-plaintext highlighter-rouge">Header</code>，它含有时间戳和ROS中广泛使用的坐标帧信息。在msg文件的第一行经常可以看到<code class="language-plaintext highlighter-rouge">Header header</code>。</p>
+
+<div class="language-cmake highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## msg示例</span>
+Header header
+string child_frame_id
+geometry_msgs/PoseWithCovariance pose
+geometry_msgs/TwistWithCovariance twist
+
+<span class="c1">## 打开 package.xml确保以下两行没有被注释</span>
+&lt;build_depend&gt;message_generation&lt;/build_depend&gt;
+&lt;exec_depend&gt;message_runtime&lt;/exec_depend&gt;
+
+<span class="c1">## 打开 CMakeLists.txt 添加依赖 message_generation</span>
+
+<span class="nb">find_package</span><span class="p">(</span>catkin REQUIRED COMPONENTS
+   roscpp
+   rospy
+   std_msgs
+   message_generation
+<span class="p">)</span>
+
+<span class="nf">catkin_package</span><span class="p">(</span>
+  ...
+  CATKIN_DEPENDS message_runtime ...
+  ...<span class="p">)</span>
+<span class="c1"># 取消依赖并修改 msg 文件名</span>
+<span class="nf">add_message_files</span><span class="p">(</span>
+   FILES
+   my_message.msg
+<span class="p">)</span>
+
+<span class="nf">generate_messages</span><span class="p">(</span>
+  DEPENDENCIES
+  std_msgs
+<span class="p">)</span>
+
+<span class="c1">## 识别msg</span>
+rosmsg show beginner_tutorials/my_message
+</code></pre></div></div>
+
+<div class="language-cmake highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## srv示例</span>
+string first_name
+string last_name
+uint8 age
+uint32 score
+
+<span class="c1">## roscp</span>
+roscp [package_name] [file_to_copy_path] [copy_path]
+
+<span class="c1">## 同上配置 package.xml 和 CMakeLists.txt，注意唯一特殊之处</span>
+<span class="nf">add_service_files</span><span class="p">(</span>
+  FILES
+  my_service.srv
+<span class="p">)</span>
+
+<span class="c1">## 识别srv</span>
+rossrv show beginner_tutorials/my_service
+
+</code></pre></div></div>
+
+<h2 id="发布者和订阅者">发布者和订阅者</h2>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "ros/ros.h"
+#include "std_msgs/String.h"
+#include &lt;sstream&gt;
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">ros</span><span class="o">::</span><span class="n">init</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">,</span> <span class="s">"talker"</span><span class="p">);</span> <span class="c1">// 初始化ROS，指定节点名称</span>
+
+  <span class="n">ros</span><span class="o">::</span><span class="n">NodeHandle</span> <span class="n">n</span><span class="p">;</span> <span class="c1">//为这个进程的节点创建句柄，创建的第一个NodeHandle实际上将执行节点的初始化。</span>
+  
+  <span class="n">ros</span><span class="o">::</span><span class="n">Publisher</span> <span class="n">chatter_pub</span> <span class="o">=</span> <span class="n">n</span><span class="p">.</span><span class="n">advertise</span><span class="o">&lt;</span><span class="n">std_msgs</span><span class="o">::</span><span class="n">String</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"chatter"</span><span class="p">,</span> <span class="mi">1000</span><span class="p">);</span> <span class="c1">// 告诉主节点我们将要在chatter话题上发布一个类型为std_msgs/String的消息。这会让主节点告诉任何正在监听chatter的节点，我们将在这一话题上发布数据。第二个参数是发布队列的大小。在本例中，如果我们发布得太快，它将最多缓存1000条消息，不然就会丢弃旧消息。</span>
+
+  <span class="n">ros</span><span class="o">::</span><span class="n">Rate</span> <span class="n">loop_rate</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span> <span class="c1">// ros::Rate对象能让你指定循环的频率。它会记录从上次调用Rate::sleep()到现在已经有多长时间，并休眠正确的时间。在本例中，我们告诉它希望以10Hz运行。</span>
+
+  <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">while</span> <span class="p">(</span><span class="n">ros</span><span class="o">::</span><span class="n">ok</span><span class="p">())</span> <span class="c1">// roscpp将安装一个SIGINT处理程序，它能够处理Ctrl+C操作，让ros::ok()返回false。</span>
+  <span class="p">{</span>
+    <span class="n">std_msgs</span><span class="o">::</span><span class="n">String</span> <span class="n">msg</span><span class="p">;</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">stringstream</span> <span class="n">ss</span><span class="p">;</span>
+    <span class="n">ss</span> <span class="o">&lt;&lt;</span> <span class="s">"hello world "</span> <span class="o">&lt;&lt;</span> <span class="n">count</span><span class="p">;</span>
+    <span class="n">msg</span><span class="p">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">ss</span><span class="p">.</span><span class="n">str</span><span class="p">();</span>
+
+    <span class="n">ROS_INFO</span><span class="p">(</span><span class="s">"%s"</span><span class="p">,</span> <span class="n">msg</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span> <span class="c1">// 取代printf/cout进行输出，有五级log类型</span>
+
+    <span class="n">chatter_pub</span><span class="p">.</span><span class="n">publish</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span> <span class="c1">//发布消息</span>
+
+    <span class="n">ros</span><span class="o">::</span><span class="n">spinOnce</span><span class="p">();</span> <span class="c1">// 调用回调函数</span>
+
+    <span class="n">loop_rate</span><span class="p">.</span><span class="n">sleep</span><span class="p">();</span> <span class="c1">// 睡眠以控制频率</span>
+    <span class="o">++</span><span class="n">count</span><span class="p">;</span>
+  <span class="p">}</span>
+
+
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "ros/ros.h"
+#include "std_msgs/String.h"
+</span>
+<span class="c1">// 回调函数，当有新消息到达chatter话题时它就会被调用。</span>
+<span class="kt">void</span> <span class="nf">chatterCallback</span><span class="p">(</span><span class="k">const</span> <span class="n">std_msgs</span><span class="o">::</span><span class="n">String</span><span class="o">::</span><span class="n">ConstPtr</span><span class="o">&amp;</span> <span class="n">msg</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">ROS_INFO</span><span class="p">(</span><span class="s">"I heard: [%s]"</span><span class="p">,</span> <span class="n">msg</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">ros</span><span class="o">::</span><span class="n">init</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">,</span> <span class="s">"listener"</span><span class="p">);</span>
+
+  <span class="n">ros</span><span class="o">::</span><span class="n">NodeHandle</span> <span class="n">n</span><span class="p">;</span>
+
+  <span class="n">ros</span><span class="o">::</span><span class="n">Subscriber</span> <span class="n">sub</span> <span class="o">=</span> <span class="n">n</span><span class="p">.</span><span class="n">subscribe</span><span class="p">(</span><span class="s">"chatter"</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">chatterCallback</span><span class="p">);</span> <span class="c1">// 通过主节点订阅chatter话题。每当有新消息到达时，ROS将调用chatterCallback()函数。第二个参数是队列大小，以防我们处理消息的速度不够快。在本例中，如果队列达到1000条，再有新消息到达时旧消息会被丢弃。</span>
+
+  <span class="n">ros</span><span class="o">::</span><span class="n">spin</span><span class="p">();</span> <span class="c1">// ros::spin()启动了一个自循环，它会尽可能快地调用消息回调函数。</span>
+
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-cmake highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># CmakeLists中build模块添加</span>
+其中的 node 均为节点文件名而非功能包名
+<span class="nb">add_executable</span><span class="p">(</span>node src/node.cpp<span class="p">)</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span>node <span class="si">${</span><span class="nv">catkin_LIBRARIES</span><span class="si">}</span><span class="p">)</span>
+<span class="c1"># 订阅者和发布者需要</span>
+<span class="nb">add_dependencies</span><span class="p">(</span>talker beginner_tutorials_generate_messages_cpp<span class="p">)</span>
+<span class="nb">add_dependencies</span><span class="p">(</span>listener beginner_tutorials_generate_messages_cpp<span class="p">)</span>
+<span class="c1"># 服务端和客户端需要</span>
+<span class="nb">add_dependencies</span><span class="p">(</span>add_two_ints_server beginner_tutorials_gencpp<span class="p">)</span>
+<span class="nb">add_dependencies</span><span class="p">(</span>add_two_ints_client beginner_tutorials_gencpp<span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="服务和客户端">服务和客户端</h2>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "ros/ros.h"
+#include "beginner_tutorials/AddTwoInts.h" //创建的srv文件生成的头文件
+</span>
+<span class="kt">bool</span> <span class="nf">add</span><span class="p">(</span><span class="n">beginner_tutorials</span><span class="o">::</span><span class="n">AddTwoInts</span><span class="o">::</span><span class="n">Request</span>  <span class="o">&amp;</span><span class="n">req</span><span class="p">,</span>    <span class="c1">//生成的结构体</span>
+         <span class="n">beginner_tutorials</span><span class="o">::</span><span class="n">AddTwoInts</span><span class="o">::</span><span class="n">Response</span> <span class="o">&amp;</span><span class="n">res</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">res</span><span class="p">.</span><span class="n">sum</span> <span class="o">=</span> <span class="n">req</span><span class="p">.</span><span class="n">a</span> <span class="o">+</span> <span class="n">req</span><span class="p">.</span><span class="n">b</span><span class="p">;</span>    
+  <span class="n">ROS_INFO</span><span class="p">(</span><span class="s">"request: x=%ld, y=%ld"</span><span class="p">,</span> <span class="p">(</span><span class="kt">long</span> <span class="kt">int</span><span class="p">)</span><span class="n">req</span><span class="p">.</span><span class="n">a</span><span class="p">,</span> <span class="p">(</span><span class="kt">long</span> <span class="kt">int</span><span class="p">)</span><span class="n">req</span><span class="p">.</span><span class="n">b</span><span class="p">);</span>
+  <span class="n">ROS_INFO</span><span class="p">(</span><span class="s">"sending back response: [%ld]"</span><span class="p">,</span> <span class="p">(</span><span class="kt">long</span> <span class="kt">int</span><span class="p">)</span><span class="n">res</span><span class="p">.</span><span class="n">sum</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">ros</span><span class="o">::</span><span class="n">init</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">,</span> <span class="s">"add_two_ints_server"</span><span class="p">);</span>
+  <span class="n">ros</span><span class="o">::</span><span class="n">NodeHandle</span> <span class="n">n</span><span class="p">;</span>
+
+  <span class="n">ros</span><span class="o">::</span><span class="n">ServiceServer</span> <span class="n">service</span> <span class="o">=</span> <span class="n">n</span><span class="p">.</span><span class="n">advertiseService</span><span class="p">(</span><span class="s">"add_two_ints"</span><span class="p">,</span> <span class="n">add</span><span class="p">);</span> <span class="c1">// 创建服务，告诉主节点</span>
+  <span class="n">ROS_INFO</span><span class="p">(</span><span class="s">"Ready to add two ints."</span><span class="p">);</span>
+  <span class="n">ros</span><span class="o">::</span><span class="n">spin</span><span class="p">();</span>
+
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "ros/ros.h"
+#include "beginner_tutorials/AddTwoInts.h"
+#include &lt;cstdlib&gt;
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">ros</span><span class="o">::</span><span class="n">init</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">,</span> <span class="s">"add_two_ints_client"</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">ROS_INFO</span><span class="p">(</span><span class="s">"usage: add_two_ints_client X Y"</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">ros</span><span class="o">::</span><span class="n">NodeHandle</span> <span class="n">n</span><span class="p">;</span>
+  <span class="n">ros</span><span class="o">::</span><span class="n">ServiceClient</span> <span class="n">client</span> <span class="o">=</span> <span class="n">n</span><span class="p">.</span><span class="n">serviceClient</span><span class="o">&lt;</span><span class="n">beginner_tutorials</span><span class="o">::</span><span class="n">AddTwoInts</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"add_two_ints"</span><span class="p">);</span> <span class="c1">// 创建客户端</span>
+  <span class="n">beginner_tutorials</span><span class="o">::</span><span class="n">AddTwoInts</span> <span class="n">srv</span><span class="p">;</span>
+  <span class="n">srv</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">atoll</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+  <span class="n">srv</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">atoll</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">client</span><span class="p">.</span><span class="n">call</span><span class="p">(</span><span class="n">srv</span><span class="p">))</span> <span class="c1">// 判断服务是否调用成功</span>
+  <span class="p">{</span>
+    <span class="n">ROS_INFO</span><span class="p">(</span><span class="s">"Sum: %ld"</span><span class="p">,</span> <span class="p">(</span><span class="kt">long</span> <span class="kt">int</span><span class="p">)</span><span class="n">srv</span><span class="p">.</span><span class="n">response</span><span class="p">.</span><span class="n">sum</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">else</span>
+  <span class="p">{</span>
+    <span class="n">ROS_ERROR</span><span class="p">(</span><span class="s">"Failed to call service add_two_ints"</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="录制和回放数据">录制和回放数据</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rosbag record <span class="nt">-a</span> <span class="c"># 带选项-a，表明所有发布的话题都应该积累在一个bag文件中。</span>
+rosbag info &lt;your bagfile&gt; <span class="c"># 检查bag文件的内容而不回放它</span>
+rosbag play &lt;your bagfile&gt; <span class="c"># 保持turtlesim但关闭turtle_teleop_key即可回放</span>
+rosbag play <span class="nt">-r</span> 2 &lt;your bagfile&gt; <span class="c"># 二倍速，-s制定某个时间开始</span>
+rosbag record <span class="nt">-O</span> subset /turtle1/cmd_vel /turtle1/pose <span class="c"># 录制指定话题，subset为指定的文件名</span>
+</code></pre></div></div>
+
+<h2 id="从bag文件中读取消息">从bag文件中读取消息</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">time </span>rosbag info demo.bag  
+path:        demo.bag
+version:     2.0
+duration:    20.0s
+start:       Mar 21 2017 19:37:58.00 <span class="o">(</span>1490150278.00<span class="o">)</span>
+end:         Mar 21 2017 19:38:17.00 <span class="o">(</span>1490150298.00<span class="o">)</span>
+size:        696.2 MB
+messages:    5390
+compression: none <span class="o">[</span>600/600 chunks]
+types:       bond/Status                      <span class="o">[</span>eacc84bf5d65b6777d4c50f463dfb9c8]
+             diagnostic_msgs/DiagnosticArray  <span class="o">[</span>60810da900de1dd6ddd437c3503511da]
+             diagnostic_msgs/DiagnosticStatus <span class="o">[</span>d0ce08bc6e5ba34c7754f563a9cabaf1]
+             nav_msgs/Odometry                <span class="o">[</span>cd5e73d190d741a2f92e81eda573aca7]
+             radar_driver/RadarTracks         <span class="o">[</span>6a2de2f790cb8bb0e149d45d297462f8]
+             sensor_msgs/Image                <span class="o">[</span>060021388200f6f0f447d0fcd9c64743]
+             sensor_msgs/NavSatFix            <span class="o">[</span>2d3a8cd499b9b4a0249fb98fd05cfa48]
+             sensor_msgs/PointCloud2          <span class="o">[</span>1158d486dd51d683ce2f1be655c3c181]
+             sensor_msgs/Range                <span class="o">[</span>c005c34273dc426c67a020a87bc24148]
+             sensor_msgs/TimeReference        <span class="o">[</span>fded64a0265108ba86c3d38fb11c0c16]
+             tf2_msgs/TFMessage               <span class="o">[</span>94810edda583a504dfda3829e70d7eec]
+             velodyne_msgs/VelodyneScan       <span class="o">[</span>50804fc9533a0e579e6322c04ae70566]
+topics:      /diagnostics                      140 msgs    : diagnostic_msgs/DiagnosticArray 
+             /diagnostics_agg                   40 msgs    : diagnostic_msgs/DiagnosticArray 
+             /diagnostics_toplevel_state        40 msgs    : diagnostic_msgs/DiagnosticStatus
+             /gps/fix                          146 msgs    : sensor_msgs/NavSatFix           
+             /gps/rtkfix                       200 msgs    : nav_msgs/Odometry               
+             /gps/time                         192 msgs    : sensor_msgs/TimeReference       
+             /image_raw                        600 msgs    : sensor_msgs/Image               
+             /obs1/gps/fix                      30 msgs    : sensor_msgs/NavSatFix           
+             /obs1/gps/rtkfix                  200 msgs    : nav_msgs/Odometry               
+             /obs1/gps/time                    136 msgs    : sensor_msgs/TimeReference       
+             /radar/points                     400 msgs    : sensor_msgs/PointCloud2         
+             /radar/range                      400 msgs    : sensor_msgs/Range               
+             /radar/tracks                     400 msgs    : radar_driver/RadarTracks        
+             /tf                              1986 msgs    : tf2_msgs/TFMessage              
+             /velodyne_nodelet_manager/bond     80 msgs    : bond/Status                     
+             /velodyne_packets                 200 msgs    : velodyne_msgs/VelodyneScan      
+             /velodyne_points                  200 msgs    : sensor_msgs/PointCloud2
+
+real    0m1.003s
+user    0m0.620s
+sys 0m0.283s
+</code></pre></div></div>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ros_readbagfile 2021-07-12-19-04-56.bag /turtle1/cmd_vel | <span class="nb">tee </span>topics.yaml
+</code></pre></div></div>
+
+<h2 id="关于roslaunch">关于roslaunch</h2>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- 关于环境变量 --&gt;</span>
+<span class="nt">&lt;launch&gt;</span>
+  <span class="nt">&lt;group</span> <span class="na">name=</span><span class="s">"wg"</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- 使用 env 置换符来使用ROBOT变量的值。例如，在roslaunch指令前执行：export ROBOT=pre将会使得pre.machine 被引用 --&gt;</span>
+    <span class="c">&lt;!-- 使用 env 置换符可以使得launch文件的一部分依赖于环境变量的值。 --&gt;</span>
+    <span class="nt">&lt;include</span> <span class="na">file=</span><span class="s">"$(find pr2_alpha)/$(env ROBOT).machine"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;include</span> <span class="na">file=</span><span class="s">"$(find 2dnav_pr2)/config/new_amcl_node.xml"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;include</span> <span class="na">file=</span><span class="s">"$(find 2dnav_pr2)/config/base_odom_teleop.xml"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;include</span> <span class="na">file=</span><span class="s">"$(find 2dnav_pr2)/config/lasers_and_filters.xml"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;include</span> <span class="na">file=</span><span class="s">"$(find 2dnav_pr2)/config/map_server.xml"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;include</span> <span class="na">file=</span><span class="s">"$(find 2dnav_pr2)/config/ground_plane.xml"</span> <span class="nt">/&gt;</span>
+
+    <span class="c">&lt;!-- The navigation stack and associated parameters --&gt;</span>
+    <span class="nt">&lt;include</span> <span class="na">file=</span><span class="s">"$(find 2dnav_pr2)/move_base/move_base.xml"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;/group&gt;</span>
+<span class="nt">&lt;/launch&gt;</span>
+</code></pre></div></div>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- 关于机器标签machine tag，比如pre.machine文件 --&gt;</span>
+<span class="nt">&lt;launch&gt;</span>
+  <span class="nt">&lt;machine</span> <span class="na">name=</span><span class="s">"c1"</span> <span class="na">address=</span><span class="s">"pre1"</span> <span class="na">ros-root=</span><span class="s">"$(env ROS_ROOT)"</span> <span class="na">ros-package-path=</span><span class="s">"$(env ROS_PACKAGE_PATH)"</span> <span class="na">default=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;machine</span> <span class="na">name=</span><span class="s">"c2"</span> <span class="na">address=</span><span class="s">"pre2"</span> <span class="na">ros-root=</span><span class="s">"$(env ROS_ROOT)"</span> <span class="na">ros-package-path=</span><span class="s">"$(env ROS_PACKAGE_PATH)"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/launch&gt;</span>
+<span class="c">&lt;!-- 这个文件对本地机器名进行了一个映射，例如"c1" 和 "c2"分别对应于机器名"pre1"和"pre2"。 --&gt;</span>
+<span class="c">&lt;!-- 
+	一旦这个映射建立好了之后，就可以用于控制节点的启动。比如，2dnav_pr2 package里所引用的config/new_amcl_node.xml文件包含这样的语句：
+	&lt;node pkg="amcl" type="amcl" name="amcl" machine="c1"&gt;
+	这可以控制 amcl节点在机器名为c1的机器上运行。
+--&gt;</span>
+</code></pre></div></div>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- 关于parameters --&gt;</span>
+<span class="nt">&lt;node</span> <span class="na">pkg=</span><span class="s">"move_base"</span> <span class="na">type=</span><span class="s">"move_base"</span> <span class="na">name=</span><span class="s">"move_base"</span> <span class="na">machine=</span><span class="s">"c2"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;remap</span> <span class="na">from=</span><span class="s">"odom"</span> <span class="na">to=</span><span class="s">"pr2_base_odometry/odom"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">"controller_frequency"</span> <span class="na">value=</span><span class="s">"10.0"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">"footprint_padding"</span> <span class="na">value=</span><span class="s">"0.015"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">"controller_patience"</span> <span class="na">value=</span><span class="s">"15.0"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">"clearing_radius"</span> <span class="na">value=</span><span class="s">"0.59"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;rosparam</span> <span class="na">file=</span><span class="s">"$(find 2dnav_pr2)/config/costmap_common_params.yaml"</span> <span class="na">command=</span><span class="s">"load"</span> <span class="na">ns=</span><span class="s">"global_costmap"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;rosparam</span> <span class="na">file=</span><span class="s">"$(find 2dnav_pr2)/config/costmap_common_params.yaml"</span> <span class="na">command=</span><span class="s">"load"</span> <span class="na">ns=</span><span class="s">"local_costmap"</span> <span class="nt">/&gt;</span> <span class="c">&lt;!-- 与上一行归属于不同的域名 --&gt;</span>
+  <span class="nt">&lt;rosparam</span> <span class="na">file=</span><span class="s">"$(find 2dnav_pr2)/move_base/local_costmap_params.yaml"</span> <span class="na">command=</span><span class="s">"load"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;rosparam</span> <span class="na">file=</span><span class="s">"$(find 2dnav_pr2)/move_base/global_costmap_params.yaml"</span> <span class="na">command=</span><span class="s">"load"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;rosparam</span> <span class="na">file=</span><span class="s">"$(find 2dnav_pr2)/move_base/navfn_params.yaml"</span> <span class="na">command=</span><span class="s">"load"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;rosparam</span> <span class="na">file=</span><span class="s">"$(find 2dnav_pr2)/move_base/base_local_planner_params.yaml"</span> <span class="na">command=</span><span class="s">"load"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/node&gt;</span>
+<span class="c">&lt;!--
+	这一小段代码负责启动move_base节点。 第一个引用元素是 remapping. 设计Move_base时是希望它从 "odom" topic 接收里程计信息的。在这个pr2案例里，里程计信息是发布在pr2_base_odometry topic上,所以我们要重新映射一下。
+	当一个给定类型的信息在不同的情况下发布在不同的topic上，我们可以使用topic remapping
+	&lt;node&gt;内有好几个&lt;param&gt;标签。这些参数是节点的内部元素（因为它们都写在&lt;/node&gt;之前），因此它们是节点的私有参数私有参数。比如，第一个参数将move_base/controller_frequency设置为10.0。
+	在&lt;param&gt;元素之后,还有一些&lt;rosparam&gt;元素，它们将从yaml文件中读取多个参数。yaml是一种易于人类读取的文件格式，支持复杂数据的结构。这是第一个&lt;rosparam&gt;所加载的costmap_common_params.yaml文件一部分:
+--&gt;</span>
+</code></pre></div></div>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;launch&gt;</span>
+<span class="nt">&lt;include</span> <span class="na">file=</span><span class="s">"$(find 2dnav_pr2)/move_base/2dnav_pr2.launch"</span> <span class="nt">/&gt;</span>
+<span class="c">&lt;!-- 重载roslaunch修改参数 --&gt;</span>
+<span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">"move_base/local_costmap/resolution"</span> <span class="na">value=</span><span class="s">"0.5"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/launch&gt;</span>
+</code></pre></div></div>
+
+<h1 id="gazebo-tutorials">Gazebo Tutorials</h1>
+
+<h2 id="关于物理引擎">关于物理引擎</h2>
+
+<p>http://gazebosim.org/tutorials?tut=physics_params&amp;cat=physics</p>
+
+<h2 id="模型制作">模型制作</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gazebo velodyne.world <span class="nt">-u</span> <span class="c"># -u 以暂停仿真的形式运行</span>
+</code></pre></div></div>
+
+<h2 id="spawning-object-in-simulation">Spawning Object In Simulation</h2>
+
+<h3 id="create-a-simple-box-urdf">Create a Simple Box URDF</h3>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;robot</span> <span class="na">name=</span><span class="s">"simple_box"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;link</span> <span class="na">name=</span><span class="s">"my_box"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;inertial&gt;</span>
+      <span class="nt">&lt;origin</span> <span class="na">xyz=</span><span class="s">"2 0 0"</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;mass</span> <span class="na">value=</span><span class="s">"1.0"</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;inertia</span>  <span class="na">ixx=</span><span class="s">"1.0"</span> <span class="na">ixy=</span><span class="s">"0.0"</span>  <span class="na">ixz=</span><span class="s">"0.0"</span>  <span class="na">iyy=</span><span class="s">"100.0"</span>  <span class="na">iyz=</span><span class="s">"0.0"</span>  <span class="na">izz=</span><span class="s">"1.0"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/inertial&gt;</span>
+    <span class="nt">&lt;visual&gt;</span>
+      <span class="nt">&lt;origin</span> <span class="na">xyz=</span><span class="s">"2 0 1"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;geometry&gt;</span>
+        <span class="nt">&lt;box</span> <span class="na">size=</span><span class="s">"1 1 2"</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;/geometry&gt;</span>
+    <span class="nt">&lt;/visual&gt;</span>
+    <span class="nt">&lt;collision&gt;</span>
+      <span class="nt">&lt;origin</span> <span class="na">xyz=</span><span class="s">"2 0 1"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;geometry&gt;</span>
+        <span class="nt">&lt;box</span> <span class="na">size=</span><span class="s">"1 1 2"</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;/geometry&gt;</span>
+    <span class="nt">&lt;/collision&gt;</span>
+  <span class="nt">&lt;/link&gt;</span>
+  <span class="nt">&lt;gazebo</span> <span class="na">reference=</span><span class="s">"my_box"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;material&gt;</span>Gazebo/Blue<span class="nt">&lt;/material&gt;</span>
+  <span class="nt">&lt;/gazebo&gt;</span>
+<span class="nt">&lt;/robot&gt;</span>
+</code></pre></div></div>
+
+<h3 id="spawn-model-in-simulation">Spawn Model in Simulation</h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rosrun gazebo spawn_model <span class="nt">-file</span> <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>/object.urdf <span class="nt">-urdf</span> <span class="nt">-z</span> 1 <span class="nt">-model</span> my_object
+</code></pre></div></div>
+
+<h3 id="spawn-additional-example-objects-in-simulation">Spawn Additional Example Objects in Simulation</h3>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;launch&gt;</span>
+  <span class="c">&lt;!-- send table urdf to param server --&gt;</span>
+  <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">"table_description"</span> <span class="na">command=</span><span class="s">"$(find xacro)/xacro.py $(find gazebo_worlds)/objects/table.urdf.xacro"</span> <span class="nt">/&gt;</span>
+
+  <span class="c">&lt;!-- push table_description to factory and spawn robot in gazebo --&gt;</span>
+  <span class="nt">&lt;node</span> <span class="na">name=</span><span class="s">"spawn_table"</span> <span class="na">pkg=</span><span class="s">"gazebo"</span> <span class="na">type=</span><span class="s">"spawn_model"</span> <span class="na">args=</span><span class="s">"-urdf -param table_description -z 0.01 -model table_model"</span> <span class="na">respawn=</span><span class="s">"false"</span> <span class="na">output=</span><span class="s">"screen"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/launch&gt;</span>
+</code></pre></div></div>
+
+<h2 id="关于xacro">关于xacro</h2>
+
+<p>http://wiki.ros.org/xacro</p>
+
+<h2 id="统一机器人描述格式">统一机器人描述格式</h2>
+
+<ol>
+  <li>
+    <link />
+    <p>标签用于描述机器人某个刚体部分的外观和物理属性，包括尺寸（size）、颜色（color）、形状（shape）、惯性矩阵（inertial matrix）、碰撞参数（collision properties）等。<visual>标签用于描述机器人link部分的外观参数，<inertial>标签用于描述link的惯性参数，而<collision>标签用于描述link的碰撞属性。<origin>标签定义了joint的起点</origin></collision></inertial></visual></p>
+  </li>
+  <li>
+    <joint>标签用于描述机器人关节的运动学和动力学属性，包括关节运动的位置和速度限制。连接两个刚体<link />。<calibration>：关节的参考位置，用来校准关节的绝对位置。<dynamics>：用于描述关节的物理属性，例如阻尼值、物理静摩擦力等，经常在动力学仿真中用到。<limit>：用于描述运动的一些极限值，包括关节运动的上下限位置、速度限制、力矩限制等。<mimic>：用于描述该关节与已有关节的关系。<safety_controller>：用于描述安全控制器参数。
+</safety_controller></mimic></limit></dynamics></calibration></joint>
+    <ol>
+      <li>continuous  旋转关节，可以绕单轴无限旋转</li>
+      <li>revolute  旋转关节，但有角度极限</li>
+      <li>prismatic  滑动关节，有位置极限</li>
+      <li>planar  平面关节，允许在平面正交方向上平移或旋转</li>
+      <li>floating  浮动关节，允许进行平移、旋转运动</li>
+      <li>fixed  固定关节，不允许运动</li>
+    </ol>
+  </li>
+  <li>
+    <robot>是完整机器人模型的最顶层标签，<link />和<joint>标签都必须包含在<robot>标签内。
+</robot></joint></robot>
+  </li>
+  <li>
+    <gazebo>标签用于描述机器人模型在Gazebo中仿真所需要的参数，包括机器人材料的属性、Gazebo插件等。该标签不是机器人模型必需的部分，只有在Gazebo仿真时才需加入。
+
+</gazebo>
+  </li>
+</ol>
+<h2 id="创建机器人描述功能包">创建机器人描述功能包</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>catkin_create_pkg mrobot_description urdf xacro
+·urdf：用于存放机器人模型的URDF或xacro文件。
+·meshes：用于放置URDF中引用的模型渲染文件。
+·launch：用于保存相关启动文件。
+·config：用于保存rviz的配置文件。
+
+URDF提供了一些命令行工具，可以帮助我们检查、梳理模型文件
+<span class="nv">$ </span>check_urdf mrobot_chassis.urdf
+还可以使用urdf_to_graphiz命令查看URDF模型的整体结构：
+<span class="nv">$ </span>urdf_to_graphiz mrobot_chassis.urdf
+</code></pre></div></div>
+
+<h2 id="使用xacro优化urdf">使用xacro优化URDF</h2>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;xacro:property</span> <span class="na">name=</span><span class="s">"M_PI"</span> <span class="na">value=</span><span class="s">"3.14159"</span><span class="nt">/&gt;</span> <span class="c">&lt;!-- 常量定义 --&gt;</span>
+<span class="nt">&lt;origin</span> <span class="na">xyz=</span><span class="s">"0 ${(motor_length+wheel_length)/2} 0"</span> <span class="na">rpy=</span><span class="s">"0 0 0"</span><span class="nt">/&gt;</span> <span class="c">&lt;!-- 调用数学公式 --&gt;</span>
+
+<span class="c">&lt;!-- 宏定义 --&gt;</span>
+<span class="nt">&lt;xacro:macro</span> <span class="na">name=</span><span class="s">"mrobot_standoff_2in"</span> <span class="na">params=</span><span class="s">"parent number x_loc y_loc z_loc"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;joint</span> <span class="na">name=</span><span class="s">"standoff_2in_${number}_joint"</span> <span class="na">type=</span><span class="s">"fixed"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;origin</span> <span class="na">xyz=</span><span class="s">"${x_loc} ${y_loc} ${z_loc}"</span> <span class="na">rpy=</span><span class="s">"0 0 0"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;parent</span> <span class="na">link=</span><span class="s">"${parent}"</span><span class="nt">/&gt;</span>
+		<span class="nt">&lt;child</span> <span class="na">link=</span><span class="s">"standoff_2in_${number}_link"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;/joint&gt;</span>
+	<span class="nt">&lt;link</span> <span class="na">name=</span><span class="s">"standoff_2in_${number}_link"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;inertial&gt;</span>
+			<span class="nt">&lt;mass</span> <span class="na">value=</span><span class="s">"0.001"</span> <span class="nt">/&gt;</span>
+			<span class="nt">&lt;origin</span> <span class="na">xyz=</span><span class="s">"0 0 0"</span> <span class="nt">/&gt;</span>
+			<span class="nt">&lt;inertia</span> <span class="na">ixx=</span><span class="s">"0.0001"</span> <span class="na">ixy=</span><span class="s">"0.0"</span> <span class="na">ixz=</span><span class="s">"0.0"</span>
+					 <span class="na">iyy=</span><span class="s">"0.0001"</span> <span class="na">iyz=</span><span class="s">"0.0"</span>
+					 <span class="na">izz=</span><span class="s">"0.0001"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;/inertial&gt;</span>
+		<span class="nt">&lt;visual&gt;</span>
+			<span class="nt">&lt;origin</span> <span class="na">xyz=</span><span class="s">" 0 0 0 "</span> <span class="na">rpy=</span><span class="s">"0 0 0"</span> <span class="nt">/&gt;</span>
+			<span class="nt">&lt;geometry&gt;</span>
+				<span class="nt">&lt;box</span> <span class="na">size=</span><span class="s">"0.01 0.01 0.07"</span> <span class="nt">/&gt;</span>
+			<span class="nt">&lt;/geometry&gt;</span>
+			<span class="nt">&lt;material</span> <span class="na">name=</span><span class="s">"black"</span><span class="nt">&gt;</span>
+				<span class="nt">&lt;color</span> <span class="na">rgba=</span><span class="s">"0.16 0.17 0.15 0.9"</span><span class="nt">/&gt;</span>
+			<span class="nt">&lt;/material&gt;</span>
+		<span class="nt">&lt;/visual&gt;</span>
+		<span class="nt">&lt;collision&gt;</span>
+			<span class="nt">&lt;origin</span> <span class="na">xyz=</span><span class="s">"0.0 0.0 0.0"</span> <span class="na">rpy=</span><span class="s">"0 0 0"</span> <span class="nt">/&gt;</span>
+			<span class="nt">&lt;geometry&gt;</span>
+				<span class="nt">&lt;box</span> <span class="na">size=</span><span class="s">"0.01 0.01 0.07"</span> <span class="nt">/&gt;</span>
+			<span class="nt">&lt;/geometry&gt;</span>
+		<span class="nt">&lt;/collision&gt;</span>
+	<span class="nt">&lt;/link&gt;</span>
+<span class="nt">&lt;/xacro:macro&gt;</span>
+</code></pre></div></div>
+
+<h2 id="others">Others</h2>
+
+<ol>
+  <li>urdf是ROS原生支持格式，Gazebo使用sdf较好</li>
+</ol>
+
+<h1 id="mavros-1">mavros</h1>
+
+<h1 id="others-1">Others</h1>
+
+<h2 id="关于ros的cmakeliststxt">关于ROS的CMakeLists.txt</h2>
+
+<p><a href="https://zhuanlan.zhihu.com/p/62344573">ROS学习之catkin CMakeList.txt - 知乎 (zhihu.com)</a></p>
+
+<div class="language-cmake highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cmake_minimum_required</span><span class="p">(</span>VERSION 3.0.2<span class="p">)</span> 
+<span class="c1">#Cmake版本说明</span>
+<span class="nb">project</span><span class="p">(</span>learning_cplus<span class="p">)</span> 
+<span class="c1">#功能包名称，可以使用变量 ${PROJECT_NAME} 在后面引用项目名称</span>
+<span class="nb">find_package</span><span class="p">(</span>catkin REQUIRED COMPONENTS 
+roscpp 
+rospy 
+std_msgs 
+message_generation 
+<span class="p">)</span> 
+<span class="c1">#找寻依赖的CMake包 </span>
+<span class="nf">generate_messages</span><span class="p">(</span> 
+DEPENDENCIES 
+std_msgs 
+<span class="p">)</span> 
+<span class="c1">#调用已生成的消息，我们的头文件有用到 </span>
+<span class="nf">catkin_package</span><span class="p">(</span> 
+<span class="c1"># INCLUDE_DIRS include </span>
+<span class="c1"># LIBRARIES learning_cplus </span>
+CATKIN_DEPENDS roscpp rospy std_msgs message_runtime
+<span class="c1"># DEPENDS system_lib </span>
+<span class="p">)</span> 
+<span class="c1">#编译依赖配置</span>
+<span class="nb">include_directories</span><span class="p">(</span>include <span class="si">${</span><span class="nv">catkin_INCLUDE_DIRS</span><span class="si">}</span> src/<span class="p">)</span>  <span class="c1"># 库文件</span>
+<span class="c1"># add_library(src/Parameter.h)   # 具体头文件</span>
+<span class="nb">add_executable</span><span class="p">(</span>publisher src/publisher.cpp<span class="p">)</span> 
+<span class="nb">target_link_libraries</span><span class="p">(</span>publisher <span class="si">${</span><span class="nv">catkin_LIBRARIES</span><span class="si">}</span><span class="p">)</span> 
+<span class="nb">add_dependencies</span><span class="p">(</span>publisher learning_cplus_generate_messages_cpp<span class="p">)</span> 
+<span class="nb">add_executable</span><span class="p">(</span>listener src/listener.cpp<span class="p">)</span> 
+<span class="nb">target_link_libraries</span><span class="p">(</span>listener <span class="si">${</span><span class="nv">catkin_LIBRARIES</span><span class="si">}</span><span class="p">)</span> 
+<span class="nb">add_dependencies</span><span class="p">(</span>listener learning_cplus_generate_messages_cpp<span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>启动gazebo仿真
+make px4_sitl_default gazebo
+启动MAVROS,链接到本地ROS
+roslaunch mavros px4.launch fcu_url:<span class="o">=</span><span class="s2">"udp://:14540@127.0.0.1:14557"</span>
+运行外部控制程序
+rosrun offboard offboard_node
+</code></pre></div></div>
+
+<p>一份教程：XTDrone (https://github.com/robin-shaun/XTDrone)</p>
+
+
+                <hr style="visibility: hidden;">
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2021/07/01/Windows/" data-toggle="tooltip" data-placement="top" title="Windows配置">
+                        Previous<br>
+                        <span>Windows配置</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2021/07/17/Quaternion/" data-toggle="tooltip" data-placement="top" title="Quaternion">
+                        Next<br>
+                        <span>Quaternion</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+
+
+                <!--Gitalk评论start  -->
+                
+                <!-- 引入Gitalk评论插件  -->
+                <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+                <script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+                <div id="gitalk-container"></div>
+                <!-- 引入一个生产md5的js，用于对id值进行处理，防止其过长 -->
+                <!-- Thank DF:https://github.com/NSDingFan/NSDingFan.github.io/issues/3#issuecomment-407496538 -->
+                <script src="/js/md5.min.js"></script>
+                <script type="text/javascript">
+                    var gitalk = new Gitalk({
+                    clientID: 'd18b343dd9c7ca49518a',
+                    clientSecret: '539e88b8a7feffaddbb553b9c421dfefcbc6eced',
+                    repo: 'Chen-WH.github.io',
+                    owner: 'Chen-WH',
+                    admin: ['Chen-WH'],
+                    distractionFreeMode: true,
+                    id: md5(location.pathname),
+                    });
+                    gitalk.render('gitalk-container');
+                </script>
+                
+                <!-- Gitalk end -->
+
+                
+
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/2-tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+        				
+                            
+                				<a href="/2-tags/#Visualization" title="Visualization" rel="2">
+                                    Visualization
+                                </a>
+                            
+        				
+                            
+                				<a href="/2-tags/#Note" title="Note" rel="2">
+                                    Note
+                                </a>
+                            
+        				
+                            
+        				
+                            
+                				<a href="/2-tags/#Coding" title="Coding" rel="2">
+                                    Coding
+                                </a>
+                            
+        				
+                            
+        				
+                            
+                				<a href="/2-tags/#Math" title="Math" rel="3">
+                                    Math
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/2-tags/#Essay" title="Essay" rel="2">
+                                    Essay
+                                </a>
+                            
+        				
+                            
+        				
+        			</div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+                    
+                        <li><a href="https://www.zhihu.com/people/spectre-40">知乎</a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        // BY Fix:去除标题前的‘#’ issues:<https://github.com/qiubaiying/qiubaiying.github.io/issues/137>
+        // anchors.options = {
+        //   visible: 'always',
+        //   placement: 'right',
+        //   icon: '#'
+        // };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    <!-- add jianshu add target = "_blank" to <a> by BY -->
+                    
+                    
+
+                    <!-- add Weibo, Zhihu by Hux, add target = "_blank" to <a> by Hux -->
+                    
+                    
+
+
+                    
+                    
+                    
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 思过崖 2021
+                    <br>
+                    Theme on <a href="https://github.com/Chen-WH/Chen-WH.github.io.git">GitHub</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="100px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=&repo=.github.io&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Service Worker -->
+
+<script type="text/javascript">
+    if(navigator.serviceWorker){
+        // For security reasons, a service worker can only control the pages that are in the same directory level or below it. That's why we put sw.js at ROOT level.
+        navigator.serviceWorker
+            .register('/sw.js')
+            .then((registration) => {console.log('Service Worker Registered. ', registration)})
+            .catch((error) => {console.log('ServiceWorker registration failed: ', error)})
+    }
+</script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/ 
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers   
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async('/js/jquery.tagcloud.js',function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog (selector) {
+        var P = $('div.post-container'),a,n,t,l,i,c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#"+$(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+            l = $('<li class="'+n+'_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;    
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function(e){
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/apple-touch-icon.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

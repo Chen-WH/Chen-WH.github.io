@@ -1,0 +1,206 @@
+I"t;<h1 id="git教程">Git教程</h1>
+
+<p>https://www.liaoxuefeng.com/wiki/896043488029600</p>
+
+<h2 id="时光机穿梭">时光机穿梭</h2>
+
+<h3 id="工作区和暂存区">工作区和暂存区</h3>
+
+<p>第一步是用<code class="language-plaintext highlighter-rouge">git add</code>把文件添加进去，实际上就是把文件修改添加到暂存区；</p>
+
+<p>第二步是用<code class="language-plaintext highlighter-rouge">git commit</code>提交更改，实际上就是把暂存区的所有内容提交到当前分支。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">## 添加全局配置</span>
+git config <span class="nt">--global</span> user.email <span class="s2">"1773904345@qq.com"</span>
+git config <span class="nt">--global</span> user.name <span class="s2">"ChenWH"</span>
+
+<span class="c">## 创建版本库</span>
+git init <span class="c"># 初始化</span>
+git add read.txt <span class="c"># 把文件添加到仓库</span>
+git commit <span class="nt">-m</span> <span class="s2">"wrote a readme file"</span> <span class="c"># 把文件提交到仓库</span>
+
+<span class="c"># 为什么Git添加文件需要 add，commit 一共两步呢？因为 commit 可以一次提交很多文件，所以你可以多次 add 不同的文件，比如：</span>
+
+git add file1.txt
+git add file2.txt file3.txt
+git <span class="nb">rm </span>test.txt <span class="c"># 删除文件</span>
+git commit <span class="nt">-m</span> <span class="s2">"add 3 files."</span>
+
+git status <span class="c"># 查看仓库状态</span>
+git diff <span class="c"># 查看修改内容</span>
+git log <span class="c"># 查看提交日志</span>
+
+<span class="c"># 在 Git 中，用 HEAD 表示当前版本，也就是最新的提交1094adb...（注意我的提交ID和你的肯定不一样），上一个版本就是 HEAD^ ，上上一个版本就是 HEAD^^ ，当然往上100个版本写100个^比较容易数不过来，所以写成 HEAD~100 。</span>
+
+git reset <span class="nt">--hard</span> HEAD^ <span class="c"># 回溯</span>
+git reset <span class="nt">--hard</span> 1094a <span class="c"># 取消回溯</span>
+git reflog <span class="c"># 查看命令历史，便于获取commit id</span>
+git checkout <span class="nt">--</span> readme.txt <span class="c"># 让工作区文件回到最近一次git commit或git add时的状态</span>
+git reset HEAD readme.txt <span class="c"># 可以把暂存区的修改撤销掉（unstage），重新放回工作区</span>
+</code></pre></div></div>
+
+<h2 id="远程仓库">远程仓库</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">## 添加 SSH key</span>
+ssh-keygen <span class="nt">-t</span> rsa <span class="nt">-C</span> <span class="s2">"youremail@example.com"</span>
+<span class="c"># 如果一切顺利的话，可以在用户主目录里找到.ssh目录，里面有id_rsa和id_rsa.pub两个文件，这两个就是SSH Key的秘钥对，id_rsa是私钥，不能泄露出去，id_rsa.pub是公钥，可以放心地告诉任何人。</span>
+
+<span class="c">## 登录GitHub</span>
+<span class="c"># 登陆GitHub，打开“Account settings”，“SSH Keys”页面，然后，点“Add SSH Key”，填上任意Title，在Key文本框里粘贴id_rsa.pub文件的内容</span>
+</code></pre></div></div>
+
+<h3 id="添加远程库">添加远程库</h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 登陆GitHub，然后，在右上角找到“Create a new repo”按钮，创建一个新的仓库</span>
+git remote add origin git@github.com:Spectre1229/learning.git
+<span class="c"># 添加后，远程库的名字就是origin，这是Git默认的叫法，也可以改成别的</span>
+
+<span class="c"># 把本地库的内容推送到远程，实际上是把当前分支master推送到远程。</span>
+git push <span class="nt">-u</span> origin master
+<span class="c"># 由于远程库是空的，我们第一次推送master分支时，加上了-u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令。</span>
+<span class="c"># 后续提交只需要</span>
+git push origin master  / git push origin main
+<span class="c">## 注意github创建的所有新的源代码仓库将默认被命名为 “main”，而不是原先的"master"。</span>
+<span class="c"># 删除远程库</span>
+git remote <span class="nt">-v</span> <span class="c"># 查看远程库信息</span>
+git remote <span class="nb">rm </span>origin <span class="c"># 然后，根据名字删除，比如删除origin</span>
+<span class="c"># 此处的“删除”其实是解除了本地和远程的绑定关系，并不是物理上删除了远程库。远程库本身并没有任何改动。要真正删除远程库，需要登录到GitHub，在后台页面找到删除按钮再删除。</span>
+</code></pre></div></div>
+
+<h3 id="从远程库克隆">从远程库克隆</h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone git@github.com:Spectre1229/SQP.git <span class="c"># ssh协议clone</span>
+git clone https://github.com/michaelliao/gitskills.git <span class="c"># https协议</span>
+</code></pre></div></div>
+
+<h2 id="分支管理">分支管理</h2>
+
+<h3 id="创建与合并分支">创建与合并分支</h3>
+
+<ol>
+  <li>每次提交，Git都把它们串成一条时间线，这条时间线就是一个分支。截止到目前，只有一条时间线，在Git里，这个分支叫主分支，即master分支。HEAD严格来说不是指向提交，而是指向master，master才是指向提交的，所以，HEAD指向的就是当前分支。</li>
+  <li>一开始的时候，master分支是一条线，Git用master指向最新的提交，再用HEAD指向master，就能确定当前分支，以及当前分支的提交点。</li>
+  <li>每次提交，master分支都会向前移动一步，这样，随着你不断提交，master分支的线也越来越长。
+当我们创建新的分支，例如dev时，Git新建了一个指针叫dev，指向master相同的提交，再把HEAD指向dev，就表示当前分支在dev上。</li>
+  <li>Git创建一个分支很快，因为除了增加一个dev指针，改改HEAD的指向，工作区的文件都没有任何变化。</li>
+  <li>不过，从现在开始，对工作区的修改和提交就是针对<code class="language-plaintext highlighter-rouge">dev</code>分支了，比如新提交一次后，<code class="language-plaintext highlighter-rouge">dev</code>指针往前移动一步，而<code class="language-plaintext highlighter-rouge">master</code>指针不变。</li>
+  <li>假如我们在<code class="language-plaintext highlighter-rouge">dev</code>上的工作完成了，就可以把<code class="language-plaintext highlighter-rouge">dev</code>合并到<code class="language-plaintext highlighter-rouge">master</code>上。Git怎么合并呢？最简单的方法，就是直接把<code class="language-plaintext highlighter-rouge">master</code>指向<code class="language-plaintext highlighter-rouge">dev</code>的当前提交，就完成了合并。</li>
+  <li>合并完分支后，甚至可以删除<code class="language-plaintext highlighter-rouge">dev</code>分支。删除<code class="language-plaintext highlighter-rouge">dev</code>分支就是把<code class="language-plaintext highlighter-rouge">dev</code>指针给删掉，删掉后，我们就剩下了一条<code class="language-plaintext highlighter-rouge">master</code>分支。</li>
+</ol>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout <span class="nt">-b</span> dev <span class="c"># 创建dev分支并切换到dev分支</span>
+<span class="c"># git checkout 命令加上-b参数表示创建并切换，相当于以下两条命令 </span>
+git branch dev <span class="c"># 创建dev</span>
+git checkout dev <span class="c"># 切换至dev</span>
+<span class="c"># 新版Git使用 git switch -c dev 以及 git switch master</span>
+git branch <span class="c"># 查看当前分支</span>
+git merge dev <span class="c"># dev合并至当前分支</span>
+git branch <span class="nt">-d</span> dev <span class="c"># 删除dev分支</span>
+</code></pre></div></div>
+
+<h3 id="解决冲突">解决冲突</h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git log <span class="nt">--graph</span> <span class="nt">--pretty</span><span class="o">=</span>oneline <span class="nt">--abbrev-commit</span>
+git log <span class="nt">--graph</span> <span class="c"># 查看分支合并图</span>
+</code></pre></div></div>
+
+<h3 id="分支管理策略">分支管理策略</h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Fast-forward 会直接将master指向dev的当前提交，但会损失分支信息，而且看不出合并的痕迹</span>
+git merge <span class="nt">--no-ff</span> <span class="nt">-m</span> <span class="s2">"merge with no-ff"</span> dev
+<span class="c">#--no-ff参数，表示禁用Fast forward，因为本次合并要创建一个新的commit，所以加上-m参数，把commit描述写进去。</span>
+</code></pre></div></div>
+
+<h3 id="bug分支">Bug分支</h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git stash <span class="c"># Git还提供了一个stash功能，可以把当前工作现场“储藏”起来，等以后恢复现场后继续工作</span>
+git stash list
+<span class="nt">----</span><span class="o">&gt;</span> stash@<span class="o">{</span>0<span class="o">}</span>: WIP on dev: f52c633 add merge
+git stash apply <span class="c"># 恢复stash到dev</span>
+git stash apply stash@<span class="o">{</span>0<span class="o">}</span> <span class="c"># 恢复指定stash</span>
+git stash drop <span class="c"># 删除stash内容</span>
+git stash pop <span class="c"># 恢复并删除stash内容</span>
+
+git cherry-pick 4c805e2 <span class="c"># 复制一个特定的提交到当前分支</span>
+</code></pre></div></div>
+
+<h3 id="feature分支">Feature分支</h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git branch <span class="nt">-D</span> feature-vulcan <span class="c"># 丢弃一个没有被合并过的分支</span>
+</code></pre></div></div>
+
+<h3 id="多人协作">多人协作</h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout <span class="nt">-b</span> dev origin/dev <span class="c"># 创建远程origin的dev分支到本地</span>
+
+<span class="c">## 如果你的小伙伴已经向origin/dev分支推送了他的提交，而碰巧你也对同样的文件作了修改，并试图推送</span>
+git branch <span class="nt">--set-upstream-to</span><span class="o">=</span>origin/dev dev <span class="c"># 如果git pull提示no tracking information，则说明本地分支和远程分支的链接关系没有创建，先指定本地dev分支与远程origin/dev分支的链接</span>
+git pull <span class="c"># 而后抓取最新的提交</span>
+git commit <span class="nt">-m</span> <span class="s2">"fix env conflict"</span> <span class="c"># 提交本地修改</span>
+git push origin dev <span class="c"># </span>
+</code></pre></div></div>
+
+<h3 id="rebase">Rebase</h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git rebase <span class="c"># 把分叉的提交历史“整理”成一条直线</span>
+</code></pre></div></div>
+
+<h2 id="标签管理">标签管理</h2>
+
+<p>tag就是一个让人容易记住的有意义的名字，它跟某个commit绑在一起。</p>
+
+<h3 id="创建标签">创建标签</h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git tag v1.0 <span class="c"># 打标签，默认标签打在最新提交的commit</span>
+git tag v0.9 f52c633 <span class="c"># 给指定commit打标签</span>
+git tag <span class="c"># 查看所有标签，标签不是按时间顺序列出，而是按字母排序的。</span>
+git show v0.9 <span class="c"># 查看标签信息</span>
+git tag <span class="nt">-a</span> v0.1 <span class="nt">-m</span> <span class="s2">"version 0.1 released"</span> 1094adb <span class="c"># 创建带有说明的标签，用-a指定标签名，-m指定说明文字</span>
+</code></pre></div></div>
+
+<h3 id="操作标签">操作标签</h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git tag <span class="nt">-d</span> v0.1 <span class="c"># 删除标签</span>
+git push origin v1.0 <span class="c"># 推送某个标签到远程</span>
+git push origin <span class="nt">--tags</span> <span class="c"># 一次性推送全部未推送的本地标签</span>
+
+<span class="c">## 删除已推送的标签</span>
+git tag <span class="nt">-d</span> v0.9 <span class="c"># 先删除本地标签</span>
+git push origin :refs/tags/v0.9 <span class="c"># 从远程删除</span>
+</code></pre></div></div>
+
+<h2 id="使用github">使用GitHub</h2>
+
+<ol>
+  <li>点“Fork”在自己的账号下克隆了一个仓库，然后，从自己的账号下clone</li>
+  <li>一定要从自己的账号下clone仓库，这样你才能推送修改。如果从bootstrap的作者的仓库地址<code class="language-plaintext highlighter-rouge">git@github.com:twbs/bootstrap.git</code>克隆，因为没有权限，你将不能推送修改。</li>
+  <li>如果你希望bootstrap的官方库能接受你的修改，你就可以在GitHub上发起一个pull request。</li>
+</ol>
+
+<h2 id="使用gitee">使用Gitee</h2>
+
+<ol>
+  <li>使用多个远程库时，我们要注意，git给远程库起的默认名称是<code class="language-plaintext highlighter-rouge">origin</code>，如果有多个远程库，我们需要用不同的名称来标识不同的远程库。</li>
+</ol>
+
+<h2 id="自定义git">自定义Git</h2>
+
+<h3 id="忽略特殊文件">忽略特殊文件</h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 忽略某些文件时，需要编写.gitignore</span>
+<span class="c"># 检验.gitignore的标准是git status命令是不是说working directory clean</span>
+<span class="c"># .gitignore文件本身要放到版本库里，并且可以对.gitignore做版本管理</span>
+git add App.class <span class="c"># 添加文件到Git</span>
+git add <span class="nt">-f</span> App.class <span class="c"># 强制添加到Git</span>
+
+<span class="c">## .gitignore文件内容示例</span>
+<span class="c"># 排除所有.开头的隐藏文件:</span>
+.<span class="k">*</span>
+<span class="c"># 排除所有.class文件:</span>
+<span class="k">*</span>.class
+<span class="c"># 不排除.gitignore和App.class:</span>
+<span class="o">!</span>.gitignore
+<span class="o">!</span>App.class
+</code></pre></div></div>
+
+:ET

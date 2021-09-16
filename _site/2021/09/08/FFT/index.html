@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="人难免天生有自怜的情绪，唯有时刻保持清醒，才能看清真正的价值在哪里。">
+    <meta name="keywords"  content="日记, 待办事项, 学习笔记, 思考">
+    <meta name="theme-color" content="#000000">
+    
+    <title>FFT笔记 - 思过崖 - 晴耕三亩，雨读千年。</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <!-- Safari Webpage Icon    by-BY -->
+    <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://Chen-WH.github.io/2021/09/08/FFT/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">思过崖</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/1-resources/">Resources</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/2-tags/">Blog</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/4-about/">About</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/the-first.png" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/the-first.png')
+    }
+
+    
+</style>
+<header class="intro-header" >
+    <div class="header-mask"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/2-tags/#Math" title="Math">Math</a>
+                        
+                    </div>
+                    <h1>FFT笔记</h1>
+                    
+                    
+                    <h2 class="subheading">(副标题)</h2>
+                    
+                    <span class="meta">Posted by ChenWH on September 8, 2021</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+				<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+<h1 id="快速傅里叶变换fft">快速傅里叶变换(FFT)</h1>
+
+<h2 id="原理介绍">原理介绍</h2>
+
+<h3 id="什么是离散傅里叶">什么是离散傅里叶</h3>
+
+\[连续周期信号的傅里叶级数\ c_n=\frac{1}{T}\int_0^Tf(t)e^{-j\frac{2\pi}{T}nt}\mathbf{d}t\]
+
+<p>​		傅里叶变换是用来处理连续系统的，那离散系统如何处理呢？假如 $x(t)$ 为连续系统信号，要转换成离散系统，就要先进行采样，采样频率为 $f_s$，对于连续信号 $x(t)$ 按照采样时间 $T_s$ 进行抽样 $N$ 次 $\delta(t-nT_s)$冲击。
+\(\begin{aligned}
+	&amp;采样序列&amp; &amp;\delta_s(t)=\sum_{n=0}^{N-1}\delta(t-nT_s)\\
+	&amp;周期的离散信号&amp; &amp;x_s(t)=x(t)\sum_{n=0}^{N-1}\delta(t-nT_s)
+\end{aligned}\)
+​		此外频率也需要离散化，将无限长的离散限号进行截短至 $N$ 个采样点，然后将这 $N$ 个采样点进行周期延拓，可以得到周期的离散信号，如此离散周期信号的傅里叶级数为
+\(X[jk\omega]=\frac{1}{T}\int_{-T/2}^{T/2}x(t)\sum_{n=0}^{N-1}\delta(t-nT_s)e^{-j\frac{2\pi}{T}kt}\mathbf{d}t\)
+​		将积分与求和调换顺序
+\(X[jk\omega]=\frac{1}{T}\sum_{n=0}^{N-1}\int_{-T/2}^{T/2}x(t)\delta(t-nT_s)e^{-j\frac{2\pi}{T}kt}\mathbf{d}t\)
+​		由于 $\delta$ 冲激函数的筛选性质 $\int_{-\infty}^{\infty}x(t)\delta(t-t_0)\mathbf{d}t=x(t_0)$ ，上式很容易离散化，积分号内只有采样点 $\sum_{n=0}^{N-1}nT_s$ 处的值被保留。考虑到 $T=NT_s$ 和 $t=nT_s$，上式可以简化为
+\(X[jk\omega]=\frac{1}{NT_s}\sum_{n=0}^{N-1}x(nT_s)e^{-j\frac{2\pi}{NT_s}knT_s}=\frac{1}{NT_s}\sum_{n=0}^{N-1}x[n]e^{-j\frac{2\pi}{N}kn}\)
+​		令 $X[jk\omega]\cdot T_s=X[k]$，得到
+\(X[k]=\frac{1}{N}\sum_{n=0}^{N-1}x(nT_s)e^{-j\frac{2\pi}{NT_s}knT_s}=\frac{1}{N}\sum_{n=0}^{N-1}x[n]e^{-j\frac{2\pi}{N}kn}\)
+​		离散周期傅里叶变换后的第 $k$ 个傅里叶系数对应的频率是 $\frac{k}{N}f_s$</p>
+
+<h3 id="离散傅里叶的定义">离散傅里叶的定义</h3>
+
+<p>​		设 $f(x)$ 是一个周期为 $2\pi$ 的函数，可以将其视作圆周上的函数，即 $f=f(e^{i\theta})$。若我们将 $2\pi$ 周期进行 $N$ 等分，则这等价于将圆周按照弧长进行 $N$ 等分，可以将相应的离散区域记作 $\mathbf{Z}(N)$。</p>
+
+<p>​		在 $\mathbf{Z}(N)$ 上，我们选取如下的函数 ${e_0,e_1,\cdots,e_{N-1}}$
+\(e_l(k)=\zeta^{lk}=e^{\frac{2\pi i}{N}lk},l=0,1,\cdots,N-1,k=0,1,\cdots,N-1\)
+其中 $\zeta=e^{\frac{2\pi i}{N}}$</p>
+
+<h3 id="采样定理">采样定理</h3>
+
+<p><img src="https://i.loli.net/2021/09/08/93lso4UhrjzYFGq.jpg" alt="Nyquist–Shannon sampling theorem" /></p>
+
+<p>对于连续信号的进行抽样离散的话，必须保证采样频率是原连续信号最大频率分量的2倍频率以上。否则原始频谱信号经过周期延拓后会有一部分重叠，这样在重叠的部分就会有信息的丢失，也就无法进行信号复原了。这就是采样定理，又叫奈奎斯特采样定理或香农采样定理。</p>
+
+<h3 id="快速傅里叶">快速傅里叶</h3>
+
+<p>快速傅氏变换，是离散傅氏变换的快速算法，它是根据离散傅氏变换的奇、偶、虚、实等特性，对离散傅立叶变换的算法进行改进获得的。FFT提高了运算速度，但是，也对参与运算的样本序列作出了限制，即要求样本数为 $2^N$ 点。</p>
+
+<p>对固定的 $N$，设 $F(0),\cdots,F(N-1)$ 与 $\omega_N=e^{-\frac{2\pi i}{N}}$ 已知，若记 $a_k^N(F)$ 为 $F$ 在 $\mathbf{Z(N)}$ 上的第 $k$ 个 $Fourier$ 系数，即
+\(a_k^N=\frac{1}{N}\sum_{r=0}^{N-1}F(r)\omega_N^{kr}\)</p>
+
+<h3 id="库利-图基算法">库利-图基算法</h3>
+
+<p>以分治法递归地将长度为 $N=N_1N_2$ 的离散傅里叶变换分解为长度为 $N_1$ 的 $N_2$ 个较短序列的离散傅里叶变换。在下面的MATLAB代码中，我们采用 NFFT = 2^nextpow2(N) 来使长度为比当前长度大的下一个最小的2的次幂值。不过不用担心会影响算法，调用函数fft(Fz, NFFT)中，向量Fz长度小于NFFT，MATLAB会为Fz补上尾零以达到长度NFFT。下面解释选取2的次幂值对算法性能有什么帮助。
+\(\begin{aligned}
+	a_k^N&amp;=\frac{1}{N}\sum_{r=0}^{N-1}F(r)\omega_N^{kr}\\
+	&amp;=\frac{1}{N}\sum_{r=2t}F(r)\omega_N^{kr}+\frac{1}{N}\sum_{r=2t+1}F(r)\omega_N^{kr}\\
+	&amp;=\frac{1}{N}\sum_{t}F(2t)\omega_{N/2}^{kt}+\frac{\omega_N^k}{N}\sum_{t}F(2t+1)\omega_{N/2}^{kt}\\
+	&amp;=\frac{1}{N}[F_{even}(k)+\omega_N^kF_{odd}(k)]
+\end{aligned}\)
+将单个离散傅里叶变换分成两个项，一个在奇数值上，一个在偶数值上。对于每一个子问题，我们只需要一半的计算次数，也就是时间复杂度由 $\mathcal{O}\left[N^{2}\right]$ 变成了 $\mathcal{O}\left[\frac{N}{2}^{2}\right]$。而对于2的次幂值长度数据可以不断递归，在渐进的极限中可以达到 $\mathcal{O}\left[N\log N\right]$ 的复杂度。</p>
+
+<h2 id="代码示例">代码示例</h2>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="n">flapFrequency</span> <span class="o">=</span> <span class="n">getFlapFrequency_F</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span>
+<span class="n">N</span> <span class="o">=</span> <span class="nb">size</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>  <span class="c1">% 获取原数据长度</span>
+<span class="n">N</span> <span class="o">=</span> <span class="n">N</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="n">Fz</span> <span class="o">=</span> <span class="n">data</span><span class="p">(:,</span><span class="mi">3</span><span class="p">);</span>
+<span class="n">NFFT</span> <span class="o">=</span> <span class="mi">2</span><span class="o">^</span><span class="nb">nextpow2</span><span class="p">(</span><span class="n">N</span><span class="p">);</span>  <span class="c1">% 获取比当前长度大的下一个最小的2的次幂值</span>
+<span class="n">f</span><span class="o">=</span> <span class="n">frequency</span><span class="p">/</span><span class="mi">2</span><span class="o">*</span><span class="nb">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">NFFT</span><span class="p">/</span><span class="mi">2</span><span class="p">);</span>  <span class="c1">% 频率离散化</span>
+<span class="n">y</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">fft</span><span class="p">(</span><span class="n">Fz</span><span class="p">,</span><span class="n">NFFT</span><span class="p">))/</span><span class="n">N</span><span class="p">;</span>  <span class="c1">% 快速傅里叶</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">NFFT</span><span class="p">/</span><span class="mi">2</span><span class="p">);</span>
+<span class="n">start_point</span> <span class="o">=</span> <span class="nb">find</span><span class="p">(</span><span class="n">f</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'first'</span><span class="p">);</span>  <span class="c1">% 根据经验，扑翼频率应大于5Hz</span>
+<span class="n">end_point</span> <span class="o">=</span> <span class="nb">find</span><span class="p">(</span><span class="n">f</span> <span class="o">&lt;</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'last'</span><span class="p">);</span>  <span class="c1">% 根据经验，扑翼频率应小于19Hz</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">(</span><span class="n">start_point</span><span class="p">:</span><span class="n">end_point</span><span class="p">);</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">start_point</span><span class="p">:</span><span class="n">end_point</span><span class="p">);</span>
+<span class="n">position</span> <span class="o">=</span> <span class="n">y</span> <span class="o">==</span> <span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>  <span class="c1">% Fourier系数最大的频率点视为扑翼频率</span>
+<span class="n">flapFrequency</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">position</span><span class="p">);</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h2 id="参考资料">参考资料</h2>
+
+<ol>
+  <li><a href="https://zh.wikipedia.org/wiki/%E5%BF%AB%E9%80%9F%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2">快速傅里叶变换 维基百科</a></li>
+  <li><a href="https://zh.wikipedia.org/wiki/%E9%87%87%E6%A0%B7%E5%AE%9A%E7%90%86">采样定理 维基百科</a></li>
+  <li><a href="https://ww2.mathworks.cn/help/matlab/ref/fft.html?searchHighlight=fft&amp;s_tid=srchtitle">MATALB Help</a></li>
+  <li><a href="./Notes 3.9.pdf">《数学分析》课件</a></li>
+</ol>
+
+
+                <hr style="visibility: hidden;">
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2021/09/04/ML/" data-toggle="tooltip" data-placement="top" title="ML读书随笔">
+                        Previous<br>
+                        <span>ML读书随笔</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2021/09/09/Matrix/" data-toggle="tooltip" data-placement="top" title="矩阵求导笔记">
+                        Next<br>
+                        <span>矩阵求导笔记</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+
+
+                <!--Gitalk评论start  -->
+                
+                <!-- 引入Gitalk评论插件  -->
+                <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+                <script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+                <div id="gitalk-container"></div>
+                <!-- 引入一个生产md5的js，用于对id值进行处理，防止其过长 -->
+                <!-- Thank DF:https://github.com/NSDingFan/NSDingFan.github.io/issues/3#issuecomment-407496538 -->
+                <script src="/js/md5.min.js"></script>
+                <script type="text/javascript">
+                    var gitalk = new Gitalk({
+                    clientID: 'd18b343dd9c7ca49518a',
+                    clientSecret: '539e88b8a7feffaddbb553b9c421dfefcbc6eced',
+                    repo: 'Chen-WH.github.io',
+                    owner: 'Chen-WH',
+                    admin: ['Chen-WH'],
+                    distractionFreeMode: true,
+                    id: md5(location.pathname),
+                    });
+                    gitalk.render('gitalk-container');
+                </script>
+                
+                <!-- Gitalk end -->
+
+                
+
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/2-tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+        				
+                            
+                				<a href="/2-tags/#Visualization" title="Visualization" rel="2">
+                                    Visualization
+                                </a>
+                            
+        				
+                            
+                				<a href="/2-tags/#Note" title="Note" rel="2">
+                                    Note
+                                </a>
+                            
+        				
+                            
+        				
+                            
+                				<a href="/2-tags/#Coding" title="Coding" rel="2">
+                                    Coding
+                                </a>
+                            
+        				
+                            
+        				
+                            
+                				<a href="/2-tags/#Math" title="Math" rel="3">
+                                    Math
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/2-tags/#Essay" title="Essay" rel="2">
+                                    Essay
+                                </a>
+                            
+        				
+                            
+        				
+        			</div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+                    
+                        <li><a href="https://www.zhihu.com/people/spectre-40">知乎</a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        // BY Fix:去除标题前的‘#’ issues:<https://github.com/qiubaiying/qiubaiying.github.io/issues/137>
+        // anchors.options = {
+        //   visible: 'always',
+        //   placement: 'right',
+        //   icon: '#'
+        // };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    <!-- add jianshu add target = "_blank" to <a> by BY -->
+                    
+                    
+
+                    <!-- add Weibo, Zhihu by Hux, add target = "_blank" to <a> by Hux -->
+                    
+                    
+
+
+                    
+                    
+                    
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 思过崖 2021
+                    <br>
+                    Theme on <a href="https://github.com/Chen-WH/Chen-WH.github.io.git">GitHub</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="100px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=&repo=.github.io&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Service Worker -->
+
+<script type="text/javascript">
+    if(navigator.serviceWorker){
+        // For security reasons, a service worker can only control the pages that are in the same directory level or below it. That's why we put sw.js at ROOT level.
+        navigator.serviceWorker
+            .register('/sw.js')
+            .then((registration) => {console.log('Service Worker Registered. ', registration)})
+            .catch((error) => {console.log('ServiceWorker registration failed: ', error)})
+    }
+</script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/ 
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers   
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async('/js/jquery.tagcloud.js',function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog (selector) {
+        var P = $('div.post-container'),a,n,t,l,i,c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#"+$(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+            l = $('<li class="'+n+'_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;    
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function(e){
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/apple-touch-icon.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

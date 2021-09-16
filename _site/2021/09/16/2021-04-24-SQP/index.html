@@ -1,0 +1,1074 @@
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+<h1 id="理论部分">理论部分</h1>
+<h2 id="background">Background</h2>
+
+\[\begin{aligned}
+	\min\ &amp;f(\boldsymbol{x})\\
+	s.t.\ &amp;h_i(\boldsymbol{x})=0,\ \ i\in E\\
+	      &amp;g_i(\boldsymbol{x})\leq0,\ \ i\in I\\
+\end{aligned}\\
+E和I分别是等式约束的指标集和不等式约束的指标集,c_i是约束函数\]
+
+<hr />
+
+<h2 id="active-set">Active Set</h2>
+
+<p><strong>如何处理不等号约束？</strong></p>
+
+<p>$activeset$：一堆$active$（起到约束效果的）条件集合
+\(g_i(\boldsymbol{x}_k)\geq0 \Longrightarrow g_i^*(\boldsymbol{x}_{k+1})=0，视为active约束\)
+把从约束条件集合中拿出来的$active$约束条件加入工作集，等号约束条件始终在工作集内，这个集合是随着迭代不断变化的。求解在当前工作集下的约束QP问题来确定下一步迭代的方向。</p>
+
+<hr />
+
+<h2 id="kkt--lagrangian">KKT &amp; Lagrangian</h2>
+
+<p>构造$Lagrangian$函数（其中$g^*$表示$active$不等号约束条件）如下：
+\(\begin{aligned}			&amp;L(\boldsymbol{x},\boldsymbol{\lambda},\boldsymbol{\mu})=f(\boldsymbol{x})+\boldsymbol{\lambda}^T \boldsymbol{h}(\boldsymbol{x})+\boldsymbol{\mu}^T \boldsymbol{g}^*(\boldsymbol{x})\\
+	\\
+	\Longrightarrow&amp;目标 \ \nabla L= \left[\begin{array}{ccc}
+	\frac{dL}{dx_i} \\
+	\frac{dL}{d\lambda_i} \\
+	\frac{dL}{d\mu_i} \\
+	\end{array}\right]
+	=\left[\begin{array}{ccc}
+	\nabla f+\boldsymbol{\lambda}^T \nabla \boldsymbol{h}+\boldsymbol{\mu}^T\nabla \boldsymbol{g}^* \\
+	h_i \\
+	g_i^*\\
+	\end{array}\right]=\boldsymbol{O} \\
+\end{aligned}\)</p>
+
+<p>假设目标函数及约束函数皆为 凸函数，那么满足以上条件的点是一全局极小值。</p>
+
+<hr />
+
+<h2 id="newtons-method-in-optimization">Newton’s method in optimization</h2>
+
+<p>wiki：https://zh.wikipedia.org/wiki/%E6%87%89%E7%94%A8%E6%96%BC%E6%9C%80%E5%84%AA%E5%8C%96%E7%9A%84%E7%89%9B%E9%A0%93%E6%B3%95</p>
+
+<p>\(\begin{aligned}
+	f(x)&amp;=f(x_k+\Delta x)\\
+	&amp;\approx f(x_k)+f'(x_k)\Delta x+\frac{1}{2}f''(x_k)\Delta x^2\\
+	&amp;令导数为0，即\Delta x=-\frac{f'(x_k)}{f''(x_k)}\\
+	&amp;x_{k+1}=x_k-\frac{f'(x_k)}{f''(x_k)}\\
+\end{aligned}\)
+直至满足一定条件（如$f’(x_k)=0$或$x_{k+1}-x_k&lt;\varepsilon$，其中$\varepsilon$为一个给定的足够小的常量）后算法终止。</p>
+
+<p><img src="v2-c3642c3b7285e0ae3231e0ded42665fe_720w.jpg" alt="img" /></p>
+
+<p>推广至高维，只需将导数替换为梯度$\nabla f(x)$，并将二阶导数的导数替换为$Hessian$矩阵的逆矩阵$[Hf(x)]^{-1}$
+\(x_{k+1}=x_k-[Hf(x_k)]^{-1}\nabla f(x_k)\\\)</p>
+
+<hr />
+
+<h2 id="sqp-algorithm">SQP Algorithm</h2>
+
+\[\begin{aligned}
+	\min\ &amp;f(\boldsymbol{x}_k)+\nabla f(\boldsymbol{x}_k)^T\boldsymbol{d}_k+\frac{1}{2}\boldsymbol{d}_k^T\nabla^2f(\boldsymbol{x}_k)\boldsymbol{d}_k\\
+	s.t.\ &amp;h(\boldsymbol{x}_k)+\nabla h(\boldsymbol{x}_k)^T\boldsymbol{d}_k=0\\
+	&amp;g^*(\boldsymbol{x}_k)+\nabla g^*(\boldsymbol{x}_k)^T\boldsymbol{d}_k=0\\
+\end{aligned}\]
+
+\[\Longrightarrow
+\left\{
+\begin{array}{ll}
+	\min&amp;f(\boldsymbol{x}_k)+\nabla f(\boldsymbol{x}_k)^T\boldsymbol{d}_k+\frac{1}{2}\boldsymbol{d}_k^T\nabla^2f(\boldsymbol{x}_k)\boldsymbol{d}_k\\
+	&amp;+\sum\limits_{i\in E}\lambda_i\left[h_i(\boldsymbol{x}_k)+\nabla h_i(\boldsymbol{x}_k)^T\boldsymbol{d}_k\right]+\sum\limits_{i\in I}\mu_i \left[g_i^*(\boldsymbol{x}_k)+\nabla g_i^*(\boldsymbol{x}_k)^T\boldsymbol{d}_k\right]\\
+	&amp;h_i(\boldsymbol{x}_k)+\nabla h_i(\boldsymbol{x}_k)^T\boldsymbol{d}_k=0\\
+	&amp;g_i^*(\boldsymbol{x}_k)+\nabla g_i^*(\boldsymbol{x}_k)^T\boldsymbol{d}_k=0\\
+\end{array}
+\right.\]
+
+\[\Longrightarrow
+\left\{
+\begin{array}{ll}
+	&amp;\nabla f(\boldsymbol{x}_k)+\nabla^2f(\boldsymbol{x}_k)\boldsymbol{d}_k+\sum\limits_{i\in E}\lambda_i \nabla h_i(\boldsymbol{x})+\sum\limits_{i\in I}\mu_i \nabla g_i^*(\boldsymbol{x})=0\\
+	&amp;h_i(\boldsymbol{x}_k)+\nabla h_i(\boldsymbol{x}_k)^T\boldsymbol{d}_k=0\\
+	&amp;g_i^*(\boldsymbol{x}_k)+\nabla g_i^*(\boldsymbol{x}_k)^T\boldsymbol{d}_k=0\\
+\end{array}
+\right.\]
+
+\[\Longrightarrow
+\left[
+\matrix{
+  H[\nabla^2f(\boldsymbol{x}_k)] &amp; \nabla \boldsymbol{h}(\boldsymbol{x}) &amp; \nabla \boldsymbol{g}^*(\boldsymbol{x})\\
+  \nabla \boldsymbol{h}(\boldsymbol{x})^T &amp; \boldsymbol{O} &amp; \boldsymbol{O}\\
+  \nabla \boldsymbol{g}^*(\boldsymbol{x})^T &amp; \boldsymbol{O} &amp; \boldsymbol{O}\\ 
+}
+\right]
+\left[
+\matrix{
+  \boldsymbol{d}_k \\
+  \boldsymbol{\lambda} \\
+  \boldsymbol{\mu} \\ 
+}
+\right]
+=
+\left[
+\matrix{
+  -\nabla f(\boldsymbol{x}_k) \\
+  -\boldsymbol{h}(\boldsymbol{x}_k) \\
+  -\boldsymbol{g}^*(\boldsymbol{x}_k) \\ 
+}
+\right]\]
+
+\[\Longrightarrow\boldsymbol{x}_{k+1}=\boldsymbol{x}_k+\boldsymbol{d}_k\]
+
+<p>（其中$g^*$表示$active$不等号约束条件，$\boldsymbol{d}_k$表示当前迭代的步长向量）</p>
+
+<hr />
+
+<h2 id="line-search">Line search</h2>
+
+<p>牛顿法能使得更新后函数处于极值点，但是它不一定是极小点，也就是说牛顿方向可能是下降方向，也可能是上升方向，以至于当初始点远离极小点时，牛顿法有可能不收敛。因此提出<strong>阻尼牛顿法</strong>，在牛顿法的基础上，每次迭代除了计算更新方向，还要对最优步长做一维搜索。
+\(\begin{aligned}
+	\boldsymbol{x}_{k+1}&amp;=\boldsymbol{x}_k-\gamma[Hf(x_k)]^{-1}\nabla f(x_k)\\
+	即\boldsymbol{x}_{k+1}&amp;=\boldsymbol{x}_k+\boldsymbol{\alpha}_k\boldsymbol{d}_k
+\end{aligned}\)</p>
+<h3 id="精确一维搜索">精确一维搜索</h3>
+
+<h4 id="直接方法">直接方法</h4>
+
+<ol>
+  <li>$0.618$法</li>
+  <li>$Fibonacci$法</li>
+</ol>
+
+<h4 id="插值法">插值法</h4>
+
+<ol>
+  <li>二次插值法
+    <ol>
+      <li>一点二次插值法（牛顿法）：收敛效果并不佳</li>
+      <li>二点二次插值法</li>
+    </ol>
+  </li>
+  <li>三次插值法</li>
+</ol>
+
+<h3 id="不精确一维搜索">不精确一维搜索</h3>
+
+<h4 id="armijo-goldstein准则">Armijo-Goldstein准则</h4>
+
+\[f(x_k+\alpha_k d_k)&lt;f(x_k)+\rho g^T_k\alpha_kd_k\]
+
+<h4 id="wolfe-powell准则">Wolfe-Powell准则</h4>
+
+\[g^T_{k+1}d_k\geq \sigma g^T_kd_k\\
+|g^T_{k+1}d_k|\leq \sigma|g^T_kd_k|\]
+
+<hr />
+
+<h2 id="modified-newton-method">Modified Newton method</h2>
+
+<p>牛顿法面临的主要困难是$Hessian$矩阵$G_k$不正定。这时候二次模型不一定有极小点，甚至没有平稳点。当$G_k$不正定时，二次模型函数是无界的。</p>
+
+<h3 id="goldstein-price修正法">Goldstein-Price修正法</h3>
+
+<p>当$Hessian$不正定时， 采用最速下降方向。
+\(d_k=\left\{  
+             \begin{array}{**lr**}  
+             d_k^N,\ \ if\ \cos\langle d_k^N,-g\rangle\geq \eta\\
+             -g_k,\ \ otherwise
+             \end{array}  
+\right.\)</p>
+
+<h3 id="goldfeld修正法">Goldfeld修正法</h3>
+
+<p>使牛顿方向偏向最速下降方向将$Hessian$矩阵$G_k$改变为$G_k+v_k I$。比较理想的是，$v_k$不要太大于使$G_k+v_k I$正定的最小的$v$。</p>
+
+<p>Gerschgorin圆盘定理
+<a href="https://zhuanlan.zhihu.com/p/31463121">第十八课：Gerschgorin（盖尔）圆盘定理 - 知乎 (zhihu.com)</a>
+\(\begin{aligned}
+	b_1&amp;=|\min\limits_{1\leq i\leq n}\{(G_k)_{ii}-\sum_{j\not=i}|(G_k)_{ij}|\}|\geq|\min\limits_{i}\lambda_i|\\
+	b_2&amp;=\max_{i}\{e_{ii} \}，其中e_{ii}是E的第i个对角元\\
+	v_k&amp;=\min\{b_1,b_2 \}\\
+\end{aligned}\)</p>
+
+<h3 id="基于cholesky分解的修正法">基于Cholesky分解的修正法</h3>
+
+<p>https://zh.wikipedia.org/wiki/Cholesky%E5%88%86%E8%A7%A3</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>先形成$G_k$的$Cholesky$分解$LDL^T$，然后定义$\overline{G_k}=L\overline{D}L^T$，其中$\overline{d_{ii}}=\max{</td>
+      <td>d_{jj}</td>
+      <td>,\delta}$，$d_{jj}$为$D$的对角元，$\delta$是某个给定的小正数。</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>缺陷</strong></p>
+
+<ol>
+  <li>对称不定矩阵的 Cholesky分解可能不存在。</li>
+  <li>即使这种分解存在，其计算过程一般也是数值不稳定的，因为其矩阵分解因子的元素可能是无界的。进一步，当$G_k$仅是稍微不定的，用这样的方法产生的$G_k$也可能与$G_k$相差很大。</li>
+</ol>
+
+<h3 id="gillmurry修正法数值稳定">Gill&amp;Murry修正法（数值稳定）</h3>
+
+<hr />
+
+<h2 id="拟牛顿法bfgs-algorithm">拟牛顿法（BFGS Algorithm）</h2>
+
+<p>https://zh.wikipedia.org/wiki/%E6%93%AC%E7%89%9B%E9%A0%93%E6%B3%95</p>
+
+<p>求一个高维问题的 Hessian矩阵的逆矩阵是一件颇费工夫的事情。</p>
+
+<p>割线方程组，对Hessian矩阵进行近似</p>
+
+<hr />
+
+<h1 id="实现及优化">实现及优化</h1>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>以$Wiki$上的例子为对象进行尝试
+\(\begin{aligned}
+	\min\ f(\boldsymbol{x})&amp;=-sin(u+v)\\
+	             s.t.\ -u-v&amp;\leq0\\
+	               u+v-\pi &amp;\leq 0\\
+	                      u&amp;=v^3\\
+\end{aligned}\)</p>
+
+<h2 id="flow-chart">Flow chart</h2>
+
+<pre><code class="language-mermaid">graph TB
+Initial(变量初始化) --&gt; B[确定Activeset]
+B--&gt;C[求解QP问题得到步长]
+C--&gt;checknorm{"检验步长的范数"}
+checknorm--&gt;|范数小于小量|checkec{"检验不等式约束"}
+checkec--&gt;|满足不等式约束|ed[规划结束]
+checkec--&gt;|不满足不等式约束|re[继续迭代]
+re--&gt;B
+checknorm--&gt;|范数大于小量|alpha[一维搜索确定步长系数]
+alpha--&gt;next[进行迭代]
+next--&gt;B
+</code></pre>
+
+<h2 id="codepython">Code(Python)</h2>
+
+<h3 id="bfgs">BFGS</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">variable</span> <span class="o">=</span> <span class="n">symbols</span><span class="p">(</span><span class="s">'u v lambda1 mu1 mu2'</span><span class="p">)</span>
+<span class="c1"># 目标函数
+</span><span class="n">f</span> <span class="o">=</span> <span class="o">-</span> <span class="n">sin</span><span class="p">(</span><span class="n">variable</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">variable</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">variable</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">variable</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">variable</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
+<span class="c1"># 不等号约束
+</span><span class="n">g</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">g</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span> <span class="n">variable</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">variable</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">g</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">variable</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">variable</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">pi</span>
+<span class="n">mug</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">mug</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">variable</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="o">-</span> <span class="n">variable</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">variable</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">mug</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">variable</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">variable</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">variable</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">pi</span><span class="p">)</span>
+<span class="n">activeset</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span>
+<span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="s">'mu1'</span><span class="p">,</span> <span class="s">'mu2'</span><span class="p">]</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="k">def</span> <span class="nf">SQP</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="n">nIters</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="c1"># 初始化
+</span>    <span class="n">xk</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">([</span><span class="n">random</span><span class="p">.</span><span class="n">random</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))])</span>
+    <span class="n">gradient</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">([</span><span class="n">diff</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span><span class="n">x_i</span><span class="p">)</span> <span class="k">for</span> <span class="n">x_i</span> <span class="ow">in</span> <span class="n">x</span><span class="p">])</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">eye</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="n">gradientX</span> <span class="o">=</span> <span class="n">einsetzen</span><span class="p">(</span><span class="n">gradient</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">xk</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">trange</span><span class="p">(</span><span class="n">nIters</span><span class="p">):</span>
+
+        <span class="c1"># 计算下一个x
+</span>        <span class="n">p</span> <span class="o">=</span> <span class="o">-</span> <span class="n">H</span><span class="p">.</span><span class="n">inv</span><span class="p">()</span> <span class="o">*</span> <span class="n">gradientX</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">linesearch</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">xk</span><span class="p">,</span> <span class="n">gradientX</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+        <span class="c1"># print("alpha = ", alpha)
+</span>        <span class="n">xkNext</span> <span class="o">=</span> <span class="n">xk</span> <span class="o">+</span> <span class="n">alpha</span><span class="o">*</span><span class="n">p</span>
+        <span class="k">if</span> <span class="n">xkNext</span> <span class="o">==</span> <span class="n">xk</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">xk</span>
+
+        <span class="c1"># 拟牛顿法 BFGS 计算下一个Hessian矩阵
+</span>        <span class="n">s</span> <span class="o">=</span> <span class="n">xkNext</span> <span class="o">-</span> <span class="n">xk</span>
+        <span class="n">gradientXNext</span> <span class="o">=</span> <span class="n">einsetzen</span><span class="p">(</span><span class="n">gradient</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">xkNext</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span>  <span class="n">gradientXNext</span> <span class="o">-</span> <span class="n">gradientX</span>
+        <span class="n">Hs</span> <span class="o">=</span> <span class="n">H</span><span class="o">*</span><span class="n">s</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="n">H</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span><span class="o">*</span><span class="n">y</span><span class="p">.</span><span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">y</span><span class="p">.</span><span class="n">T</span><span class="o">*</span><span class="n">s</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="o">-</span>  <span class="n">Hs</span><span class="o">*</span><span class="n">Hs</span><span class="p">.</span><span class="n">T</span> <span class="o">/</span> <span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">T</span><span class="o">*</span><span class="n">Hs</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># 为下一次迭代做准备
+</span>        <span class="n">gradientX</span> <span class="o">=</span> <span class="n">gradientXNext</span>
+        <span class="n">xk</span> <span class="o">=</span> <span class="n">xkNext</span><span class="p">.</span><span class="n">evalf</span><span class="p">()</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="n">H</span><span class="p">.</span><span class="n">evalf</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">xk</span>
+
+<span class="c1"># 一维线搜索
+</span><span class="k">def</span> <span class="nf">linesearch</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">xk</span><span class="p">,</span> <span class="n">gradientX</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="mf">0.1</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">linearFactor</span> <span class="o">=</span> <span class="n">c</span><span class="o">*</span><span class="p">(</span><span class="n">gradientX</span><span class="p">.</span><span class="n">T</span><span class="o">*</span><span class="n">p</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># [0]转化为标量
+</span>    <span class="n">linear</span> <span class="o">=</span> <span class="n">einsetzen</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">xk</span><span class="p">)</span> <span class="o">+</span> <span class="n">linearFactor</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="n">einsetzen</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">xk</span> <span class="o">+</span> <span class="n">alpha</span><span class="o">*</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">new</span> <span class="o">&lt;=</span> <span class="n">linear</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">alpha</span> 
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">alpha</span> <span class="o">/=</span> <span class="mi">2</span>
+    <span class="k">return</span> <span class="n">alpha</span>
+
+<span class="c1"># 数值计算
+</span><span class="k">def</span> <span class="nf">einsetzen</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">vec</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">fun</span><span class="p">.</span><span class="n">subs</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">vec</span><span class="p">)))</span>
+
+
+<span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">nIters</span><span class="p">):</span>
+    <span class="c1"># 初始化
+</span>    <span class="n">x</span> <span class="o">=</span> <span class="n">symbols</span><span class="p">(</span><span class="s">'u v lambda1'</span><span class="p">)</span>
+    <span class="n">fun</span> <span class="o">=</span> <span class="n">f</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1"># Activeset
+</span>    <span class="k">while</span> <span class="n">flag</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">x_new</span> <span class="o">=</span> <span class="p">[</span><span class="s">'u'</span><span class="p">,</span> <span class="s">'v'</span><span class="p">,</span> <span class="s">'lambda1'</span><span class="p">]</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">SQP</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="n">nIters</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">einsetzen</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">result</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">activeset</span><span class="p">)):</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">activeset</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">einsetzen</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">x</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">activeset</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="n">fun</span> <span class="o">=</span> <span class="n">fun</span> <span class="o">+</span> <span class="n">mug</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    <span class="n">flag</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">x_new</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">constraints</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="n">n</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">activeset</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="n">fun</span> <span class="o">=</span> <span class="n">fun</span> <span class="o">-</span> <span class="n">mug</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    <span class="n">flag</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">del</span> <span class="n">x</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">symbols</span><span class="p">(</span><span class="n">x_new</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'x = '</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    
+    <span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">einsetzen</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">result</span><span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"用时共计"</span><span class="p">,</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">,</span> <span class="s">"seconds</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+
+<span class="c1"># 预设10次迭代
+</span><span class="n">run</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="hessian">Hessian</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">variable</span> <span class="o">=</span> <span class="n">symbols</span><span class="p">(</span><span class="s">'u v lambda1 mu1 mu2'</span><span class="p">)</span>
+<span class="c1"># 目标函数
+</span><span class="n">f</span> <span class="o">=</span> <span class="o">-</span> <span class="n">sin</span><span class="p">(</span><span class="n">variable</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">variable</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">variable</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">variable</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">variable</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
+<span class="c1"># 不等号约束
+</span><span class="n">g</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">g</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span> <span class="n">variable</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">variable</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">g</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">variable</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">variable</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">pi</span>
+<span class="n">mug</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">mug</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">variable</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="o">-</span> <span class="n">variable</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">variable</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">mug</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">variable</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">variable</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">variable</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">pi</span><span class="p">)</span>
+<span class="n">activeset</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span>
+<span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="s">'mu1'</span><span class="p">,</span> <span class="s">'mu2'</span><span class="p">]</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">3</span>       <span class="c1"># 不计入Activeset的变量数目
+</span>
+<span class="k">def</span> <span class="nf">SQP</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="n">nIters</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="c1"># 预处理
+</span>    <span class="n">flag_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">size_L</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">xk</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">([</span><span class="n">random</span><span class="p">.</span><span class="n">random</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size_L</span><span class="p">)])</span>
+    <span class="c1"># 计算gradient和Hessian矩阵的函数形式
+</span>    <span class="n">gradient</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">([</span><span class="n">diff</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span><span class="n">x_i</span><span class="p">)</span> <span class="k">for</span> <span class="n">x_i</span> <span class="ow">in</span> <span class="n">x</span><span class="p">])</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">eye</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="n">Hessian</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size_L</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size_L</span><span class="p">):</span>
+            <span class="n">Hessian</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">diff</span><span class="p">(</span><span class="n">gradient</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'初始化'</span><span class="p">,</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">flag_time</span><span class="p">)</span>
+    <span class="n">flag_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="c1"># 开始迭代
+</span>    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nIters</span><span class="p">):</span>
+        <span class="n">gradientX</span> <span class="o">=</span> <span class="n">einsetzen</span><span class="p">(</span><span class="n">gradient</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">xk</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'gradient'</span><span class="p">,</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">flag_time</span><span class="p">)</span>
+        <span class="n">flag_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size_L</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size_L</span><span class="p">):</span>
+                <span class="n">H</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">einsetzen</span><span class="p">(</span><span class="n">Hessian</span><span class="p">[</span><span class="n">count</span><span class="p">],</span> <span class="n">x</span><span class="p">,</span> <span class="n">xk</span><span class="p">)</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'Hessian'</span><span class="p">,</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">flag_time</span><span class="p">)</span>
+        <span class="n">flag_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="c1"># QP
+</span>        <span class="n">p</span> <span class="o">=</span> <span class="o">-</span> <span class="n">H</span><span class="p">.</span><span class="n">inv</span><span class="p">()</span> <span class="o">*</span> <span class="n">gradientX</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'步长'</span><span class="p">,</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">flag_time</span><span class="p">)</span>
+        <span class="n">flag_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">xkNext</span> <span class="o">=</span> <span class="n">xk</span> <span class="o">+</span> <span class="n">p</span>
+        <span class="k">if</span> <span class="n">xkNext</span> <span class="o">==</span> <span class="n">xk</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">xk</span>
+        <span class="n">xk</span> <span class="o">=</span> <span class="n">xkNext</span>
+    <span class="k">return</span> <span class="n">xk</span>
+
+<span class="c1"># 数值计算
+</span><span class="k">def</span> <span class="nf">einsetzen</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">vec</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">fun</span><span class="p">.</span><span class="n">subs</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">vec</span><span class="p">)))</span>
+
+
+<span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">nIters</span><span class="p">):</span>
+    <span class="c1"># 初始化
+</span>    <span class="n">x</span> <span class="o">=</span> <span class="n">symbols</span><span class="p">(</span><span class="s">'u v lambda1'</span><span class="p">)</span>
+    <span class="n">fun</span> <span class="o">=</span> <span class="n">f</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1"># Activeset
+</span>    <span class="k">while</span> <span class="n">flag</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">x_new</span> <span class="o">=</span> <span class="p">[</span><span class="s">'u'</span><span class="p">,</span> <span class="s">'v'</span><span class="p">,</span> <span class="s">'lambda1'</span><span class="p">]</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">SQP</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="n">nIters</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">einsetzen</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">result</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">activeset</span><span class="p">)):</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">activeset</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">einsetzen</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">x</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">activeset</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="n">fun</span> <span class="o">=</span> <span class="n">fun</span> <span class="o">+</span> <span class="n">mug</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    <span class="n">flag</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">x_new</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">constraints</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="n">n</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">activeset</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="n">fun</span> <span class="o">=</span> <span class="n">fun</span> <span class="o">-</span> <span class="n">mug</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    <span class="n">flag</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">del</span> <span class="n">x</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">symbols</span><span class="p">(</span><span class="n">x_new</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'x_new = '</span><span class="p">,</span> <span class="n">x_new</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'x = '</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">einsetzen</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">result</span><span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Took"</span><span class="p">,</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">,</span> <span class="s">"seconds</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+
+
+<span class="n">run</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="codec">Code(C++)</h2>
+<h3 id="解析法">解析法</h3>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;stdio.h&gt;
+#include &lt;cstdlib&gt;
+#include &lt;cstring&gt;
+#include &lt;cmath&gt;
+#include &lt;math.h&gt;
+#include &lt;iomanip&gt;
+#include&lt;time.h&gt;
+#include &lt;Eigen/Dense&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">Eigen</span><span class="p">;</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="c1">//User define</span>
+<span class="cp">#define pi 3.14159265359  //Pi的精度
+</span><span class="kt">int</span> <span class="n">var_num</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>          <span class="c1">//目标函数变量个数</span>
+<span class="kt">int</span> <span class="n">ec_num</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>           <span class="c1">//等号约束个数</span>
+<span class="kt">int</span> <span class="n">ic_num</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>           <span class="c1">//不等号约束个数</span>
+<span class="kt">int</span> <span class="n">repeat</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>           <span class="c1">//主程序循环次数</span>
+<span class="kt">double</span> <span class="n">rand_range</span> <span class="o">=</span> <span class="mf">1e+5</span><span class="p">;</span> <span class="c1">//初始随机值范围</span>
+<span class="kt">double</span> <span class="n">epsilon1</span> <span class="o">=</span> <span class="mf">1e-10</span><span class="p">;</span>  <span class="c1">//Hessian行列式容忍限度</span>
+<span class="kt">double</span> <span class="n">epsilon2</span> <span class="o">=</span> <span class="mf">1e-10</span><span class="p">;</span>  <span class="c1">//不等号约束激活条件</span>
+<span class="kt">double</span> <span class="n">epsilon3</span> <span class="o">=</span> <span class="mf">1e-10</span><span class="p">;</span>  <span class="c1">//步长下限</span>
+<span class="kt">double</span> <span class="n">epsilon4</span> <span class="o">=</span> <span class="mf">1e-15</span><span class="p">;</span>  <span class="c1">//迭代停止下限</span>
+
+<span class="c1">//目标函数</span>
+<span class="kr">inline</span> <span class="kt">double</span> <span class="nf">f</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="o">-</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+<span class="p">}</span>
+<span class="kr">inline</span> <span class="kt">double</span> <span class="nf">df0</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="o">-</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+<span class="p">}</span>
+<span class="kr">inline</span> <span class="kt">double</span> <span class="nf">df1</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="o">-</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+<span class="p">}</span>
+<span class="kr">inline</span> <span class="kt">double</span> <span class="nf">Qdf00</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+<span class="p">}</span>
+<span class="kr">inline</span> <span class="kt">double</span> <span class="nf">Qdf01</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+<span class="p">}</span>
+<span class="kr">inline</span> <span class="kt">double</span> <span class="nf">Qdf10</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+<span class="p">}</span>
+<span class="kr">inline</span> <span class="kt">double</span> <span class="nf">Qdf11</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+<span class="p">}</span>
+<span class="c1">//等号约束</span>
+<span class="kr">inline</span> <span class="kt">double</span> <span class="nf">h0</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">pow</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kr">inline</span> <span class="kt">double</span> <span class="nf">dh0</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kr">inline</span> <span class="kt">double</span> <span class="nf">dh1</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="o">-</span><span class="mi">3</span> <span class="o">*</span> <span class="n">pow</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="c1">//不等号约束</span>
+<span class="kr">inline</span> <span class="kt">double</span> <span class="nf">g0</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="p">}</span>
+<span class="kr">inline</span> <span class="kt">double</span> <span class="nf">g1</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">pi</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kr">inline</span> <span class="kt">double</span> <span class="nf">dg00</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kr">inline</span> <span class="kt">double</span> <span class="nf">dg01</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kr">inline</span> <span class="kt">double</span> <span class="nf">dg10</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kr">inline</span> <span class="kt">double</span> <span class="nf">dg11</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">//定义函数数组</span>
+<span class="kt">double</span> <span class="p">(</span><span class="o">*</span><span class="n">h</span><span class="p">[])(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="o">=</span> <span class="p">{</span> <span class="n">h0</span> <span class="p">};</span>
+<span class="kt">double</span> <span class="p">(</span><span class="o">*</span><span class="n">g</span><span class="p">[])(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="o">=</span> <span class="p">{</span> <span class="n">g0</span><span class="p">,</span> <span class="n">g1</span> <span class="p">};</span>
+<span class="kt">double</span> <span class="p">(</span><span class="o">*</span><span class="n">df</span><span class="p">[])(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="o">=</span> <span class="p">{</span> <span class="n">df0</span><span class="p">,</span> <span class="n">df1</span> <span class="p">};</span>
+<span class="kt">double</span> <span class="p">(</span><span class="o">*</span><span class="n">dh</span><span class="p">[])(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="o">=</span> <span class="p">{</span> <span class="n">dh0</span><span class="p">,</span> <span class="n">dh1</span> <span class="p">};</span>
+<span class="kt">double</span> <span class="p">(</span><span class="o">*</span><span class="n">dg</span><span class="p">[])(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="o">=</span> <span class="p">{</span> <span class="n">dg00</span><span class="p">,</span> <span class="n">dg01</span><span class="p">,</span> <span class="n">dg10</span><span class="p">,</span> <span class="n">dg11</span> <span class="p">};</span>
+<span class="kt">double</span> <span class="p">(</span><span class="o">*</span><span class="n">Qdf</span><span class="p">[])(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="o">=</span> <span class="p">{</span> <span class="n">Qdf00</span><span class="p">,</span> <span class="n">Qdf01</span><span class="p">,</span> <span class="n">Qdf10</span><span class="p">,</span> <span class="n">Qdf11</span> <span class="p">};</span>
+
+
+<span class="c1">//System define</span>
+<span class="kt">int</span> <span class="n">c_num</span> <span class="o">=</span> <span class="n">ec_num</span> <span class="o">+</span> <span class="n">ic_num</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">awz_num</span> <span class="o">=</span> <span class="n">var_num</span> <span class="o">+</span> <span class="n">ec_num</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">total_num</span> <span class="o">=</span> <span class="n">var_num</span> <span class="o">+</span> <span class="n">ec_num</span> <span class="o">+</span> <span class="n">ic_num</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">active_num</span><span class="p">;</span>
+
+<span class="c1">//gradient函数</span>
+<span class="n">MatrixXd</span> <span class="nf">Gradient</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">activeset</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="n">MatrixXd</span> <span class="n">tmp</span><span class="p">(</span><span class="n">awz_num</span> <span class="o">+</span> <span class="n">active_num</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+	<span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">var_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">tmp</span><span class="p">(</span><span class="n">count</span><span class="o">++</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="n">x</span><span class="p">);</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ec_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">tmp</span><span class="p">(</span><span class="n">count</span><span class="o">++</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="n">x</span><span class="p">);</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ic_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">activeset</span><span class="p">[</span><span class="n">awz_num</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">tmp</span><span class="p">(</span><span class="n">count</span><span class="o">++</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="n">x</span><span class="p">);</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">//Hessian矩阵函数</span>
+<span class="n">MatrixXd</span> <span class="nf">Hessian</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">activeset</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">awz_num</span> <span class="o">+</span> <span class="n">active_num</span><span class="p">;</span>
+	<span class="n">MatrixXd</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">MatrixXd</span><span class="o">::</span><span class="n">Zero</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
+	<span class="kt">int</span> <span class="n">count_x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="kt">int</span> <span class="n">count_y</span><span class="p">;</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">total_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">var_num</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">count_y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">total_num</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">var_num</span><span class="p">)</span> <span class="p">{</span>
+					<span class="n">tmp</span><span class="p">(</span><span class="n">count_x</span><span class="p">,</span> <span class="n">count_y</span><span class="o">++</span><span class="p">)</span> <span class="o">=</span> <span class="n">Qdf</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">var_num</span> <span class="o">+</span> <span class="n">j</span><span class="p">](</span><span class="n">x</span><span class="p">);</span>
+				<span class="p">}</span>
+				<span class="k">else</span> <span class="p">{</span>
+					<span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">awz_num</span><span class="p">)</span> <span class="p">{</span>
+						<span class="n">tmp</span><span class="p">(</span><span class="n">count_x</span><span class="p">,</span> <span class="n">count_y</span><span class="o">++</span><span class="p">)</span> <span class="o">=</span> <span class="n">dh</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="n">x</span><span class="p">);</span>
+					<span class="p">}</span>
+					<span class="k">else</span> <span class="p">{</span>
+						<span class="k">if</span> <span class="p">(</span><span class="n">activeset</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+							<span class="n">tmp</span><span class="p">(</span><span class="n">count_x</span><span class="p">,</span> <span class="n">count_y</span><span class="o">++</span><span class="p">)</span> <span class="o">=</span> <span class="n">dg</span><span class="p">[(</span><span class="n">j</span> <span class="o">-</span> <span class="n">awz_num</span><span class="p">)</span> <span class="o">*</span> <span class="n">var_num</span> <span class="o">+</span> <span class="n">i</span><span class="p">](</span><span class="n">x</span><span class="p">);</span>
+						<span class="p">}</span>
+					<span class="p">}</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+			<span class="o">++</span><span class="n">count_x</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="k">else</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">awz_num</span><span class="p">)</span> <span class="p">{</span>
+				<span class="n">count_y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+				<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">var_num</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+					<span class="n">tmp</span><span class="p">(</span><span class="n">count_x</span><span class="p">,</span> <span class="n">count_y</span><span class="o">++</span><span class="p">)</span> <span class="o">=</span> <span class="n">dh</span><span class="p">[</span><span class="n">j</span><span class="p">](</span><span class="n">x</span><span class="p">);</span>
+				<span class="p">}</span>
+				<span class="o">++</span><span class="n">count_x</span><span class="p">;</span>
+			<span class="p">}</span>
+			<span class="k">else</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">activeset</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+					<span class="n">count_y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+					<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">var_num</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+						<span class="n">tmp</span><span class="p">(</span><span class="n">count_x</span><span class="p">,</span> <span class="n">count_y</span><span class="o">++</span><span class="p">)</span> <span class="o">=</span> <span class="n">dg</span><span class="p">[(</span><span class="n">i</span> <span class="o">-</span> <span class="n">awz_num</span><span class="p">)</span> <span class="o">*</span> <span class="n">var_num</span> <span class="o">+</span> <span class="n">j</span><span class="p">](</span><span class="n">x</span><span class="p">);</span>
+					<span class="p">}</span>
+					<span class="o">++</span><span class="n">count_x</span><span class="p">;</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">//伪逆矩阵函数</span>
+<span class="n">MatrixXd</span> <span class="nf">pinv</span><span class="p">(</span><span class="k">const</span> <span class="n">MatrixXd</span> <span class="n">obj</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">JacobiSVD</span><span class="o">&lt;</span> <span class="n">MatrixXd</span> <span class="o">&gt;</span> <span class="n">svd</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">ComputeThinU</span> <span class="o">|</span> <span class="n">ComputeThinV</span><span class="p">);</span>
+	<span class="n">MatrixXd</span> <span class="n">S</span> <span class="o">=</span> <span class="n">svd</span><span class="p">.</span><span class="n">matrixU</span><span class="p">().</span><span class="n">inverse</span><span class="p">()</span> <span class="o">*</span> <span class="n">obj</span> <span class="o">*</span> <span class="n">svd</span><span class="p">.</span><span class="n">matrixV</span><span class="p">().</span><span class="n">transpose</span><span class="p">().</span><span class="n">inverse</span><span class="p">();</span>
+	<span class="k">return</span> <span class="n">svd</span><span class="p">.</span><span class="n">matrixV</span><span class="p">()</span> <span class="o">*</span> <span class="n">S</span> <span class="o">*</span> <span class="n">svd</span><span class="p">.</span><span class="n">matrixU</span><span class="p">().</span><span class="n">transpose</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="c1">//一维范数</span>
+<span class="kt">double</span> <span class="nf">norm</span><span class="p">(</span><span class="k">const</span> <span class="n">MatrixXd</span> <span class="n">obj</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="kt">double</span> <span class="n">tmp</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">obj</span><span class="p">.</span><span class="n">rows</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">obj</span><span class="p">.</span><span class="n">cols</span><span class="p">();</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">tmp</span> <span class="o">+=</span> <span class="n">fabs</span><span class="p">(</span><span class="n">obj</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">));</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">//一维线搜索函数</span>
+<span class="kt">double</span> <span class="nf">linesearch</span><span class="p">(</span><span class="n">MatrixXd</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">MatrixXd</span> <span class="n">delta</span><span class="p">,</span> <span class="kt">double</span> <span class="n">x</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">activeset</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="kt">double</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="kt">double</span> <span class="n">tp</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+	<span class="kt">bool</span> <span class="n">flag</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+	<span class="kt">double</span><span class="o">*</span> <span class="n">tmp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">double</span><span class="p">[</span><span class="n">total_num</span><span class="p">];</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">total_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+	<span class="p">}</span>
+	<span class="k">while</span> <span class="p">(</span><span class="n">alpha</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">flag</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">var_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">gradient</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">tp</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">alpha</span> <span class="o">/=</span> <span class="mi">2</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="k">else</span> <span class="p">{</span>
+			<span class="n">flag</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">alpha</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">//QP子问题</span>
+<span class="n">MatrixXd</span> <span class="nf">SubQP</span><span class="p">(</span><span class="kt">int</span> <span class="n">activeset</span><span class="p">[],</span> <span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">awz_num</span> <span class="o">+</span> <span class="n">active_num</span><span class="p">;</span>
+	<span class="kt">double</span> <span class="n">alpha</span><span class="p">;</span>
+	<span class="n">MatrixXd</span> <span class="n">gradient</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+	<span class="n">MatrixXd</span> <span class="n">hessian</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
+	<span class="n">MatrixXd</span> <span class="n">p</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+	<span class="n">gradient</span> <span class="o">=</span> <span class="n">Gradient</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">activeset</span><span class="p">);</span>
+	<span class="n">hessian</span> <span class="o">=</span> <span class="n">Hessian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">activeset</span><span class="p">);</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">fabs</span><span class="p">(</span><span class="n">hessian</span><span class="p">.</span><span class="n">determinant</span><span class="p">())</span> <span class="o">&gt;</span> <span class="n">epsilon1</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">p</span> <span class="o">=</span> <span class="n">hessian</span><span class="p">.</span><span class="n">inverse</span><span class="p">()</span> <span class="o">*</span> <span class="n">gradient</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">else</span> <span class="p">{</span>
+		<span class="n">p</span> <span class="o">=</span> <span class="n">pinv</span><span class="p">(</span><span class="n">hessian</span><span class="p">)</span> <span class="o">*</span> <span class="n">gradient</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">block</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">var_num</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">epsilon3</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">alpha</span> <span class="o">=</span> <span class="n">linesearch</span><span class="p">(</span><span class="n">gradient</span><span class="p">,</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">activeset</span><span class="p">);</span>
+		<span class="k">return</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">gradient</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">else</span> <span class="p">{</span>
+		<span class="n">alpha</span> <span class="o">=</span> <span class="n">linesearch</span><span class="p">(</span><span class="n">gradient</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">activeset</span><span class="p">);</span>
+		<span class="n">p</span> <span class="o">*=</span> <span class="n">alpha</span><span class="p">;</span>
+		<span class="k">return</span> <span class="n">p</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="kt">clock_t</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">;</span>
+	<span class="n">srand</span><span class="p">((</span><span class="kt">unsigned</span><span class="p">)</span><span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">));</span>
+	<span class="n">start</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+	<span class="kt">int</span><span class="o">*</span> <span class="n">activeset</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">total_num</span><span class="p">];</span>
+	<span class="kt">bool</span> <span class="n">flag</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+	<span class="kt">int</span> <span class="n">min</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="kt">int</span> <span class="n">count</span><span class="p">;</span>
+	<span class="kt">double</span><span class="o">**</span> <span class="n">x</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">double</span><span class="o">*</span> <span class="p">[</span><span class="n">repeat</span><span class="p">];</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">repeat</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">double</span><span class="p">[</span><span class="n">total_num</span><span class="p">];</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">awz_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">activeset</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="kt">double</span><span class="o">*</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">double</span><span class="p">[</span><span class="n">repeat</span><span class="p">];</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="n">repeat</span><span class="p">;</span> <span class="o">++</span><span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">var_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand</span><span class="p">()</span> <span class="o">/</span> <span class="kt">double</span><span class="p">(</span><span class="n">RAND_MAX</span><span class="p">)</span> <span class="o">*</span> <span class="n">rand_range</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">var_num</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">total_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand</span><span class="p">()</span> <span class="o">/</span> <span class="kt">double</span><span class="p">(</span><span class="n">RAND_MAX</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">flag</span><span class="p">)</span> <span class="p">{</span>
+			<span class="c1">//Activeset</span>
+			<span class="n">active_num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ic_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="o">&gt;</span> <span class="o">-</span><span class="n">epsilon2</span><span class="p">)</span> <span class="p">{</span>
+					<span class="n">activeset</span><span class="p">[</span><span class="n">awz_num</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+					<span class="o">++</span><span class="n">active_num</span><span class="p">;</span>
+				<span class="p">}</span>
+				<span class="k">else</span> <span class="p">{</span>
+					<span class="n">activeset</span><span class="p">[</span><span class="n">awz_num</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+			<span class="n">flag</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+			<span class="n">MatrixXd</span> <span class="n">p</span> <span class="o">=</span> <span class="n">SubQP</span><span class="p">(</span><span class="n">activeset</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">]);</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">var_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">fabs</span><span class="p">(</span><span class="n">p</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">epsilon4</span><span class="p">)</span> <span class="p">{</span>
+					<span class="n">flag</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+			<span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">var_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+				<span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">-=</span> <span class="n">p</span><span class="p">(</span><span class="n">count</span><span class="o">++</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+			<span class="p">}</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">var_num</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">total_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">activeset</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+					<span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">p</span><span class="p">(</span><span class="n">count</span><span class="o">++</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ic_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+					<span class="n">flag</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+			<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"变量当前为: "</span><span class="p">;</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">var_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+				<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="sc">' '</span><span class="p">;</span>
+			<span class="p">}</span>
+			<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"  目标函数值为: "</span> <span class="o">&lt;&lt;</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">]);</span>
+			<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"  等号约束误差: "</span> <span class="o">&lt;&lt;</span> <span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">pow</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="n">ans</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">]);</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">ans</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">ans</span><span class="p">[</span><span class="n">min</span><span class="p">])</span> <span class="p">{</span>
+			<span class="n">min</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"最终变量分别为: "</span><span class="p">;</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">var_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">x</span><span class="p">[</span><span class="n">min</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="sc">' '</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span> <span class="o">&lt;&lt;</span> <span class="s">"规划结果为: "</span> <span class="o">&lt;&lt;</span> <span class="n">ans</span><span class="p">[</span><span class="n">min</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"等号约束误差: "</span> <span class="o">&lt;&lt;</span> <span class="n">x</span><span class="p">[</span><span class="n">min</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">pow</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">min</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="n">end</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"程序运行时间: "</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="kt">double</span><span class="p">)(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">/</span> <span class="n">CLOCKS_PER_SEC</span> <span class="o">&lt;&lt;</span> <span class="err">'</span><span class="n">sec</span><span class="err">'</span><span class="p">;</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="数值法">数值法</h3>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;stdio.h&gt;
+#include &lt;cstdlib&gt;
+#include &lt;cstring&gt;
+#include &lt;cmath&gt;
+#include &lt;math.h&gt;
+#include &lt;iomanip&gt;
+#include&lt;time.h&gt;
+#include &lt;Eigen/Dense&gt;
+#include &lt;fstream&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">Eigen</span><span class="p">;</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="c1">//User define</span>
+<span class="cp">#define pi 3.14159265359  //Pi的精度
+</span><span class="kt">int</span> <span class="n">var_num</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>          <span class="c1">//目标函数变量个数</span>
+<span class="kt">int</span> <span class="n">ec_num</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>           <span class="c1">//等号约束个数</span>
+<span class="kt">int</span> <span class="n">ic_num</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>           <span class="c1">//不等号约束个数</span>
+<span class="kt">int</span> <span class="n">repeat</span> <span class="o">=</span> <span class="mi">200</span><span class="p">;</span>          <span class="c1">//主程序循环次数</span>
+<span class="kt">double</span> <span class="n">rand_range</span> <span class="o">=</span> <span class="mf">1e+4</span><span class="p">;</span> <span class="c1">//初始随机值范围</span>
+<span class="kt">double</span> <span class="n">step</span> <span class="o">=</span> <span class="mf">1e-6</span><span class="p">;</span>       <span class="c1">//偏导精度</span>
+<span class="kt">double</span> <span class="n">epsilon1</span> <span class="o">=</span> <span class="mf">1e-10</span><span class="p">;</span>  <span class="c1">//Hessian行列式容忍限度</span>
+<span class="kt">double</span> <span class="n">epsilon2</span> <span class="o">=</span> <span class="mf">1e-5</span><span class="p">;</span>   <span class="c1">//不等号约束激活条件</span>
+<span class="kt">double</span> <span class="n">epsilon3</span> <span class="o">=</span> <span class="mf">1e-5</span><span class="p">;</span>   <span class="c1">//步长下限</span>
+<span class="kt">double</span> <span class="n">epsilon4</span> <span class="o">=</span> <span class="mf">1e-10</span><span class="p">;</span>  <span class="c1">//迭代停止下限</span>
+
+<span class="c1">//目标函数</span>
+<span class="kr">inline</span> <span class="kt">double</span> <span class="nf">f</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="o">-</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+<span class="p">}</span>
+<span class="c1">//等号约束</span>
+<span class="kr">inline</span> <span class="kt">double</span> <span class="nf">h0</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">pow</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="c1">//不等号约束</span>
+<span class="kr">inline</span> <span class="kt">double</span> <span class="nf">g0</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="p">}</span>
+<span class="kr">inline</span> <span class="kt">double</span> <span class="nf">g1</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">pi</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">//定义函数数组</span>
+<span class="kt">double</span> <span class="p">(</span><span class="o">*</span><span class="n">h</span><span class="p">[])(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="o">=</span> <span class="p">{</span> <span class="n">h0</span> <span class="p">};</span>
+<span class="kt">double</span> <span class="p">(</span><span class="o">*</span><span class="n">g</span><span class="p">[])(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="o">=</span> <span class="p">{</span> <span class="n">g0</span><span class="p">,</span> <span class="n">g1</span> <span class="p">};</span>
+
+
+<span class="c1">//System define</span>
+<span class="kt">int</span> <span class="n">c_num</span> <span class="o">=</span> <span class="n">ec_num</span> <span class="o">+</span> <span class="n">ic_num</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">awz_num</span> <span class="o">=</span> <span class="n">var_num</span> <span class="o">+</span> <span class="n">ec_num</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">total_num</span> <span class="o">=</span> <span class="n">var_num</span> <span class="o">+</span> <span class="n">ec_num</span> <span class="o">+</span> <span class="n">ic_num</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">active_num</span><span class="p">;</span>
+
+<span class="c1">//偏导及二阶偏导函数</span>
+<span class="kt">double</span> <span class="nf">partial</span><span class="p">(</span><span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="kt">double</span><span class="o">*</span> <span class="n">tmp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">double</span><span class="p">[</span><span class="n">total_num</span><span class="p">];</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">total_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+	<span class="p">}</span>
+	<span class="n">tmp</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">+=</span> <span class="n">step</span><span class="p">;</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">k</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">-</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">/</span> <span class="n">step</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">else</span> <span class="p">{</span>
+		<span class="n">k</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">k</span> <span class="o">&lt;</span> <span class="n">ec_num</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="n">k</span><span class="p">](</span><span class="n">tmp</span><span class="p">)</span> <span class="o">-</span> <span class="n">h</span><span class="p">[</span><span class="n">k</span><span class="p">](</span><span class="n">x</span><span class="p">))</span> <span class="o">/</span> <span class="n">step</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="k">else</span> <span class="p">{</span>
+			<span class="n">k</span> <span class="o">-=</span> <span class="n">ec_num</span><span class="p">;</span>
+			<span class="k">return</span> <span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">k</span><span class="p">](</span><span class="n">tmp</span><span class="p">)</span> <span class="o">-</span> <span class="n">g</span><span class="p">[</span><span class="n">k</span><span class="p">](</span><span class="n">x</span><span class="p">))</span> <span class="o">/</span> <span class="n">step</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+<span class="kt">double</span> <span class="nf">Qpartial</span><span class="p">(</span><span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="kt">double</span><span class="o">*</span> <span class="n">tmp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">double</span><span class="p">[</span><span class="n">total_num</span><span class="p">];</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">total_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+	<span class="p">}</span>
+	<span class="n">tmp</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">+=</span> <span class="n">step</span><span class="p">;</span>
+	<span class="k">return</span> <span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">tmp</span><span class="p">)</span> <span class="o">-</span> <span class="n">partial</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span> <span class="o">/</span> <span class="n">step</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">//gradient函数</span>
+<span class="n">MatrixXd</span> <span class="nf">Gradient</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">activeset</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="n">MatrixXd</span> <span class="n">tmp</span><span class="p">(</span><span class="n">awz_num</span> <span class="o">+</span> <span class="n">active_num</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+	<span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">var_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">tmp</span><span class="p">(</span><span class="n">count</span><span class="o">++</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ec_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">tmp</span><span class="p">(</span><span class="n">count</span><span class="o">++</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="n">x</span><span class="p">);</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ic_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">activeset</span><span class="p">[</span><span class="n">awz_num</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">tmp</span><span class="p">(</span><span class="n">count</span><span class="o">++</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="n">x</span><span class="p">);</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">//Hessian矩阵函数</span>
+<span class="n">MatrixXd</span> <span class="nf">Hessian</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">activeset</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">awz_num</span> <span class="o">+</span> <span class="n">active_num</span><span class="p">;</span>
+	<span class="n">MatrixXd</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">MatrixXd</span><span class="o">::</span><span class="n">Zero</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
+	<span class="kt">int</span> <span class="n">count_x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="kt">int</span> <span class="n">count_y</span><span class="p">;</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">total_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">var_num</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">count_y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">total_num</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">var_num</span><span class="p">)</span> <span class="p">{</span>
+					<span class="n">tmp</span><span class="p">(</span><span class="n">count_x</span><span class="p">,</span> <span class="n">count_y</span><span class="o">++</span><span class="p">)</span> <span class="o">=</span> <span class="n">Qpartial</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+				<span class="p">}</span>
+				<span class="k">else</span> <span class="p">{</span>
+					<span class="k">if</span> <span class="p">(</span><span class="n">activeset</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+						<span class="n">tmp</span><span class="p">(</span><span class="n">count_x</span><span class="p">,</span> <span class="n">count_y</span><span class="o">++</span><span class="p">)</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">var_num</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+					<span class="p">}</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+			<span class="o">++</span><span class="n">count_x</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="k">else</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">activeset</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+				<span class="n">count_y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+				<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">var_num</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+					<span class="n">tmp</span><span class="p">(</span><span class="n">count_x</span><span class="p">,</span> <span class="n">count_y</span><span class="o">++</span><span class="p">)</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">var_num</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+				<span class="p">}</span>
+				<span class="o">++</span><span class="n">count_x</span><span class="p">;</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">//伪逆矩阵函数</span>
+<span class="n">MatrixXd</span> <span class="nf">pinv</span><span class="p">(</span><span class="k">const</span> <span class="n">MatrixXd</span> <span class="n">obj</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">JacobiSVD</span><span class="o">&lt;</span> <span class="n">MatrixXd</span> <span class="o">&gt;</span> <span class="n">svd</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">ComputeThinU</span> <span class="o">|</span> <span class="n">ComputeThinV</span><span class="p">);</span>
+	<span class="n">MatrixXd</span> <span class="n">S</span> <span class="o">=</span> <span class="n">svd</span><span class="p">.</span><span class="n">matrixU</span><span class="p">().</span><span class="n">inverse</span><span class="p">()</span> <span class="o">*</span> <span class="n">obj</span> <span class="o">*</span> <span class="n">svd</span><span class="p">.</span><span class="n">matrixV</span><span class="p">().</span><span class="n">transpose</span><span class="p">().</span><span class="n">inverse</span><span class="p">();</span>
+	<span class="k">return</span> <span class="n">svd</span><span class="p">.</span><span class="n">matrixV</span><span class="p">()</span> <span class="o">*</span> <span class="n">S</span> <span class="o">*</span> <span class="n">svd</span><span class="p">.</span><span class="n">matrixU</span><span class="p">().</span><span class="n">transpose</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="c1">//一维范数</span>
+<span class="kt">double</span> <span class="nf">norm</span><span class="p">(</span><span class="k">const</span> <span class="n">MatrixXd</span> <span class="n">obj</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="kt">double</span> <span class="n">tmp</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">obj</span><span class="p">.</span><span class="n">rows</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">obj</span><span class="p">.</span><span class="n">cols</span><span class="p">();</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">tmp</span> <span class="o">+=</span> <span class="n">fabs</span><span class="p">(</span><span class="n">obj</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">));</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">//一维线搜索函数</span>
+<span class="kt">double</span> <span class="nf">linesearch</span><span class="p">(</span><span class="n">MatrixXd</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">MatrixXd</span> <span class="n">delta</span><span class="p">,</span> <span class="kt">double</span> <span class="n">x</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">activeset</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="kt">double</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="kt">double</span> <span class="n">tp</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+	<span class="kt">bool</span> <span class="n">flag</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+	<span class="kt">double</span><span class="o">*</span> <span class="n">tmp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">double</span><span class="p">[</span><span class="n">total_num</span><span class="p">];</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">total_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+	<span class="p">}</span>
+	<span class="k">while</span> <span class="p">(</span><span class="n">alpha</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">flag</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">var_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">gradient</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">tp</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">alpha</span> <span class="o">/=</span> <span class="mi">2</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="k">else</span> <span class="p">{</span>
+			<span class="n">flag</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">alpha</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">//QP子问题</span>
+<span class="n">MatrixXd</span> <span class="nf">SubQP</span><span class="p">(</span><span class="kt">int</span> <span class="n">activeset</span><span class="p">[],</span> <span class="kt">double</span> <span class="n">x</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">awz_num</span> <span class="o">+</span> <span class="n">active_num</span><span class="p">;</span>
+	<span class="kt">double</span> <span class="n">alpha</span><span class="p">;</span>
+	<span class="n">MatrixXd</span> <span class="n">gradient</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+	<span class="n">MatrixXd</span> <span class="n">hessian</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
+	<span class="n">MatrixXd</span> <span class="n">p</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+	<span class="n">gradient</span> <span class="o">=</span> <span class="n">Gradient</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">activeset</span><span class="p">);</span>
+	<span class="n">hessian</span> <span class="o">=</span> <span class="n">Hessian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">activeset</span><span class="p">);</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">fabs</span><span class="p">(</span><span class="n">hessian</span><span class="p">.</span><span class="n">determinant</span><span class="p">())</span> <span class="o">&gt;</span> <span class="n">epsilon1</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">p</span> <span class="o">=</span> <span class="n">hessian</span><span class="p">.</span><span class="n">inverse</span><span class="p">()</span> <span class="o">*</span> <span class="n">gradient</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">else</span> <span class="p">{</span>
+		<span class="n">p</span> <span class="o">=</span> <span class="n">pinv</span><span class="p">(</span><span class="n">hessian</span><span class="p">)</span> <span class="o">*</span> <span class="n">gradient</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">block</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">var_num</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">epsilon3</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">alpha</span> <span class="o">=</span> <span class="n">linesearch</span><span class="p">(</span><span class="n">gradient</span><span class="p">,</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">activeset</span><span class="p">);</span>
+		<span class="k">return</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">gradient</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">else</span> <span class="p">{</span>
+		<span class="n">alpha</span> <span class="o">=</span> <span class="n">linesearch</span><span class="p">(</span><span class="n">gradient</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">activeset</span><span class="p">);</span>
+		<span class="n">p</span> <span class="o">*=</span> <span class="n">alpha</span><span class="p">;</span>
+		<span class="k">return</span> <span class="n">p</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="kt">clock_t</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">;</span>
+	<span class="n">srand</span><span class="p">((</span><span class="kt">unsigned</span><span class="p">)</span><span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">));</span>
+	<span class="n">cout</span><span class="p">.</span><span class="n">setf</span><span class="p">(</span><span class="n">ios_base</span><span class="o">::</span><span class="n">showpoint</span><span class="p">);</span>
+	<span class="n">cout</span><span class="p">.</span><span class="n">precision</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span>
+	<span class="kt">int</span><span class="o">*</span> <span class="n">activeset</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">total_num</span><span class="p">];</span>
+	<span class="kt">bool</span> <span class="n">flag</span><span class="p">;</span>
+	<span class="kt">int</span> <span class="n">min</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="kt">int</span> <span class="n">count</span><span class="p">;</span>
+	<span class="kt">double</span><span class="o">**</span> <span class="n">x</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">double</span><span class="o">*</span> <span class="p">[</span><span class="n">repeat</span><span class="p">];</span>
+	<span class="kt">double</span><span class="o">*</span> <span class="n">time</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">double</span><span class="p">[</span><span class="n">repeat</span><span class="p">];</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">repeat</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">double</span><span class="p">[</span><span class="n">total_num</span><span class="p">];</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">awz_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">activeset</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="kt">double</span><span class="o">*</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">double</span><span class="p">[</span><span class="n">repeat</span><span class="p">];</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="n">repeat</span><span class="p">;</span> <span class="o">++</span><span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">flag</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+		<span class="n">start</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">var_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand</span><span class="p">()</span> <span class="o">/</span> <span class="kt">double</span><span class="p">(</span><span class="n">RAND_MAX</span><span class="p">)</span> <span class="o">*</span> <span class="n">rand_range</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">var_num</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">total_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand</span><span class="p">()</span> <span class="o">/</span> <span class="kt">double</span><span class="p">(</span><span class="n">RAND_MAX</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">flag</span><span class="p">)</span> <span class="p">{</span>
+			<span class="c1">//Activeset</span>
+			<span class="n">active_num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ic_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="o">&gt;</span> <span class="o">-</span><span class="n">epsilon2</span><span class="p">)</span> <span class="p">{</span>
+					<span class="n">activeset</span><span class="p">[</span><span class="n">awz_num</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+					<span class="o">++</span><span class="n">active_num</span><span class="p">;</span>
+				<span class="p">}</span>
+				<span class="k">else</span> <span class="p">{</span>
+					<span class="n">activeset</span><span class="p">[</span><span class="n">awz_num</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+			<span class="n">flag</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+			<span class="n">MatrixXd</span> <span class="n">p</span> <span class="o">=</span> <span class="n">SubQP</span><span class="p">(</span><span class="n">activeset</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">]);</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">var_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">fabs</span><span class="p">(</span><span class="n">p</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">epsilon4</span><span class="p">)</span> <span class="p">{</span>
+					<span class="n">flag</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+			<span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">var_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+				<span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">-=</span> <span class="n">p</span><span class="p">(</span><span class="n">count</span><span class="o">++</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+			<span class="p">}</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">var_num</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">total_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">activeset</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+					<span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">p</span><span class="p">(</span><span class="n">count</span><span class="o">++</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ic_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+					<span class="n">flag</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+			<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"变量当前为: "</span><span class="p">;</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">var_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+				<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="sc">' '</span><span class="p">;</span>
+			<span class="p">}</span>
+			<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"  目标函数值为: "</span> <span class="o">&lt;&lt;</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">]);</span>
+			<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"  等号约束误差： "</span> <span class="o">&lt;&lt;</span> <span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">pow</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="n">ans</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">]);</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">ans</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">ans</span><span class="p">[</span><span class="n">min</span><span class="p">])</span> <span class="p">{</span>
+			<span class="n">min</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="n">end</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+		<span class="n">time</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">/</span> <span class="n">CLOCKS_PER_SEC</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span> <span class="o">&lt;&lt;</span> <span class="s">"最终变量分别为: "</span><span class="p">;</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">var_num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">x</span><span class="p">[</span><span class="n">min</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="sc">' '</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span> <span class="o">&lt;&lt;</span> <span class="s">"规划结果为: "</span> <span class="o">&lt;&lt;</span> <span class="n">ans</span><span class="p">[</span><span class="n">min</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"等号约束误差： "</span> <span class="o">&lt;&lt;</span> <span class="n">x</span><span class="p">[</span><span class="n">min</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">pow</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">min</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="n">ofstream</span> <span class="n">myout</span><span class="p">(</span><span class="s">"1.txt"</span><span class="p">);</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">repeat</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">myout</span> <span class="o">&lt;&lt;</span> <span class="n">time</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="n">myout</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="理论速度">理论速度</h2>
+

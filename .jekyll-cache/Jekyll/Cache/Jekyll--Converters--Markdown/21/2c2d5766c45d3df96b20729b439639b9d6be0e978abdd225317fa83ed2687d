@@ -1,0 +1,82 @@
+I"!<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+<h1 id="sql">SQL</h1>
+
+<p>https://www.liaoxuefeng.com/wiki/1177760294764384</p>
+
+<ul>
+  <li>数据关系库  域</li>
+  <li>索引 如何实现</li>
+</ul>
+
+<ol>
+  <li>DDL：Data Definition Language，允许用户定义数据，也就是创建表、删除表、修改表结构这些操作。通常，DDL由数据库管理员执行。</li>
+  <li>DML：Data Manipulation Language，为用户提供添加、删除、更新数据的能力，这些是应用程序对数据库的日常操作。</li>
+  <li>DQL：Data Query Language，允许用户查询数据，这也是通常最频繁的数据库日常操作。</li>
+</ol>
+
+<h2 id="安装mysql">安装MySQL</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt-get <span class="nb">install </span>mysql-server
+mysql <span class="nt">-u</span> root <span class="nt">-p</span>
+<span class="nb">exit</span> <span class="c"># 退出MySQL命令行，但服务器仍在后台运行</span>
+</code></pre></div></div>
+
+<h2 id="关系模型">关系模型</h2>
+
+<h3 id="外键">外键</h3>
+
+<pre><code class="language-mysql">## 关于外键
+# 定义外键
+ALTER TABLE students
+ADD CONSTRAINT fk_class_id
+FOREIGN KEY (class_id)
+REFERENCES classes (id);
+# 删除外键
+ALTER TABLE students
+DROP FOREIGN KEY fk_class_id;
+</code></pre>
+
+<h3 id="索引">索引</h3>
+
+<pre><code class="language-mysql">ALTER TABLE students
+ADD INDEX idx_score (score);
+ADD INDEX idx_name_score (name, score);
+# 创建了一个名称为idx_score，使用列score的索引。索引名称是任意的，索引如果有多列，可以在括号里依次写上。
+# 索引的效率取决于索引列的值是否散列，即该列的值如果越互不相同，那么索引效率越高。反过来，如果记录的列存在大量相同的值，例如gender列，大约一半的记录值是M，另一半是F，因此，对该列创建索引就没有意义。
+# 可以对一张表创建多个索引。索引的优点是提高了查询效率，缺点是在插入、更新和删除记录时，需要同时修改索引，因此，索引越多，插入、更新和删除记录的速度就越慢。
+# 对于主键，关系数据库会自动对其创建主键索引。使用主键索引的效率是最高的，因为主键会保证绝对唯一。
+ALTER TABLE students
+ADD CONSTRAINT uni_name UNIQUE (name);
+# 在设计关系数据表的时候，看上去唯一的列，例如身份证号、邮箱地址等，因为他们具有业务含义，因此不宜作为主键。
+# 但是，这些列根据业务要求，又具有唯一性约束：即不能出现两条记录存储了同一个身份证号。这个时候，就可以给该列添加一个唯一索引。
+</code></pre>
+
+<h2 id="查询数据">查询数据</h2>
+
+<pre><code class="language-mysql"># 基本查询
+SELECT * FROM students;
+SELECT * FROM &lt;表名&gt;
+# 条件查询
+SELECT * FROM students WHERE score &gt;= 80;
+SELECT * FROM &lt;表名&gt; WHERE &lt;条件表达式&gt;
+SELECT * FROM students WHERE score &gt;= 80 AND gender = 'M';
+SELECT * FROM students WHERE score &gt;= 80 OR gender = 'M';
+SELECT * FROM students WHERE NOT class_id = 2;
+SELECT * FROM students WHERE (score &lt; 80 OR score &gt; 90) AND gender = 'M';
+name LIKE 'ab%' # %表示任意字符，例如'ab%'将匹配'ab'，'abc'，'abcd'
+# 投影查询
+SELECT id, score, name FROM students; # 返回某些列的数据，而不是所有列的数据
+SELECT id, score points, name FROM students; # 以下SELECT语句将列名score重命名为points，而id和name列名保持不变
+</code></pre>
+
+:ET
