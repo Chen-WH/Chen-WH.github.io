@@ -1,3 +1,28 @@
+---
+layout:     post
+title:      Pyecharts
+subtitle:   (副标题) 
+date:       2021-07-28
+author:     ChenWH
+header-img: img/the-first.png
+catalog:   true
+tags:
+
+    - Visualization
+---
+
+
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
 # Pyecharts
 
 ----
