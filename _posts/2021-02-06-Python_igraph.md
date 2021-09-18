@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      Igraph 
-subtitle:   Python 
+subtitle:   Python-Igraph 
 date:       2021-02-06
 author:     ChenWH 
 header-img: img/the-first.png

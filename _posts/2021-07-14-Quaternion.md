@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      Quaternion
-subtitle:   (副标题) 
+subtitle:   四元数与三位旋转 
 date:       2021-07-17
 author:     ChenWH
 header-img: img/the-first.png

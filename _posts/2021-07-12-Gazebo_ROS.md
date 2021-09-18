@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      Gazebo/ROS
-subtitle:   (副标题) 
+subtitle:    
 date:       2021-07-12
 author:     ChenWH
 header-img: img/the-first.png

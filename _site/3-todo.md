@@ -1,5 +1,11 @@
 # To Do
 
+## Robotics
+
+1. exp && paper
+2. 机器人学导论
+3. 多机器人系统
+
 ## CS
 
 1. 深入理解计算机系统
@@ -7,20 +13,11 @@
 
 ## CFD
 
-1. 流体力学_丁祖荣
-2. ANSYS CFD入门指南
-
-## Project with ysc
-
-1. 文章初稿
+2. ANSYS Fluent UDF
 
 ## AI
 
 1. 机器学习个人笔记
-
-## 爬虫
-
-1. 书籍
 
 ## Web
 
