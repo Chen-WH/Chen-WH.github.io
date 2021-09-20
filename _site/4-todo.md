@@ -1,10 +1,15 @@
 # To Do
 
-## Robotics
+## Critical
 
 1. exp && paper
-2. 机器人学导论
-3. 多机器人系统
+2. Project with Ysc
+3. 贝叶斯滤波与卡尔曼滤波
+
+## Robotics
+
+1. 机器人学导论
+2. 多机器人系统
 
 ## CS
 
@@ -13,7 +18,7 @@
 
 ## CFD
 
-2. ANSYS Fluent UDF
+1. ANSYS Fluent UDF
 
 ## AI
 
