@@ -10,7 +10,7 @@
     <meta name="keywords"  content="待办事项, 学习笔记, 思考随笔">
     <meta name="theme-color" content="#000000">
     
-    <title>GPM - 思过崖 - 晴耕三亩，雨读千年。</title>
+    <title>SSL证书问题及Grub引导问题 - 思过崖 - 晴耕三亩，雨读千年。</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -22,7 +22,7 @@
     <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://Chen-WH.github.io/2021/04/24/GPM/">
+    <link rel="canonical" href="https://Chen-WH.github.io/2021/09/27/Death/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -177,15 +177,13 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/2-tags/#Math" title="Math">Math</a>
-                        
                     </div>
-                    <h1>GPM</h1>
+                    <h1>SSL证书问题及Grub引导问题</h1>
                     
                     
-                    <h2 class="subheading">高斯伪谱法</h2>
+                    <h2 class="subheading"></h2>
                     
-                    <span class="meta">Posted by ChenWH on April 24, 2021</span>
+                    <span class="meta">Posted by ChenWH on September 27, 2021</span>
                 </div>
             </div>
         </div>
@@ -203,80 +201,34 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-				<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-      processEscapes: true
-    }
-  });
-</script>
+				<h1 id="ssl证书问题及grub引导问题">SSL证书问题及Grub引导问题</h1>
 
-<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<p>最近倒腾电脑遇到的各种窒息错误，在这里记录一下。</p>
 
-<h1 id="gpm">GPM</h1>
+<h2 id="ssl证书报错">SSL证书报错</h2>
 
-<hr />
-<h2 id="问题陈述">问题陈述</h2>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>apt update 
+<span class="c"># Certificate verification failed: The certificate is NOT trusted. The certificate issuer is unknown.  Could not handshake: Error in the certificate verification.</span>
 
-\[\min\ J=\int_0^{t_f}h(\boldsymbol{x}(t),\boldsymbol{u}(t),t)\boldsymbol{d}t\\
-s.t.\ \boldsymbol{\dot{x}}=\boldsymbol{f}(\boldsymbol{x}(t),\boldsymbol{u}(t),\boldsymbol{x}(0))=\boldsymbol{x_0}\\
-\text{式中：}\boldsymbol{\dot{x}}=\boldsymbol{f}(\boldsymbol{x}(t),\boldsymbol{u}(t))=[x_3,x_4,gu_2-c_1x_5,u_1-g-c_2x_5,gu_2-c_1x_5]^T\\
-h=\frac{1}{2}(u_1-g)^2+\frac{1}{2}u_2^2+k_1(x_1+3)^2+k_2(x_2+x_1u_2)^2\\
-t_f=2,g=9.8,k_1=k_2=50,c_1=1.5,c_2=0.38\]
+<span class="c"># onedrive</span>
+SSL报错
 
-<hr />
+最后解决方案，重装ca-certificates
+<span class="nb">sudo </span>apt <span class="nb">install</span> <span class="nt">--reinstall</span> ca-certificates
+</code></pre></div></div>
 
-<h2 id="continuous-bolza-problem">Continuous Bolza Problem</h2>
+<h2 id="grub引导问题">Grub引导问题</h2>
 
-\[\begin{aligned}
-	&amp;J=\Phi\left[\mathbf{x}(-1), t_{0}, \mathbf{x}(1), t_{f}\right]+\frac{t_{f}-t_{0}}{2} \int_{-1}^{1} g\left[\mathbf{x}(\tau), \mathbf{u}(\tau), \tau ; t_{0}, t_{f}\right] \mathrm{d} \tau\ \ \ (目标函数)\\
-	&amp;\frac{\mathrm{d} \mathbf{x}}{\mathrm{d} \tau}=\frac{t_{f}-t_{0}}{2} \mathbf{f}\left[\mathbf{x}(\tau), \mathbf{u}(\tau), \tau ; t_{0}, t_{f}\right] \\
-	&amp;\phi\left[\mathbf{x}(-1), t_{0}, \mathbf{x}(1), t_{f}\right]=\mathbf{0} \in \mathbb{R}^{q}\ \ \ (边界约束) \\
-	&amp;\mathbf{C}\left[\mathbf{x}(\tau), \mathbf{u}(\tau), \tau ; t_{0}, t_{f}\right] \leq \mathbf{0} \in \mathbb{R}^{c}\ \ \ (路径约束)
-\end{aligned}\]
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Windows</span>
+<span class="nb">set </span><span class="nv">root</span><span class="o">=(</span>hd1,gpt3<span class="o">)</span>
+chainloader /Windows/Boot/EFI/bootmgfw.efi
+boot
+<span class="c"># Ubuntu</span>
+<span class="nb">set </span><span class="nv">root</span><span class="o">=(</span>hd0,gpt2<span class="o">)</span>
+<span class="nb">set </span><span class="nv">prefix</span><span class="o">=(</span>hd0,gpt2<span class="o">)</span>/boot/grub
+normal
+</code></pre></div></div>
 
-<p>$\mathbf{x}(\tau)状态函数，\mathbf{u}(\tau)控制函数求取极值$</p>
-
-<hr />
-
-<h2 id="问题化简">问题化简</h2>
-
-<ol>
-  <li>拉格朗日插值多项式，化简$\mathbf{x}(\tau)和\mathbf{u}(\tau)$</li>
-</ol>
-
-\[\begin{aligned}
-	&amp;\sum_{i=0}^{N} D_{k i} \mathbf{X}_{i}-\frac{t_{f}}{2} \mathbf{f}\left(\mathbf{X}_{k}, \mathbf{U}_{k}, \tau_{k} ; t_{0}, t_{f}\right)=\mathbf{0} \quad(k=1, \ldots, N)\\
-	
-\Longrightarrow&amp;\sum^{N}_{i=0}X_{\tau_{i}}\left[\sum^{N}_{l=0,l\not=i}\frac{\prod^{N}_{j=0,j\not=i,l}(\tau_{k}-\tau_{j})}{\prod^{N}_{j=0,j\not=i}(\tau_{i}-\tau_{j})} \right] -\frac{t_{f}}{2}X_{\tau_{k}}=0\\
-\end{aligned}\]
-
-<ol>
-  <li>计算微分逼近矩阵$D$和高斯权重$w$，其中LG点$\tau$由legendre多项式取零点得到</li>
-</ol>
-
-<p>\(D_{ki}=\sum^{N}_{l=0,l\not=i}\frac{\prod^{N}_{j=0,j\not=i,l}(\tau_{k}-\tau_{j})}{\prod^{N}_{j=0,j\not=i}(\tau_{i}-\tau_{j})}\\
-	w_{i}=\frac{2}{(1-\tau_{i}^2)\left[ P_n'(\tau_i)^2\right]},其中P_n(\tau)=\prod_{1\leq i\leq N}(\tau-\tau_i)\)
-\(\begin{aligned}
-	\mathbf{X}_{f} &amp;\equiv \mathbf{X}_{0}+\frac{t_{f}-t_{0}}{2} \sum_{k=1}^{N} w_{k} \mathbf{f}\left(\mathbf{X}_{k}, \mathbf{U}_{k}, \tau_{k} ; t_{0}, t_{f}\right)\\
-	J&amp;=\Phi\left(\mathbf{X}_{0}, t_{0}, \mathbf{X}_{f}, t_{f}\right)+\frac{t_{f}-t_{0}}{2} \sum_{k=1}^{N} w_{k} g\left(\mathbf{X}_{k}, \mathbf{U}_{k}, \tau_{k} ; t_{0}, t_{f}\right)
-\end{aligned}\)</p>
-
-<ol>
-  <li>原连续Bolza问题转化为NLP如下</li>
-</ol>
-
-\[\begin{aligned}
-	min\ J&amp;=\frac{t_{f}}{2} w^T\left[ \frac{1}{2}(U_1-g)\odot(U_1-g)+\frac{1}{2}U_2\odot U_2+k_1(X_1+3)\odot(X_1+3)+k_2(X_1\odot U_2+X_2)\odot(X_1\odot U_2+X_2) \right]\\
-	s.t.&amp;D\widetilde X_1-\frac{t_f}{2}X_3=0 \\
-	&amp;D\widetilde X_2-\frac{t_f}{2}X_4=0\\
-	&amp;D\widetilde X_3-\frac{t_f}{2}(gU_2-c_1X_5)=0\\
-	&amp;D\widetilde X_4-\frac{t_f}{2}(U_1-g-c_2X_5)=0\\
-	&amp;D\widetilde X_5-\frac{t_f}{2}(gU_2-c_1X_5)=0\\
-\end{aligned}\]
-
-<p>其中$\odot$为数组乘法,$\widetilde X_i$为$X$的拓展矩阵，即$\widetilde X_i=[X_{0,i};X_i]$</p>
 
 
                 <hr style="visibility: hidden;">
@@ -284,19 +236,12 @@ t_f=2,g=9.8,k_1=k_2=50,c_1=1.5,c_2=0.38\]
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2021/04/20/Ubuntu/" data-toggle="tooltip" data-placement="top" title="Ubuntu配置">
+                        <a href="/2021/09/09/Matrix/" data-toggle="tooltip" data-placement="top" title="矩阵求导笔记">
                         Previous<br>
-                        <span>Ubuntu配置</span>
+                        <span>矩阵求导笔记</span>
                         </a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2021/04/24/SQP/" data-toggle="tooltip" data-placement="top" title="SQP">
-                        Next<br>
-                        <span>SQP</span>
-                        </a>
-                    </li>
                     
                 </ul>
 
@@ -330,20 +275,6 @@ t_f=2,g=9.8,k_1=k_2=50,c_1=1.5,c_2=0.38\]
             </div>  
 
     <!-- Side Catalog Container -->
-        
-            <div class="
-                col-lg-2 col-lg-offset-0
-                visible-lg-block
-                sidebar-container
-                catalog-container">
-                <div class="side-catalog">
-                    <hr class="hidden-sm hidden-xs">
-                    <h5>
-                        <a class="catalog-toggle" href="#">CATALOG</a>
-                    </h5>
-                    <ul class="catalog-body"></ul>
-                </div>
-            </div>
         
 
     <!-- Sidebar Container -->
@@ -585,50 +516,6 @@ t_f=2,g=9.8,k_1=k_2=50,c_1=1.5,c_2=0.38\]
 
 
 <!-- Side Catalog -->
-
-<script type="text/javascript">
-    function generateCatalog (selector) {
-        var P = $('div.post-container'),a,n,t,l,i,c;
-        a = P.find('h1,h2,h3,h4,h5,h6');
-        a.each(function () {
-            n = $(this).prop('tagName').toLowerCase();
-            i = "#"+$(this).prop('id');
-            t = $(this).text();
-            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
-            l = $('<li class="'+n+'_nav"></li>').append(c);
-            $(selector).append(l);
-        });
-        return true;    
-    }
-
-    generateCatalog(".catalog-body");
-
-    // toggle side catalog
-    $(".catalog-toggle").click((function(e){
-        e.preventDefault();
-        $('.side-catalog').toggleClass("fold")
-    }))
-
-    /*
-     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
-     * Fork by Hux to support padding
-     */
-    async("/js/jquery.nav.js", function () {
-        $('.catalog-body').onePageNav({
-            currentClass: "active",
-            changeHash: !1,
-            easing: "swing",
-            filter: "",
-            scrollSpeed: 700,
-            scrollOffset: 0,
-            scrollThreshold: .2,
-            begin: null,
-            end: null,
-            scrollChange: null,
-            padding: 80
-        });
-    });
-</script>
 
 
 

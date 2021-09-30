@@ -5,9 +5,47 @@
     <description>人难免天生有自怜的情绪，唯有时刻保持清醒，才能看清真正的价值在哪里。</description>
     <link>https://Chen-WH.github.io/</link>
     <atom:link href="https://Chen-WH.github.io/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 25 Sep 2021 00:44:18 +0800</pubDate>
-    <lastBuildDate>Sat, 25 Sep 2021 00:44:18 +0800</lastBuildDate>
+    <pubDate>Thu, 30 Sep 2021 20:06:06 +0800</pubDate>
+    <lastBuildDate>Thu, 30 Sep 2021 20:06:06 +0800</lastBuildDate>
     <generator>Jekyll v4.2.0</generator>
+    
+      <item>
+        <title>SSL证书问题及Grub引导问题</title>
+        <description>&lt;h1 id=&quot;ssl证书问题及grub引导问题&quot;&gt;SSL证书问题及Grub引导问题&lt;/h1&gt;
+
+&lt;p&gt;最近倒腾电脑遇到的各种窒息错误，在这里记录一下。&lt;/p&gt;
+
+&lt;h2 id=&quot;ssl证书报错&quot;&gt;SSL证书报错&lt;/h2&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt update 
+&lt;span class=&quot;c&quot;&gt;# Certificate verification failed: The certificate is NOT trusted. The certificate issuer is unknown.  Could not handshake: Error in the certificate verification.&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# onedrive&lt;/span&gt;
+SSL报错
+
+最后解决方案，重装ca-certificates
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--reinstall&lt;/span&gt; ca-certificates
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;grub引导问题&quot;&gt;Grub引导问题&lt;/h2&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Windows&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=(&lt;/span&gt;hd1,gpt3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+chainloader /Windows/Boot/EFI/bootmgfw.efi
+boot
+&lt;span class=&quot;c&quot;&gt;# Ubuntu&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=(&lt;/span&gt;hd0,gpt2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;prefix&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=(&lt;/span&gt;hd0,gpt2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;/boot/grub
+normal
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+</description>
+        <pubDate>Mon, 27 Sep 2021 00:00:00 +0800</pubDate>
+        <link>https://Chen-WH.github.io/2021/09/27/Death/</link>
+        <guid isPermaLink="true">https://Chen-WH.github.io/2021/09/27/Death/</guid>
+        
+        
+      </item>
     
       <item>
         <title>矩阵求导笔记</title>
@@ -1132,65 +1170,6 @@ SELECT id, score points, name FROM students; # 以下SELECT语句将列名score�
         <guid isPermaLink="true">https://Chen-WH.github.io/2021/08/02/SQL/</guid>
         
         <category>Backend</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Pyecharts</title>
-        <description>&lt;script type=&quot;text/x-mathjax-config&quot;&gt;
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], [&quot;\\(&quot;,&quot;\\)&quot;] ],
-      processEscapes: true
-    }
-  });
-&lt;/script&gt;
-
-&lt;script src=&quot;https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
-
-&lt;h1 id=&quot;pyecharts&quot;&gt;Pyecharts&lt;/h1&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;配置&quot;&gt;配置&lt;/h2&gt;
-
-&lt;h3 id=&quot;phantomjs安装&quot;&gt;phantomjs安装&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/lunhui601/article/details/105892613&quot;&gt;windows下安装phantomjs实战（亲测有效）-2020年5月2日_lunhui601的博客-CSDN博客&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.cnblogs.com/my-global/articles/12662614.html&quot;&gt;Python - pyecharts：直接将图片保存为 png, pdf, gif 格式的文件 - 共感的艺术 - 博客园 (cnblogs.com)&lt;/a&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;snapshot使用&quot;&gt;Snapshot使用&lt;/h2&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;snapshot_phantomjs&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;snapshot&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;pyecharts.render&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;make_snapshot&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;make_snapshot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;snapshot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;*.html&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;*.png&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;##支持格式
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PNG_FORMAT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;png&quot;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;JPG_FORMAT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;jpeg&quot;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;GIF_FORMAT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;gif&quot;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;PDF_FORMAT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;pdf&quot;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;SVG_FORMAT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;svg&quot;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;EPS_FORMAT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;eps&quot;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;B64_FORMAT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;base64&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;示例&quot;&gt;示例&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://gallery.pyecharts.org/#/README&quot;&gt;中文简介 - Document (pyecharts.org)&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Wed, 28 Jul 2021 00:00:00 +0800</pubDate>
-        <link>https://Chen-WH.github.io/2021/07/28/Pyecharts/</link>
-        <guid isPermaLink="true">https://Chen-WH.github.io/2021/07/28/Pyecharts/</guid>
-        
-        <category>Visualization</category>
         
         
       </item>

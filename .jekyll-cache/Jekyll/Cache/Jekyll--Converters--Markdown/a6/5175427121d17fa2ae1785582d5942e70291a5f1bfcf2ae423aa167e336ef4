@@ -1,0 +1,29 @@
+I"�<h1 id="ssl证书问题及grub引导问题">SSL证书问题及Grub引导问题</h1>
+
+<p>最近倒腾电脑遇到的各种窒息错误，在这里记录一下。</p>
+
+<h2 id="ssl证书报错">SSL证书报错</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>apt update 
+<span class="c"># Certificate verification failed: The certificate is NOT trusted. The certificate issuer is unknown.  Could not handshake: Error in the certificate verification.</span>
+
+<span class="c"># onedrive</span>
+SSL报错
+
+最后解决方案，重装ca-certificates
+<span class="nb">sudo </span>apt <span class="nb">install</span> <span class="nt">--reinstall</span> ca-certificates
+</code></pre></div></div>
+
+<h2 id="grub引导问题">Grub引导问题</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Windows</span>
+<span class="nb">set </span><span class="nv">root</span><span class="o">=(</span>hd1,gpt3<span class="o">)</span>
+chainloader /Windows/Boot/EFI/bootmgfw.efi
+boot
+<span class="c"># Ubuntu</span>
+<span class="nb">set </span><span class="nv">root</span><span class="o">=(</span>hd0,gpt2<span class="o">)</span>
+<span class="nb">set </span><span class="nv">prefix</span><span class="o">=(</span>hd0,gpt2<span class="o">)</span>/boot/grub
+normal
+</code></pre></div></div>
+
+:ET

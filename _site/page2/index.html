@@ -187,6 +187,46 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2021/07/28/Pyecharts/">
+        <h2 class="post-title">
+            Pyecharts
+        </h2>
+        
+        <h3 class="post-subtitle">
+            基于Python调用Echarts
+        </h3>
+        
+        <div class="post-content-preview">
+            
+
+
+
+Pyecharts
+
+
+
+配置
+
+phantomjs安装
+
+windows下安装phantomjs实战（亲测有效）-2020年5月2日_lunhui601的博客-CSDN博客
+
+Python - pyecharts：直接将图片保存为 png, pdf, gif 格式的文件 - 共感的艺术 - 博客园 (cnblogs.com)
+
+
+
+Snapshot使用
+
+from snapshot...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on July 28, 2021
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2021/07/17/Quaternion/">
         <h2 class="post-title">
             Quaternion
@@ -274,21 +314,19 @@ https://www.geek-share.com/detail/2807...
   clash
   potplayer
   typora
+  微软运行库
   迅雷
   百度网盘
-  endnote
+  endnote/zotero
+  Python
+  MinGW
   UU
   steam
   雷电模拟器
   VS
   VScode
   CAD
-  SW
-  PR
-  MATLAB
-  MMA
-  几何画板
-  A...
+  S...
         </div>
     </a>
     <p class="post-meta">
@@ -351,7 +389,27 @@ $0.618$法和$Fibonacci$...
 
 
 
-https://blog.csdn.net/MaybeTnT/article/details/109841378?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.control&amp;dist_request_id=1328602.40184.16150835415...
+
+
+第三方库在VS中的配置与使用
+
+教程
+
+
+  下载库
+  在创建的工程中的解决方案的下面一列右击选择属性
+  选择所有平台，所有配置
+  选择VC++目录，点击包含目录最后面下拉箭头的编辑，添加路径
+
+
+
+
+eigen3
+
+矩阵和向量的定义与赋值
+
+//定义
+MatrixXd：定义任意维double矩阵。其中X表示维度，d表示double型。同理d可改为f或者i，分别表示floa...
         </div>
     </a>
     <p class="post-meta">
@@ -383,14 +441,14 @@ Matlab进阶
 
 进阶操作建议官网文档，一般随用随查。
 
-MATLAB Documentation - MathWorks 中国
+MATLAB Documentation
 
 
 
 数据读写
 
 fid = fopen("1.txt", 'a');   % 要想存的文件名是自己输入的，这个地方就得这样写
-fprintf(fid,'%d\t%d\t%d\r...
+fprintf(fid,'%d\t%d\t%d\r\n', Ex_num, re...
         </div>
     </a>
     <p class="post-meta">
@@ -476,59 +534,23 @@ Ubuntu
 
 Ubuntu开机自启小键盘
 
-https://blog.csdn.net/artourins/article/details/86411786
-
 sudo -i
 su gdm -s /bin/bash
 gsettings set org.gnome.settings-daemon.peripherals.keyboard numlock-state 'on'
 
 
-软链...
+软链接
+
+ln -s ~/OneDrive/ ./
+
+
+更新
+
+sudo apt-get update: 升级安装包相关...
         </div>
     </a>
     <p class="post-meta">
         Posted by ChenWH on April 20, 2021
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2021/02/06/Python_igraph/">
-        <h2 class="post-title">
-            Igraph
-        </h2>
-        
-        <h3 class="post-subtitle">
-            Python-Igraph
-        </h3>
-        
-        <div class="post-content-preview">
-            
-
-
-
-Python-igraph
-
-官网：Tutorial (igraph.org)
-
-
-
-创建图形
-
-g = Graph()
-g = Graph.Full(10)  #满边图
-#添加顶点
-add_vertices(3)
-#添加边
-add_edges()[(0,1), (1,2)]
-#顶点数、边数和图形的名称；summary略去边列表
-print(g)
-summary(g)
-#删除边及顶点...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by ChenWH on February 6, 2021
     </p>
 </div>
 <hr>
@@ -542,6 +564,10 @@ summary(g)
         <a href="/">&larr; Newer Posts</a>
     </li>
     
+    
+    <li class="next">
+        <a href="/page3">Older Posts &rarr;</a>
+    </li>
     
 </ul>
 

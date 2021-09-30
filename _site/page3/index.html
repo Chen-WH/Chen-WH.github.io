@@ -10,7 +10,7 @@
     <meta name="keywords"  content="待办事项, 学习笔记, 思考随笔">
     <meta name="theme-color" content="#000000">
     
-    <title>GPM - 思过崖 - 晴耕三亩，雨读千年。</title>
+    <title>思过崖 - 晴耕三亩，雨读千年。</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -22,7 +22,7 @@
     <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://Chen-WH.github.io/2021/04/24/GPM/">
+    <link rel="canonical" href="https://Chen-WH.github.io/page3/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -156,257 +156,183 @@
 </script>
 
 
-    <!-- Image to hack wechat -->
-<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
-<!-- <img src="/img/the-first.png" width="0" height="0"> -->
-
-<!-- Post Header -->
-<style type="text/css">
-    header.intro-header{
-        position: relative;
-        background-image: url('/img/the-first.png')
-    }
-
-    
-</style>
-<header class="intro-header" >
-    <div class="header-mask"></div>
+    <!-- Page Header -->
+<header class="intro-header" style="background-image: url('/img/post-bg-desk.jpg')">
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="post-heading">
-                    <div class="tags">
-                        
-                        <a class="tag" href="/2-tags/#Math" title="Math">Math</a>
-                        
-                    </div>
-                    <h1>GPM</h1>
-                    
-                    
-                    <h2 class="subheading">高斯伪谱法</h2>
-                    
-                    <span class="meta">Posted by ChenWH on April 24, 2021</span>
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
+                <div class="site-heading">
+                    <h1>思过崖</h1>
+                    <!--<hr class="small">-->
+                    <span class="subheading">人难免天生有自怜的情绪，唯有时刻保持清醒，才能看清真正的价值在哪里。</span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Post Content -->
-<article>
-    <div class="container">
-        <div class="row">
-
-    <!-- Post Container -->
-            <div class="
-                col-lg-8 col-lg-offset-2
-                col-md-10 col-md-offset-1
-                post-container">
-
-				<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-      processEscapes: true
-    }
-  });
-</script>
-
-<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
-
-<h1 id="gpm">GPM</h1>
-
-<hr />
-<h2 id="问题陈述">问题陈述</h2>
-
-\[\min\ J=\int_0^{t_f}h(\boldsymbol{x}(t),\boldsymbol{u}(t),t)\boldsymbol{d}t\\
-s.t.\ \boldsymbol{\dot{x}}=\boldsymbol{f}(\boldsymbol{x}(t),\boldsymbol{u}(t),\boldsymbol{x}(0))=\boldsymbol{x_0}\\
-\text{式中：}\boldsymbol{\dot{x}}=\boldsymbol{f}(\boldsymbol{x}(t),\boldsymbol{u}(t))=[x_3,x_4,gu_2-c_1x_5,u_1-g-c_2x_5,gu_2-c_1x_5]^T\\
-h=\frac{1}{2}(u_1-g)^2+\frac{1}{2}u_2^2+k_1(x_1+3)^2+k_2(x_2+x_1u_2)^2\\
-t_f=2,g=9.8,k_1=k_2=50,c_1=1.5,c_2=0.38\]
-
-<hr />
-
-<h2 id="continuous-bolza-problem">Continuous Bolza Problem</h2>
-
-\[\begin{aligned}
-	&amp;J=\Phi\left[\mathbf{x}(-1), t_{0}, \mathbf{x}(1), t_{f}\right]+\frac{t_{f}-t_{0}}{2} \int_{-1}^{1} g\left[\mathbf{x}(\tau), \mathbf{u}(\tau), \tau ; t_{0}, t_{f}\right] \mathrm{d} \tau\ \ \ (目标函数)\\
-	&amp;\frac{\mathrm{d} \mathbf{x}}{\mathrm{d} \tau}=\frac{t_{f}-t_{0}}{2} \mathbf{f}\left[\mathbf{x}(\tau), \mathbf{u}(\tau), \tau ; t_{0}, t_{f}\right] \\
-	&amp;\phi\left[\mathbf{x}(-1), t_{0}, \mathbf{x}(1), t_{f}\right]=\mathbf{0} \in \mathbb{R}^{q}\ \ \ (边界约束) \\
-	&amp;\mathbf{C}\left[\mathbf{x}(\tau), \mathbf{u}(\tau), \tau ; t_{0}, t_{f}\right] \leq \mathbf{0} \in \mathbb{R}^{c}\ \ \ (路径约束)
-\end{aligned}\]
-
-<p>$\mathbf{x}(\tau)状态函数，\mathbf{u}(\tau)控制函数求取极值$</p>
-
-<hr />
-
-<h2 id="问题化简">问题化简</h2>
-
-<ol>
-  <li>拉格朗日插值多项式，化简$\mathbf{x}(\tau)和\mathbf{u}(\tau)$</li>
-</ol>
-
-\[\begin{aligned}
-	&amp;\sum_{i=0}^{N} D_{k i} \mathbf{X}_{i}-\frac{t_{f}}{2} \mathbf{f}\left(\mathbf{X}_{k}, \mathbf{U}_{k}, \tau_{k} ; t_{0}, t_{f}\right)=\mathbf{0} \quad(k=1, \ldots, N)\\
-	
-\Longrightarrow&amp;\sum^{N}_{i=0}X_{\tau_{i}}\left[\sum^{N}_{l=0,l\not=i}\frac{\prod^{N}_{j=0,j\not=i,l}(\tau_{k}-\tau_{j})}{\prod^{N}_{j=0,j\not=i}(\tau_{i}-\tau_{j})} \right] -\frac{t_{f}}{2}X_{\tau_{k}}=0\\
-\end{aligned}\]
-
-<ol>
-  <li>计算微分逼近矩阵$D$和高斯权重$w$，其中LG点$\tau$由legendre多项式取零点得到</li>
-</ol>
-
-<p>\(D_{ki}=\sum^{N}_{l=0,l\not=i}\frac{\prod^{N}_{j=0,j\not=i,l}(\tau_{k}-\tau_{j})}{\prod^{N}_{j=0,j\not=i}(\tau_{i}-\tau_{j})}\\
-	w_{i}=\frac{2}{(1-\tau_{i}^2)\left[ P_n'(\tau_i)^2\right]},其中P_n(\tau)=\prod_{1\leq i\leq N}(\tau-\tau_i)\)
-\(\begin{aligned}
-	\mathbf{X}_{f} &amp;\equiv \mathbf{X}_{0}+\frac{t_{f}-t_{0}}{2} \sum_{k=1}^{N} w_{k} \mathbf{f}\left(\mathbf{X}_{k}, \mathbf{U}_{k}, \tau_{k} ; t_{0}, t_{f}\right)\\
-	J&amp;=\Phi\left(\mathbf{X}_{0}, t_{0}, \mathbf{X}_{f}, t_{f}\right)+\frac{t_{f}-t_{0}}{2} \sum_{k=1}^{N} w_{k} g\left(\mathbf{X}_{k}, \mathbf{U}_{k}, \tau_{k} ; t_{0}, t_{f}\right)
-\end{aligned}\)</p>
-
-<ol>
-  <li>原连续Bolza问题转化为NLP如下</li>
-</ol>
-
-\[\begin{aligned}
-	min\ J&amp;=\frac{t_{f}}{2} w^T\left[ \frac{1}{2}(U_1-g)\odot(U_1-g)+\frac{1}{2}U_2\odot U_2+k_1(X_1+3)\odot(X_1+3)+k_2(X_1\odot U_2+X_2)\odot(X_1\odot U_2+X_2) \right]\\
-	s.t.&amp;D\widetilde X_1-\frac{t_f}{2}X_3=0 \\
-	&amp;D\widetilde X_2-\frac{t_f}{2}X_4=0\\
-	&amp;D\widetilde X_3-\frac{t_f}{2}(gU_2-c_1X_5)=0\\
-	&amp;D\widetilde X_4-\frac{t_f}{2}(U_1-g-c_2X_5)=0\\
-	&amp;D\widetilde X_5-\frac{t_f}{2}(gU_2-c_1X_5)=0\\
-\end{aligned}\]
-
-<p>其中$\odot$为数组乘法,$\widetilde X_i$为$X$的拓展矩阵，即$\widetilde X_i=[X_{0,i};X_i]$</p>
-
-
-                <hr style="visibility: hidden;">
-
-                <ul class="pager">
-                    
-                    <li class="previous">
-                        <a href="/2021/04/20/Ubuntu/" data-toggle="tooltip" data-placement="top" title="Ubuntu配置">
-                        Previous<br>
-                        <span>Ubuntu配置</span>
-                        </a>
-                    </li>
-                    
-                    
-                    <li class="next">
-                        <a href="/2021/04/24/SQP/" data-toggle="tooltip" data-placement="top" title="SQP">
-                        Next<br>
-                        <span>SQP</span>
-                        </a>
-                    </li>
-                    
-                </ul>
-
-
-                <!--Gitalk评论start  -->
-                
-                <!-- 引入Gitalk评论插件  -->
-                <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-                <script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
-                <div id="gitalk-container"></div>
-                <!-- 引入一个生产md5的js，用于对id值进行处理，防止其过长 -->
-                <!-- Thank DF:https://github.com/NSDingFan/NSDingFan.github.io/issues/3#issuecomment-407496538 -->
-                <script src="/js/md5.min.js"></script>
-                <script type="text/javascript">
-                    var gitalk = new Gitalk({
-                    clientID: 'd18b343dd9c7ca49518a',
-                    clientSecret: '539e88b8a7feffaddbb553b9c421dfefcbc6eced',
-                    repo: 'Chen-WH.github.io',
-                    owner: 'Chen-WH',
-                    admin: ['Chen-WH'],
-                    distractionFreeMode: true,
-                    id: md5(location.pathname),
-                    });
-                    gitalk.render('gitalk-container');
-                </script>
-                
-                <!-- Gitalk end -->
-
-                
-
-            </div>  
-
-    <!-- Side Catalog Container -->
-        
-            <div class="
-                col-lg-2 col-lg-offset-0
-                visible-lg-block
-                sidebar-container
-                catalog-container">
-                <div class="side-catalog">
-                    <hr class="hidden-sm hidden-xs">
-                    <h5>
-                        <a class="catalog-toggle" href="#">CATALOG</a>
-                    </h5>
-                    <ul class="catalog-body"></ul>
-                </div>
-            </div>
+<!-- Main Content -->
+<div class="container">
+	<div class="row">
         
 
+<!-- USE SIDEBAR -->
+    <!-- PostList Container -->
+    		<div class="
+                col-lg-8 col-lg-offset-1
+                col-md-8 col-md-offset-1
+                col-sm-12
+                col-xs-12
+                postlist-container
+            ">
+    			
+<div class="post-preview">
+    <a href="/2021/02/06/Python_igraph/">
+        <h2 class="post-title">
+            Igraph
+        </h2>
+        
+        <h3 class="post-subtitle">
+            Python-Igraph
+        </h3>
+        
+        <div class="post-content-preview">
+            
+
+
+
+Python-igraph
+
+官网：Tutorial (igraph.org)
+
+
+
+创建图形
+
+g = Graph()
+g = Graph.Full(10)  #满边图
+#添加顶点
+add_vertices(3)
+#添加边
+add_edges()[(0,1), (1,2)]
+#顶点数、边数和图形的名称；summary略去边列表
+print(g)
+summary(g)
+#删除边及顶点...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on February 6, 2021
+    </p>
+</div>
+<hr>
+
+
+<!-- Pager -->
+
+<ul class="pager">
+    
+    <li class="previous">
+        <a href="/page2">&larr; Newer Posts</a>
+    </li>
+    
+    
+</ul>
+
+
+    		</div>
     <!-- Sidebar Container -->
             <div class="
-                col-lg-8 col-lg-offset-2
-                col-md-10 col-md-offset-1
-                sidebar-container">
-
+                col-lg-3 col-lg-offset-0
+                col-md-3 col-md-offset-0
+                col-sm-12
+                col-xs-12
+                sidebar-container
+            ">
                 <!-- Featured Tags -->
                 
                 <section>
                     <hr class="hidden-sm hidden-xs">
                     <h5><a href="/2-tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
-        				
+                        
                             
-                				<a href="/2-tags/#Visualization" title="Visualization" rel="2">
+                                <a href="/2-tags/#Visualization" title="Visualization" rel="2">
                                     Visualization
                                 </a>
                             
-        				
+                        
                             
-                				<a href="/2-tags/#Note" title="Note" rel="3">
+                                <a href="/2-tags/#Note" title="Note" rel="3">
                                     Note
                                 </a>
                             
-        				
+                        
                             
-                				<a href="/2-tags/#Math" title="Math" rel="6">
+                                <a href="/2-tags/#Math" title="Math" rel="6">
                                     Math
                                 </a>
                             
-        				
+                        
                             
-        				
+                        
                             
-                				<a href="/2-tags/#Coding" title="Coding" rel="2">
+                                <a href="/2-tags/#Coding" title="Coding" rel="2">
                                     Coding
                                 </a>
                             
-        				
+                        
                             
-        				
+                        
                             
-        				
+                        
                             
-        				
+                        
                             
-                				<a href="/2-tags/#Essay" title="Essay" rel="2">
+                                <a href="/2-tags/#Essay" title="Essay" rel="2">
                                     Essay
                                 </a>
                             
-        				
+                        
                             
-        				
-        			</div>
+                        
+                    </div>
                 </section>
                 
 
+                <!-- Short About -->
+                <section class="visible-md visible-lg">
+                    <hr><h5><a href="/3-about/">ABOUT ME</a></h5>
+                    <div class="short-about">
+                        
+                            <a href="/3-about">
+                                <img src="/img/avatar.jpg"/>
+                            </a>
+                        
+                        
+                            <p>怕什么真理无穷，进一寸有一寸的欢喜。</p>
+                        
+                        <!-- SNS Link -->
+                        <ul class="list-inline">
+                            
+                            <!-- add jianshu add target = "_blank" to <a> by BY -->
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                        </ul>
+                        
+                            <p>✉️ 1773904345@qq.com</p>
+                        
+                    </div>
+                </section>
                 <!-- Friends Blog -->
                 
                 <hr>
-                <h5>FRIENDS</h5>
+                <h5>MORE SITES</h5>
                 <ul class="list-inline">
                     
                         <li><a href="https://github.com/Chen-WH">GitHub</a></li>
@@ -415,51 +341,10 @@ t_f=2,g=9.8,k_1=k_2=50,c_1=1.5,c_2=0.38\]
                     
                 </ul>
                 
-            </div>
-        </div>
-    </div>
-</article>
-
-
-
-
-
-
-<!-- async load function -->
-<script>
-    function async(u, c) {
-      var d = document, t = 'script',
-          o = d.createElement(t),
-          s = d.getElementsByTagName(t)[0];
-      o.src = u;
-      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
-      s.parentNode.insertBefore(o, s);
-    }
-</script>
-<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
-<script>
-    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
-        // BY Fix:去除标题前的‘#’ issues:<https://github.com/qiubaiying/qiubaiying.github.io/issues/137>
-        // anchors.options = {
-        //   visible: 'always',
-        //   placement: 'right',
-        //   icon: '#'
-        // };
-        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
-    })
-</script>
-<style>
-    /* place left on bigger screen */
-    @media all and (min-width: 800px) {
-        .anchorjs-link{
-            position: absolute;
-            left: -0.75em;
-            font-size: 1.1em;
-            margin-top : -0.1em;
-        }
-    }
-</style>
-
+    		</div>
+        
+	</div>
+</div>
 
 
     <!-- Footer -->
@@ -585,50 +470,6 @@ t_f=2,g=9.8,k_1=k_2=50,c_1=1.5,c_2=0.38\]
 
 
 <!-- Side Catalog -->
-
-<script type="text/javascript">
-    function generateCatalog (selector) {
-        var P = $('div.post-container'),a,n,t,l,i,c;
-        a = P.find('h1,h2,h3,h4,h5,h6');
-        a.each(function () {
-            n = $(this).prop('tagName').toLowerCase();
-            i = "#"+$(this).prop('id');
-            t = $(this).text();
-            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
-            l = $('<li class="'+n+'_nav"></li>').append(c);
-            $(selector).append(l);
-        });
-        return true;    
-    }
-
-    generateCatalog(".catalog-body");
-
-    // toggle side catalog
-    $(".catalog-toggle").click((function(e){
-        e.preventDefault();
-        $('.side-catalog').toggleClass("fold")
-    }))
-
-    /*
-     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
-     * Fork by Hux to support padding
-     */
-    async("/js/jquery.nav.js", function () {
-        $('.catalog-body').onePageNav({
-            currentClass: "active",
-            changeHash: !1,
-            easing: "swing",
-            filter: "",
-            scrollSpeed: 700,
-            scrollOffset: 0,
-            scrollThreshold: .2,
-            begin: null,
-            end: null,
-            scrollChange: null,
-            padding: 80
-        });
-    });
-</script>
 
 
 

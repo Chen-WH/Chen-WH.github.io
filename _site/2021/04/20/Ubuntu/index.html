@@ -218,8 +218,6 @@
 
 <h2 id="ubuntu开机自启小键盘">Ubuntu开机自启小键盘</h2>
 
-<p>https://blog.csdn.net/artourins/article/details/86411786</p>
-
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo</span> <span class="nt">-i</span>
 su gdm <span class="nt">-s</span> /bin/bash
 gsettings <span class="nb">set </span>org.gnome.settings-daemon.peripherals.keyboard numlock-state <span class="s1">'on'</span>
@@ -254,11 +252,15 @@ gsettings <span class="nb">set </span>org.gnome.settings-daemon.peripherals.keyb
 
 <h2 id="tmux">tmux</h2>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Ctrl+B 方向键 换窗口
-Ctrl+B shift+5 左右分割
-Ctrl+B shift+' 上下分割
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Ctrl+B 方向键 换窗口
+Ctrl+B <span class="nb">shift</span>+5 左右分割
+Ctrl+B <span class="nb">shift</span>+<span class="s1">' 上下分割
 Ctrl+B x 关闭当前窗口
-</code></pre></div></div>
+
+# 自动启用
+[[ $- != *i* ]] &amp;&amp; return
+[[ -z "$TMUX" ]] &amp;&amp; exec tmux
+</span></code></pre></div></div>
 
 <h2 id="simplescreenrecorder">SimpleScreenRecorder</h2>
 
@@ -302,8 +304,6 @@ sudo apt-get remove shutter
 sudo add-apt-repository --remove ppa:linuxuprising/shutter
 </code></pre></div></div>
 
-<p><img src="1585117-20191020004658876-1968565684.png" alt="img" /></p>
-
 <h2 id="freecad">FreeCAD</h2>
 
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>add-apt-repository ppa:freecad-maintainers/freecad-stable
@@ -336,13 +336,13 @@ sudo apt install fcitx
 
 <h2 id="matlab">MATLAB</h2>
 
-<p>https://www.cnblogs.com/MingruiYu/p/12367846.html</p>
+<p><a href="https://www.cnblogs.com/MingruiYu/p/12367846.html">安装教程</a></p>
 
 <h2 id="goldendict">Goldendict</h2>
 
-<p>http://einverne.github.io/post/2018/08/goldendict.html</p>
+<p><a href="http://einverne.github.io/post/2018/08/goldendict.html">使用教程</a></p>
 
-<p>https://github.com/skywind3000/ECDICT/wiki/%E7%AE%80%E6%98%8E%E8%8B%B1%E6%B1%89%E5%AD%97%E5%85%B8%E5%A2%9E%E5%BC%BA%E7%89%88   离线字典链接</p>
+<p><a href="https://github.com/skywind3000/ECDICT/wiki/%E7%AE%80%E6%98%8E%E8%8B%B1%E6%B1%89%E5%AD%97%E5%85%B8%E5%A2%9E%E5%BC%BA%E7%89%88">离线字典下载链接</a></p>
 
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt-get <span class="nb">install </span>goldendict
 </code></pre></div></div>
@@ -351,7 +351,8 @@ sudo apt install fcitx
 
 <p>https://docs.anbox.io/userguide/install.html</p>
 
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>adb <span class="nb">install </span>my-app.apk
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>apt <span class="nb">install </span>android-tools-adb
+<span class="nv">$ </span>adb <span class="nb">install </span>my-app.apk
 </code></pre></div></div>
 
 <h2 id="gnome-shell-extension">gnome-shell-extension</h2>
@@ -372,13 +373,50 @@ sudo apt install fcitx
   <li>ubuntu dock</li>
 </ol>
 
-<h2 id="主题美化">主题美化</h2>
-
-<p>https://zhuanlan.zhihu.com/p/71588449</p>
-
 <h2 id="vim设置">Vim设置</h2>
 
-<p>https://www.ruanyifeng.com/blog/2018/09/vimrc.html</p>
+<p><a href="https://www.ruanyifeng.com/blog/2018/09/vimrc.html">教程</a></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>set number
+syntax on
+set showmode
+set showcmd
+set t_Co=256
+filetype indent on
+set tabstop=2
+set wrap
+set hlsearch
+set showmatch
+</code></pre></div></div>
+
+<h2 id="终端美化">终端美化</h2>
+
+<p>oh my zsh</p>
+
+<p>背景透明度</p>
+
+<h2 id="figlet">figlet</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo
+echo</span> <span class="s2">"I'll walk through fire with you"</span> | figlet | lolcat <span class="nt">-a</span> <span class="nt">-d</span> 1
+<span class="nb">echo</span>
+</code></pre></div></div>
+
+<h2 id="压缩与解压">压缩与解压</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">tar</span> <span class="nt">-zxvf</span> xxx.tar.gz <span class="c"># 解压</span>
+<span class="nb">tar</span> <span class="nt">-zcvf</span> xxx.tar.gz file <span class="c"># 压缩</span>
+</code></pre></div></div>
+
+<h2 id="picgo">PicGo</h2>
+
+<p><a href="https://blog.csdn.net/liaoxianfu/article/details/118156643">教程</a></p>
+
+<h2 id="远程映射">远程映射</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>sshfs asc@login.hpc.sjtu.edu.cn:/lustre/home/acct-hpc/asc/hjzhang /home/hjzhang/[34m~L[34m~]/pi-share/
+</code></pre></div></div>
+
 
 
                 <hr style="visibility: hidden;">
