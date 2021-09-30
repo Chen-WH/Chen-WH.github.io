@@ -1,24 +1,23 @@
 # To Do
 
-## Critical
+## List
 
 1. exp && paper
 2. Project with Ysc
-3. 贝叶斯滤波与卡尔曼滤波
 
 ## Robotics
 
 1. 机器人学导论
 2. 多机器人系统
 
+## Flapping
+
+1. 扑翼机文献调研
+
 ## CS
 
 1. 深入理解计算机系统
 2. 现代操作系统
-
-## CFD
-
-1. ANSYS Fluent UDF
 
 ## AI
 
