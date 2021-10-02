@@ -11,18 +11,6 @@ tags:
     - Robotics
 ---
 
-
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-      processEscapes: true
-    }
-  });
-</script>
-<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
-
 # 配置安装
 
 [Ubuntu18.04安装PX4并与ROS联合实验_boyhoodme的博客-CSDN博客_ubuntu18.04安装px4](https://blog.csdn.net/boyhoodme/article/details/96611182)

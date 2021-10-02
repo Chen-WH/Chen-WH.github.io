@@ -5,8 +5,8 @@
     <description>人难免天生有自怜的情绪，唯有时刻保持清醒，才能看清真正的价值在哪里。</description>
     <link>https://Chen-WH.github.io/</link>
     <atom:link href="https://Chen-WH.github.io/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 02 Oct 2021 17:35:14 +0800</pubDate>
-    <lastBuildDate>Sat, 02 Oct 2021 17:35:14 +0800</lastBuildDate>
+    <pubDate>Sat, 02 Oct 2021 21:29:43 +0800</pubDate>
+    <lastBuildDate>Sat, 02 Oct 2021 21:29:43 +0800</lastBuildDate>
     <generator>Jekyll v4.2.0</generator>
     
       <item>
@@ -49,18 +49,7 @@ normal
     
       <item>
         <title>矩阵求导笔记</title>
-        <description>&lt;script src=&quot;https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
-
-&lt;script type=&quot;text/x-mathjax-config&quot;&gt;
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], [&quot;\\(&quot;,&quot;\\)&quot;] ],
-      processEscapes: true
-    }
-  });
-&lt;/script&gt;
-
-&lt;h1 id=&quot;matrix&quot;&gt;Matrix&lt;/h1&gt;
+        <description>&lt;h1 id=&quot;matrix&quot;&gt;Matrix&lt;/h1&gt;
 
 &lt;p&gt;计算字典 &lt;a href=&quot;./matrixcookbook.pdf&quot;&gt;Matrix Cook Book&lt;/a&gt;&lt;/p&gt;
 

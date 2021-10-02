@@ -1,0 +1,76 @@
+I"�<h1 id="matrix">Matrix</h1>
+
+<p>计算字典 <a href="./matrixcookbook.pdf">Matrix Cook Book</a></p>
+
+<h2 id="微分法则">微分法则</h2>
+
+\[\begin{aligned}
+	&amp;转置&amp; &amp;\mathbf{d}(\boldsymbol{X}^T)=(\mathbf{d}\boldsymbol{X})^T\\
+	&amp;迹&amp; &amp;\mathbf{d}\mathrm{tr}(\boldsymbol{X})=\mathrm{tr}(\mathbf{d}\boldsymbol{X})\\
+	&amp;求逆&amp; &amp;\mathbf{d}\boldsymbol{X}^{-1}=-\boldsymbol{X}^{-1}\mathbf{d}\boldsymbol{XX}^{-1}(\boldsymbol{XX}^{-1}=\boldsymbol{I}两边微分得到)\\
+	&amp;行列式&amp; &amp;\mathbf{d}|\boldsymbol{X}|=\mathrm{tr}(\boldsymbol{X}^*\mathbf{d}\boldsymbol{X})\\
+	&amp;主元素函数&amp; &amp;\mathbf{d}\sigma(\boldsymbol{X})=\sigma'(\boldsymbol{X})\odot\mathbf{d}\boldsymbol{X}
+\end{aligned}\]
+
+<h2 id="关于迹">关于迹</h2>
+
+\[\begin{aligned}
+&amp;矩阵乘法交换，\boldsymbol{A}与\boldsymbol{B}^T尺寸相同&amp; &amp;\mathrm{tr}(\boldsymbol{AB})=\mathrm{tr}(\boldsymbol{BA})\\
+&amp;矩阵乘法/逐元素乘法交换，\boldsymbol{A},\boldsymbol{B},\boldsymbol{C}尺寸相同&amp; &amp;\mathrm{tr}(\boldsymbol{A}^T(\boldsymbol{B}\odot\boldsymbol{C}))=\mathrm{tr}((\boldsymbol{A}\odot\boldsymbol{B})^T\boldsymbol{C})
+\end{aligned}\]
+
+<p>若标量函数 $f$ 是矩阵 $X$ 经加减乘法、逆、行列式、逐元素函数等运算构成，则使用相应的运算法则对 $f$ 求微分，再使用迹技巧给 $\mathbf{d}f$ 套上迹并将其它项交换至 $\mathbf{d}f$ 左侧，对照导数与微分的联系 $\mathbf{d}f=\mathrm{tr}(\frac{\partial f}{\partial \boldsymbol{X}}^T\mathbf{d}\boldsymbol{X})$，即能得到导数。</p>
+
+<h2 id="复合法则">复合法则</h2>
+
+\[\begin{aligned}
+	\mathbf{d}f&amp;=\mathrm{tr}(\frac{\partial f}{\partial \boldsymbol{Y}}^T\mathbf{d}\boldsymbol{Y})\\
+	&amp;=\mathrm{tr}(\frac{\partial f}{\partial \boldsymbol{Y}}^T\boldsymbol{A}\mathbf{d}\boldsymbol{X}\boldsymbol{B})\\
+	&amp;=\mathrm{tr}(\boldsymbol{B}\frac{\partial f}{\partial \boldsymbol{Y}}^T\boldsymbol{A}\mathbf{d}\boldsymbol{X})\\
+	&amp;=\mathrm{tr}\left((\boldsymbol{A}^T\frac{\partial f}{\partial \boldsymbol{Y}}\boldsymbol{B}^T)^T \mathbf{d}\boldsymbol{X}\right)\\
+	得到\frac{\partial f}{\partial \boldsymbol{X}}&amp;=\boldsymbol{A}^T\frac{\partial f}{\partial \boldsymbol{Y}}\boldsymbol{B}^T\\
+	注意这里\mathbf{d}\boldsymbol{Y}&amp;=(\mathbf{d}\boldsymbol{A})\boldsymbol{XB}+\boldsymbol{A}(\mathbf{d}\boldsymbol{X})\boldsymbol{B}+\boldsymbol{AX}(\mathbf{d}\boldsymbol{B})=\boldsymbol{A}(\mathbf{d}\boldsymbol{X})\boldsymbol{B}\\
+\end{aligned}\]
+
+<h2 id="矩阵对矩阵">矩阵对矩阵</h2>
+
+\[\begin{aligned}
+	&amp;向量\boldsymbol{f}(p\times1)对向量\boldsymbol{x}(m\times1)导数&amp; &amp;\frac{\partial \boldsymbol{f}}{\partial \boldsymbol{x}}=
+	\left[\begin{array}{cccc}
+\frac{\partial f_{1}}{\partial x_{1}} &amp; \frac{\partial f_{2}}{\partial x_{1}} &amp; \cdots &amp; \frac{\partial f_{p}}{\partial x_{1}} \\
+\frac{\partial f_{1}}{\partial x_{2}} &amp; \frac{\partial f_{2}}{\partial x_{2}} &amp; \cdots &amp; \frac{\partial f_{p}}{\partial x_{2}} \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+\frac{\partial f_{1}}{\partial x_{m}} &amp; \frac{\partial f_{2}}{\partial x_{m}} &amp; \cdots &amp; \frac{\partial f_{p}}{\partial x_{m}}
+\end{array}\right](\mathrm{m} \times \mathrm{p})\\
+	&amp;矩阵\boldsymbol{F}(p\times q)对矩阵\boldsymbol{X}(m\times n)导数&amp; &amp;向量化（列优先）\\
+	&amp;&amp; &amp;\mathbf{vec}(\boldsymbol{X})=[X_{11},\dots,X_{m1},X_{12},\dots,X_{m2},\dots,X_{mn}]^T(mn\times1)\\
+	&amp;&amp; &amp;\frac{\partial \boldsymbol{F}}{\partial \boldsymbol{X}}=\frac{\partial \mathbf{vec}(\boldsymbol{F})}{\partial \mathbf{vec}(\boldsymbol{X})}(mn\times pq)\\
+\end{aligned}\]
+
+<h2 id="关于向量化">关于向量化</h2>
+
+\[\begin{aligned}
+	&amp;矩阵乘法&amp; &amp;\mathbf{vec}(\boldsymbol{AXB})=(\boldsymbol{B}^T\otimes\boldsymbol{A})\mathbf{vec}(\boldsymbol{X})\\
+	&amp;\otimes&amp; &amp;Kronecker克罗内克积，\boldsymbol{A}(m\times n)\otimes\boldsymbol{B}(p\times q)=[\boldsymbol{A_{ij}B}](mp\times nq)\\
+	&amp;转置&amp; &amp;\mathbf{vec}(\boldsymbol{A}^T)=\boldsymbol{K}_{mn}\mathbf{vec}(\boldsymbol{A})\\
+	&amp;\boldsymbol{K}_{mn}(mn\times mn)&amp; &amp;交换矩阵，将m\times n按列优先的向量化变为按行优先的向量化\\
+	&amp;逐元素乘法&amp; &amp;\mathbf{vec}(\boldsymbol{A}\odot\boldsymbol{X})=\mathbf{diag}(\boldsymbol{A})\mathbf{vec}(\boldsymbol{X})\\
+	&amp;\mathbf{diag}(\boldsymbol{A})(mn\times mn)&amp; &amp;用\boldsymbol{A}的元素按列优先排成的对角阵
+\end{aligned}\]
+
+<p>若矩阵函数 $\boldsymbol{F}$ 是矩阵 $\boldsymbol{X}$ 经加减乘法、逆、行列式、逐元素函数等运算构成，则使用相应的运算法则对 $\boldsymbol{F}$ 求微分，再做向量化并使用技巧将其它项交换至 $\mathbf{vec}(\mathbf{d}\boldsymbol{X})$ 左侧，对照导数与微分的联系 $\mathbf{vec}(\mathbf{d}\boldsymbol{F})=\frac{\partial \boldsymbol{F}}{\partial \boldsymbol{X}}^T\mathbf{vec}(\mathbf{d}\boldsymbol{X})$，即能得到导数。</p>
+
+<h2 id="一些恒等式">一些恒等式</h2>
+
+\[\begin{aligned}
+	&amp;1&amp; &amp;(\boldsymbol{A}\otimes\boldsymbol{B})^T=\boldsymbol{A}^T\otimes\boldsymbol{B}^T\\
+	&amp;2&amp; &amp;\mathbf{vec}(\boldsymbol{ab}^T)=\boldsymbol{b}\otimes\boldsymbol{a}\\
+	&amp;3&amp; &amp;(\boldsymbol{A}\otimes\boldsymbol{B})(\boldsymbol{C}\otimes\boldsymbol{D})=(\boldsymbol{AC})\otimes(\boldsymbol{BD})\\
+	&amp;&amp; &amp;\boldsymbol{F}=\boldsymbol{D}^T\boldsymbol{B}^T\boldsymbol{XAC}直接求导和引入\boldsymbol{Y}=\boldsymbol{B}^T\boldsymbol{XA}链式法则分别得到两侧\\
+	&amp;4&amp; &amp;\boldsymbol{K}_{mn}=\boldsymbol{K}_{nm}^T,\boldsymbol{K}_{mn}\boldsymbol{K}_{nm}=\boldsymbol{I}\\
+	&amp;5&amp; &amp;\boldsymbol{K}_{pm}(\boldsymbol{A}\otimes\boldsymbol{B})\boldsymbol{K}_{nq}=\boldsymbol{B}\otimes\boldsymbol{A},\boldsymbol{A}(m\times n),\boldsymbol{B}(p\times q)\\
+	&amp;&amp; &amp;\mathbf{vec}(\boldsymbol{AXB}^T)=(\boldsymbol{B}\otimes\boldsymbol{A})\mathbf{vec}(\boldsymbol{X})\\
+	&amp;&amp; &amp;\mathbf{vec}(\boldsymbol{AXB}^T)=\boldsymbol{K}_{pm}\mathbf{vec}(\boldsymbol{BX}^T\boldsymbol{A}^T)=\boldsymbol{K}_{pm}(\boldsymbol{A}\otimes\boldsymbol{B})\mathbf{vec}(\boldsymbol{X}^T)=\boldsymbol{K}_{pm}(\boldsymbol{A}\otimes\boldsymbol{B})\boldsymbol{K}_{nq}\mathbf{vec}(\boldsymbol{X})\\
+\end{aligned}\]
+
+:ET
