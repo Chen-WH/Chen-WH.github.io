@@ -5,8 +5,8 @@
     <description>人难免天生有自怜的情绪，唯有时刻保持清醒，才能看清真正的价值在哪里。</description>
     <link>https://Chen-WH.github.io/</link>
     <atom:link href="https://Chen-WH.github.io/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 30 Sep 2021 23:08:45 +0800</pubDate>
-    <lastBuildDate>Thu, 30 Sep 2021 23:08:45 +0800</lastBuildDate>
+    <pubDate>Fri, 01 Oct 2021 00:02:11 +0800</pubDate>
+    <lastBuildDate>Fri, 01 Oct 2021 00:02:11 +0800</lastBuildDate>
     <generator>Jekyll v4.2.0</generator>
     
       <item>
@@ -49,7 +49,7 @@ normal
     
       <item>
         <title>矩阵求导笔记</title>
-        <description>&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML&quot; async=&quot;&quot;&gt;&lt;/script&gt;
+        <description>&lt;script src=&quot;https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
 
 &lt;script type=&quot;text/x-mathjax-config&quot;&gt;
   MathJax.Hub.Config({
@@ -156,7 +156,7 @@ normal
   });
 &lt;/script&gt;
 
-&lt;script src=&quot;https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML&quot; async=&quot;&quot;&gt;&lt;/script&gt;
 
 &lt;h1 id=&quot;快速傅里叶变换fft&quot;&gt;快速傅里叶变换(FFT)&lt;/h1&gt;
 
