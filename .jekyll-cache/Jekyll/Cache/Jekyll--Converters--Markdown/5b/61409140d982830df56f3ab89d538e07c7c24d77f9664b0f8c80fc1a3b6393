@@ -1,0 +1,143 @@
+I"|<h1 id="第一章-引论">第一章 引论</h1>
+
+<h2 id="问题背景">问题背景</h2>
+
+\[\begin{aligned}
+	\min\ &amp;f(x)\\
+	s.t.\ &amp;c_i(x)=0,\ \ i\in E\\
+	      &amp;c_i(x)\geq0,\ \ i\in I\\
+	      
+\end{aligned}\]
+
+<hr />
+
+<h1 id="第二章-一维搜索">第二章 一维搜索</h1>
+
+<h2 id="精确一维搜索">精确一维搜索</h2>
+
+<h3 id="直接方法">直接方法</h3>
+
+<p>$0.618$法和$Fibonacci$法</p>
+
+<h3 id="插值法">插值法</h3>
+
+<ol>
+  <li>二次插值法
+    <ol>
+      <li>一点二次插值法（牛顿法）：收敛效果并不佳</li>
+      <li>二点二次插值法</li>
+    </ol>
+  </li>
+  <li>三次插值法</li>
+</ol>
+
+<h2 id="不精确一维搜索">不精确一维搜索</h2>
+
+<h3 id="armijo-goldstein准则">Armijo-Goldstein准则</h3>
+
+\[f(x_k+\alpha_k d_k)&lt;f(x_k)+\rho g^T_k\alpha_kd_k\]
+
+<h3 id="wolfe-powell准则">Wolfe-Powell准则</h3>
+
+\[g^T_{k+1}d_k\geq \sigma g^T_kd_k\\
+|g^T_{k+1}d_k|\leq \sigma|g^T_kd_k|\]
+
+<p>$\sigma$值越小，线性搜索越精确</p>
+
+<hr />
+
+<h1 id="第三章-牛顿法">第三章 牛顿法</h1>
+
+<h2 id="31-最速下降法">3.1 最速下降法</h2>
+
+<p>最速下降法以负梯度方向作为极小化算法的下降方向。</p>
+
+<h2 id="32牛顿法">3.2牛顿法</h2>
+
+<p>牛顿法的基本思想是利用目标函数的二次Taylor展开，并将其极小化。</p>
+
+<p>\(f(x_k+d_k)\approx f(x_k)+\nabla f(x_k)^Td_k+\frac{1}{2}d^T_k\nabla^2f(x_k)d_k\)
+将上式右边极小化，得到$x_{k+1}=x_k-\left[\nabla^2f(x_k)\right]^{-1}\nabla f(x_k)$</p>
+
+<h2 id="33-修正牛顿法">3.3 修正牛顿法</h2>
+
+<p>牛顿法面临的主要困难是$Hessian$矩阵$G_k$不正定。这时候二次模型不一定有极小点，甚至没有平稳点。当$G_k$不正定时，二次模型函数是无界的。</p>
+
+<h3 id="goldstein-price修正法">Goldstein-Price修正法</h3>
+
+<p>当$Hessian$不正定时， 采用最速下降方向。
+\(d_k=\left\{  
+             \begin{array}{**lr**}  
+             d_k^N,\ \ if\ \cos\langle d_k^N,-g\rangle\geq \eta\\
+             -g_k,\ \ otherwise
+             \end{array}  
+\right.\)</p>
+
+<h3 id="goldfeld修正法">Goldfeld修正法</h3>
+
+<p>使牛顿方向偏向最速下降方向将$Hessian$矩阵$G_k$改变为$G_k+v_k I$。比较理想的是，$v_k$不要太大于使$G_k+v_k I$正定的最小的$v_k（最小特征值）+\varepsilon$。</p>
+
+<p><a href="https://zhuanlan.zhihu.com/p/31463121">Gerschgorin（盖尔）圆盘定理</a>
+\(\begin{aligned}
+	b_1&amp;=|\min\limits_{1\leq i\leq n}\{(G_k)_{ii}-\sum_{j\not=i}|(G_k)_{ij}|\}|\geq|\min\limits_{i}\lambda_i|\\
+	b_2&amp;=\max_{i}\{e_{ii} \}，其中e_{ii}是E的第i个对角元\\
+	v_k&amp;=\min\{b_1,b_2 \}\\
+\end{aligned}\)</p>
+<h3 id="基于cholesky分解的修正法">基于Cholesky分解的修正法</h3>
+
+<p><a href="https://zh.wikipedia.org/wiki/Cholesky%E5%88%86%E8%A7%A3">参考：维基百科</a></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>先形成$G_k$的$Cholesky$分解$LDL^T$，然后定义$\overline{G_k}=L\overline{D}L^T$，其中$\overline{d_{ii}}=\max{</td>
+      <td>d_{jj}</td>
+      <td>,\delta}$，$d_{jj}$为$D$的对角元，$\delta$是某个给定的小正数。</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>缺陷</strong></p>
+
+<ol>
+  <li>对称不定矩阵的 Cholesky分解可能不存在。</li>
+  <li>即使这种分解存在，其计算过程一般也是数值不稳定的，因为其矩阵分解因子的元素可能是无界的。进一步，当$G_k$仅是稍微不定的，用这样的方法产生的$G_k$也可能与$G_k$相差很大。</li>
+</ol>
+
+<h3 id="gillmurry修正法数值稳定">Gill&amp;Murry修正法（数值稳定）</h3>
+
+<p>见3.5.2</p>
+
+<h2 id="34-有限差分牛顿法">3.4 有限差分牛顿法</h2>
+
+<p>在牛顿法中利用有限差分作为解析导数$\nabla f(x)$和$\nabla^2f(x)$的近似。</p>
+
+<h2 id="35-负曲率方向法">3.5 负曲率方向法</h2>
+
+<h3 id="引言">引言</h3>
+
+<p>若负曲率方向$d$满足$d^T\nabla f(x)\leq0$，则$d$是下降方向；若$d^T\nabla f(x)\geq0$，则$-d$是下降方向。</p>
+
+<h3 id="gillmurry稳定牛顿法">Gill&amp;Murry稳定牛顿法</h3>
+
+\[\overline{G_k}=G_k+E_k=L_kD_kL_k^T\\
+D_k=\bold{diag}(d_{11},\cdots,d_{nn}),\ \ E_k=\bold{diag}(e_{11},\cdots,e_{nn})\]
+
+\[\begin{aligned}
+	&amp;令\varphi_j=d_{jj}-e_{jj},j=1,\cdots,n\\
+	&amp;求下标t，使\varphi_t=\min\{\varphi_j|j=1,\cdots,n\}\\
+	&amp;若\varphi_j\geq，则停止；否则，解方程L_k^Td_k=e_t，其中
+\end{aligned}\]
+
+<p><strong>罚函数</strong>
+\(等号约束\sigma\sum |h(x)|^2\\
+不等号约束\sigma\sum\left[\max\left\{0, -g(x)\right\}\right]^2\\\)
+$\sigma_kP(x)&lt;\varepsilon$ ，则停止；$\sigma_{k+1}=c\sigma_k, c&gt;1$ 。</p>
+
+<p>SUMT方法：取一个趋向无穷大的数列 ${\sigma_k}$ 逐个求解 $\min\ f(x)+\sigma_kP(x)$ 得到极小点序列 ${x^{(k)}}$ 收敛于最优解</p>
+
+<p><strong>内点法</strong></p>
+
+<p>从可行域内点出发，在可行域内搜索，适用于只有不等式的问题</p>
+
+:ET

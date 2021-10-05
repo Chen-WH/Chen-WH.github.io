@@ -1,0 +1,21 @@
+I"<h1 id="machine-learning">Machine Learning</h1>
+
+<h2 id="多变量线性回归">多变量线性回归</h2>
+
+<h3 id="正规方程">正规方程</h3>
+
+\[\begin{aligned}
+	&amp;&amp; &amp;\theta=(X^TX)^{-1}X^Ty\\
+	&amp;s.t.&amp; &amp;训练集特征矩阵为X，训练集结果为向量y\\
+\end{aligned}\]
+
+<h3 id="正规方程推导过程">正规方程推导过程</h3>
+
+\[\begin{aligned}
+	&amp;首先变换&amp; J(\theta)&amp;=\frac{1}{2}(X\theta-y)^T(X\theta-y)\\
+	&amp;&amp; &amp;=\frac{1}{2}(\theta^TX^TX\theta-\theta^TX^Ty-y^TX\theta-y^Ty)\\
+	&amp;矩阵求导法则&amp; &amp;\frac{\mathbf{d}AB}{\mathbf{d}B}=A^T&amp; &amp;\frac{\mathbf{d}X^TAX}{\mathbf{d}X}=2AX\\
+	&amp;得到&amp; \frac{\partial{J(\theta)}}{\partial \theta}&amp;=\frac{1}{2}(2X^TX\theta-X^Ty)
+\end{aligned}\]
+
+:ET

@@ -5,8 +5,8 @@
     <description>人难免天生有自怜的情绪，唯有时刻保持清醒，才能看清真正的价值在哪里。</description>
     <link>https://Chen-WH.github.io/</link>
     <atom:link href="https://Chen-WH.github.io/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 02 Oct 2021 21:29:43 +0800</pubDate>
-    <lastBuildDate>Sat, 02 Oct 2021 21:29:43 +0800</lastBuildDate>
+    <pubDate>Mon, 04 Oct 2021 13:31:42 +0800</pubDate>
+    <lastBuildDate>Mon, 04 Oct 2021 13:31:42 +0800</lastBuildDate>
     <generator>Jekyll v4.2.0</generator>
     
       <item>
@@ -136,18 +136,7 @@ normal
     
       <item>
         <title>FFT笔记</title>
-        <description>&lt;script type=&quot;text/x-mathjax-config&quot;&gt;
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], [&quot;\\(&quot;,&quot;\\)&quot;] ],
-      processEscapes: true
-    }
-  });
-&lt;/script&gt;
-
-&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML&quot; async=&quot;&quot;&gt;&lt;/script&gt;
-
-&lt;h1 id=&quot;快速傅里叶变换fft&quot;&gt;快速傅里叶变换(FFT)&lt;/h1&gt;
+        <description>&lt;h1 id=&quot;快速傅里叶变换fft&quot;&gt;快速傅里叶变换(FFT)&lt;/h1&gt;
 
 &lt;h2 id=&quot;原理介绍&quot;&gt;原理介绍&lt;/h2&gt;
 
@@ -241,18 +230,7 @@ normal
     
       <item>
         <title>ML读书随笔</title>
-        <description>&lt;script type=&quot;text/x-mathjax-config&quot;&gt;
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], [&quot;\\(&quot;,&quot;\\)&quot;] ],
-      processEscapes: true
-    }
-  });
-&lt;/script&gt;
-
-&lt;script src=&quot;https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
-
-&lt;h1 id=&quot;machine-learning&quot;&gt;Machine Learning&lt;/h1&gt;
+        <description>&lt;h1 id=&quot;machine-learning&quot;&gt;Machine Learning&lt;/h1&gt;
 
 &lt;h2 id=&quot;多变量线性回归&quot;&gt;多变量线性回归&lt;/h2&gt;
 
@@ -284,18 +262,7 @@ normal
     
       <item>
         <title>HTML学习笔记</title>
-        <description>&lt;script type=&quot;text/x-mathjax-config&quot;&gt;
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], [&quot;\\(&quot;,&quot;\\)&quot;] ],
-      processEscapes: true
-    }
-  });
-&lt;/script&gt;
-
-&lt;script src=&quot;https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
-
-&lt;h1 id=&quot;html&quot;&gt;HTML&lt;/h1&gt;
+        <description>&lt;h1 id=&quot;html&quot;&gt;HTML&lt;/h1&gt;
 
 &lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
 &lt;span class=&quot;nt&quot;&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
@@ -602,18 +569,7 @@ git add &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; App.class &lt;span clas
     
       <item>
         <title>CS读书随笔</title>
-        <description>&lt;script type=&quot;text/x-mathjax-config&quot;&gt;
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], [&quot;\\(&quot;,&quot;\\)&quot;] ],
-      processEscapes: true
-    }
-  });
-&lt;/script&gt;
-
-&lt;script src=&quot;https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
-
-&lt;h1 id=&quot;计算机是怎样跑起来的&quot;&gt;《计算机是怎样跑起来的》&lt;/h1&gt;
+        <description>&lt;h1 id=&quot;计算机是怎样跑起来的&quot;&gt;《计算机是怎样跑起来的》&lt;/h1&gt;
 
 &lt;ol&gt;
   &lt;li&gt;
@@ -747,16 +703,7 @@ RAM/Random_Access_Memory--&amp;gt;DRAM/Dynamic_RAM &amp;amp; SRAM/Static_RAM
     
       <item>
         <title>ANSYS学习笔记</title>
-        <description>&lt;script type=&quot;text/x-mathjax-config&quot;&gt;
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], [&quot;\\(&quot;,&quot;\\)&quot;] ],
-      processEscapes: true
-    }
-  });
-&lt;/script&gt;
-
-&lt;script src=&quot;https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+        <description>&lt;h1 id=&quot;ansys&quot;&gt;ANSYS&lt;/h1&gt;
 
 &lt;h2 id=&quot;安装及使用&quot;&gt;安装及使用&lt;/h2&gt;
 
@@ -907,18 +854,7 @@ Face_thread--&amp;gt;Faces面或边界
     
       <item>
         <title>oneAPI学习笔记</title>
-        <description>&lt;script type=&quot;text/x-mathjax-config&quot;&gt;
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], [&quot;\\(&quot;,&quot;\\)&quot;] ],
-      processEscapes: true
-    }
-  });
-&lt;/script&gt;
-
-&lt;script src=&quot;https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
-
-&lt;h1 id=&quot;oneapi&quot;&gt;oneAPI&lt;/h1&gt;
+        <description>&lt;h1 id=&quot;oneapi&quot;&gt;oneAPI&lt;/h1&gt;
 
 &lt;p&gt;因为项目中有矩阵计算的需要，所以选择了Intel的MKL，想在这里记录一下Intel的oneAPI Base Toolkit学习使用过程。&lt;/p&gt;
 
@@ -1072,18 +1008,7 @@ mpirun &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; 4 ./mpi  &lt;span class=
     
       <item>
         <title>SQL</title>
-        <description>&lt;script type=&quot;text/x-mathjax-config&quot;&gt;
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], [&quot;\\(&quot;,&quot;\\)&quot;] ],
-      processEscapes: true
-    }
-  });
-&lt;/script&gt;
-
-&lt;script src=&quot;https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
-
-&lt;h1 id=&quot;sql&quot;&gt;SQL&lt;/h1&gt;
+        <description>&lt;h1 id=&quot;sql&quot;&gt;SQL&lt;/h1&gt;
 
 &lt;p&gt;https://www.liaoxuefeng.com/wiki/1177760294764384&lt;/p&gt;
 

@@ -1,0 +1,78 @@
+I"�<h1 id="matlab">Matlab</h1>
+
+<h2 id="matlab基础">Matlab基础</h2>
+
+<p>基础操作建议《Matlab揭秘》</p>
+
+<hr />
+
+<h2 id="matlab进阶">Matlab进阶</h2>
+
+<p>进阶操作建议官网文档，一般随用随查。</p>
+
+<p><a href="https://ww2.mathworks.cn/help/matlab/">MATLAB Documentation</a></p>
+
+<hr />
+
+<h2 id="数据读写">数据读写</h2>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fid</span> <span class="o">=</span> <span class="nb">fopen</span><span class="p">(</span><span class="s2">"1.txt"</span><span class="p">,</span> <span class="s1">'a'</span><span class="p">);</span>   <span class="c1">% 要想存的文件名是自己输入的，这个地方就得这样写</span>
+<span class="nb">fprintf</span><span class="p">(</span><span class="n">fid</span><span class="p">,</span><span class="s1">'%d\t%d\t%d\r\n'</span><span class="p">,</span> <span class="n">Ex_num</span><span class="p">,</span> <span class="n">repeat_num</span><span class="p">,</span> <span class="n">if_wind</span><span class="p">);</span>
+<span class="k">for</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">:</span><span class="n">repeat_num</span>
+  <span class="k">for</span> <span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">:</span><span class="mi">7</span>
+  <span class="nb">fprintf</span><span class="p">(</span><span class="n">fid</span><span class="p">,</span><span class="s1">'%f\t'</span><span class="p">,</span><span class="n">out</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">));</span>
+  <span class="k">end</span>
+  <span class="nb">fprintf</span><span class="p">(</span><span class="n">fid</span><span class="p">,</span><span class="s1">'\r\n'</span><span class="p">);</span>
+<span class="k">end</span>
+<span class="nb">fprintf</span><span class="p">(</span><span class="n">fid</span><span class="p">,</span><span class="s1">'%f\t%f\t%f'</span><span class="p">,</span> <span class="n">fit</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">fit</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">f15</span><span class="p">);</span>
+ <span class="nb">fprintf</span><span class="p">(</span><span class="n">fid</span><span class="p">,</span><span class="s1">'\r\n'</span><span class="p">);</span>
+<span class="nb">fclose</span><span class="p">(</span><span class="n">fid</span><span class="p">);</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="tricks">Tricks</h2>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fitlm</span> <span class="c1">%拟合线性回归</span>
+<span class="n">fitlm</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span><span class="s1">'RobustOpts'</span><span class="p">,</span><span class="s1">'on'</span><span class="p">);</span> <span class="c1">%k</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="neural-network">Neural Network</h2>
+
+<h3 id="neural-net-fitting">Neural Net Fitting</h3>
+
+<ol>
+  <li>
+    <p>训练的数据集注意维度匹配</p>
+  </li>
+  <li>
+    <p>Training        训练数据</p>
+
+    <p>Validating     验证数据</p>
+
+    <p>Testing         测试数据</p>
+  </li>
+  <li>
+    <p><strong>隐含神经元数量的确定</strong>
+\(\begin{aligned}
+	N_h&amp;=\frac{N_s}{\alpha \cdot (N_i+N_o)}\\
+	其中： &amp;N_i是输入层神经元个数；\\
+	&amp;N_o是输出层神经元个数；\\
+	&amp;N_s是训练集的样本数；\\
+	&amp;\alpha是可以自取的任意值变量，通常范围可取 2\sim10。
+\end{aligned}\)
+隐藏神经元的数量应在输入层的大小和输出层的大小之间。</p>
+
+    <p>隐藏神经元的数量应为输入层大小的$\frac{2}{3}$加上输出层大小的$\frac{2}{3}$。</p>
+  </li>
+  <li>
+    <p>神经网络的使用</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Y=sim(net,X);
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+:ET

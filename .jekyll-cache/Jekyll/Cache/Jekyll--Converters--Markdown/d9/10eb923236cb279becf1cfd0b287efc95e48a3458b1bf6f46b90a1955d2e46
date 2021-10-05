@@ -1,0 +1,37 @@
+I"�<h1 id="pyecharts">Pyecharts</h1>
+
+<hr />
+
+<h2 id="配置">配置</h2>
+
+<h3 id="phantomjs安装">phantomjs安装</h3>
+
+<p><a href="https://blog.csdn.net/lunhui601/article/details/105892613">windows下安装phantomjs实战（亲测有效）-2020年5月2日_lunhui601的博客-CSDN博客</a></p>
+
+<p><a href="https://www.cnblogs.com/my-global/articles/12662614.html">Python - pyecharts：直接将图片保存为 png, pdf, gif 格式的文件 - 共感的艺术 - 博客园 (cnblogs.com)</a></p>
+
+<hr />
+
+<h2 id="snapshot使用">Snapshot使用</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">snapshot_phantomjs</span> <span class="kn">import</span> <span class="n">snapshot</span>
+<span class="kn">from</span> <span class="nn">pyecharts.render</span> <span class="kn">import</span> <span class="n">make_snapshot</span>
+
+<span class="n">make_snapshot</span><span class="p">(</span><span class="n">snapshot</span><span class="p">,</span><span class="s">"*.html"</span><span class="p">,</span><span class="s">"*.png"</span><span class="p">)</span>
+
+<span class="c1">##支持格式
+</span><span class="n">PNG_FORMAT</span> <span class="o">=</span> <span class="s">"png"</span>
+<span class="n">JPG_FORMAT</span> <span class="o">=</span> <span class="s">"jpeg"</span>
+<span class="n">GIF_FORMAT</span> <span class="o">=</span> <span class="s">"gif"</span>
+<span class="n">PDF_FORMAT</span> <span class="o">=</span> <span class="s">"pdf"</span>
+<span class="n">SVG_FORMAT</span> <span class="o">=</span> <span class="s">"svg"</span>
+<span class="n">EPS_FORMAT</span> <span class="o">=</span> <span class="s">"eps"</span>
+<span class="n">B64_FORMAT</span> <span class="o">=</span> <span class="s">"base64"</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="示例">示例</h2>
+
+<p><a href="https://gallery.pyecharts.org/#/README">中文简介 - Document (pyecharts.org)</a></p>
+:ET

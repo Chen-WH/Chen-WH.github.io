@@ -1,0 +1,79 @@
+I"<h1 id="html">HTML</h1>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+<span class="c">&lt;!--   标题   --&gt;</span>
+<span class="nt">&lt;h1&gt;</span>This is a heading<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;h2&gt;</span>This is a heading<span class="nt">&lt;/h2&gt;</span>
+<span class="nt">&lt;h3&gt;</span>This is a heading<span class="nt">&lt;/h3&gt;</span>
+<span class="c">&lt;!--   段落   --&gt;</span>
+<span class="nt">&lt;p&gt;</span>This is a paragraph.<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;p&gt;</span>This is another paragraph.<span class="nt">&lt;/p&gt;</span>
+<span class="c">&lt;!--   链接   --&gt;</span>
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"http://www.w3school.com.cn"</span><span class="nt">&gt;</span>This is a link<span class="nt">&lt;/a&gt;</span>
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"http://www.w3school.com.cn/"</span> <span class="na">target=</span><span class="s">"_blank"</span><span class="nt">&gt;</span>Visit W3School!<span class="nt">&lt;/a&gt;</span>
+如果把链接的 target 属性设置为 "_blank"，该链接会在新窗口中打开。
+<span class="c">&lt;!--   图像   --&gt;</span>
+<span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"w3school.jpg"</span> <span class="na">width=</span><span class="s">"104"</span> <span class="na">height=</span><span class="s">"142"</span> <span class="nt">/&gt;</span>
+<span class="c">&lt;!--   水平线   --&gt;</span>
+<span class="nt">&lt;hr</span> <span class="nt">/&gt;</span>
+<span class="c">&lt;!--   换行   --&gt;</span>
+<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+<span class="c">&lt;!--   元素样式   --&gt;</span>
+<span class="nt">&lt;p</span> <span class="na">style=</span><span class="s">"font-family:times;color:green;font-size:30px"</span><span class="nt">&gt;</span>This text is in Times and green<span class="nt">&lt;/p&gt;</span>
+"background-color:yellow"
+"text-align:center"
+
+<span class="c">&lt;!----------------&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;b&gt;</span>This text is bold<span class="nt">&lt;/b&gt;</span>
+
+<span class="nt">&lt;strong&gt;</span>This text is strong<span class="nt">&lt;/strong&gt;</span>
+
+<span class="nt">&lt;big&gt;</span>This text is big<span class="nt">&lt;/big&gt;</span>
+
+<span class="nt">&lt;em&gt;</span>This text is emphasized<span class="nt">&lt;/em&gt;</span>
+
+<span class="nt">&lt;i&gt;</span>This text is italic<span class="nt">&lt;/i&gt;</span>
+
+<span class="nt">&lt;small&gt;</span>This text is small<span class="nt">&lt;/small&gt;</span>
+
+This text contains<span class="nt">&lt;sub&gt;</span>subscript<span class="nt">&lt;/sub&gt;</span>
+
+This text contains<span class="nt">&lt;sup&gt;</span>superscript<span class="nt">&lt;/sup&gt;</span>
+
+<span class="nt">&lt;pre&gt;</span>
+这是
+预格式文本。
+它保留了      空格
+和换行。
+<span class="nt">&lt;/pre&gt;</span>
+</code></pre></div></div>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!--   外部样式   --&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">type=</span><span class="s">"text/css"</span> <span class="na">href=</span><span class="s">"mystyle.css"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+</code></pre></div></div>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!--   图片作为链接   --&gt;</span>
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"/example/html/lastpage.html"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;img</span> <span class="na">border=</span><span class="s">"0"</span> <span class="na">src=</span><span class="s">"/i/eg_buttonnext.gif"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/a&gt;</span>
+</code></pre></div></div>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;a</span> <span class="na">name=</span><span class="s">"tips"</span><span class="nt">&gt;</span>基本的注意事项 - 有用的提示<span class="nt">&lt;/a&gt;</span>
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"#tips"</span><span class="nt">&gt;</span>有用的提示<span class="nt">&lt;/a&gt;</span>
+<span class="c">&lt;!--也可以在其他页面中创建指向该锚的链接--&gt;</span>
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"http://www.w3school.com.cn/html/html_links.asp#tips"</span><span class="nt">&gt;</span>有用的提示<span class="nt">&lt;/a&gt;</span>
+</code></pre></div></div>
+
+<ol>
+  <li>在未来 HTML 版本中强制使用小写。</li>
+  <li>浏览器会移除<em>源代码中</em>多余的空格和空行。所有连续的空格或空行都会被算作一个空格。</li>
+</ol>
+
+:ET

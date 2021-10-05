@@ -1,0 +1,143 @@
+I"�"<h1 id="oneapi">oneAPI</h1>
+
+<p>因为项目中有矩阵计算的需要，所以选择了Intel的MKL，想在这里记录一下Intel的oneAPI Base Toolkit学习使用过程。</p>
+
+<h2 id="下载安装">下载安装</h2>
+
+<p>https://software.intel.com/content/www/us/en/develop/tools/oneapi/components/onemkl.html#gs.852ahl</p>
+
+<p>进入官网后注册账户即可进行下载，这里我选择的是命令行下载、本地安装</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget https://registrationcenter-download.intel.com/akdlm/irc_nas/17977/l_BaseKit_p_2021.3.0.3219_offline.sh
+
+<span class="nb">sudo </span>bash l_BaseKit_p_2021.3.0.3219_offline.sh
+<span class="c"># 这里我选择安装在根目录下所以加上了sudo，安装在home目录下应该也是可以的，不过要记住路径以便后续环境变量配置</span>
+<span class="c"># 安装过程全都默认即可，也可以自己更换安装目录</span>
+</code></pre></div></div>
+
+<h2 id="关于目录">关于目录</h2>
+
+<p><img src="chenwh@Inspiron-7590 _009.png" alt="chenwh@Inspiron-7590 _009" /></p>
+
+<ul>
+  <li>oneapi
+    <ul>
+      <li>mkl/
+        <ul>
+          <li>2021.3.0/
+            <ul>
+              <li>include/</li>
+              <li>lib/</li>
+              <li>其他</li>
+            </ul>
+          </li>
+          <li>latest/ –&gt; 2021.3.0/</li>
+        </ul>
+      </li>
+      <li>mpi/</li>
+      <li>tbb/</li>
+      <li>其他工具包以及安装程序等</li>
+    </ul>
+  </li>
+</ul>
+
+<p>以mkl工具包为例，底下存放有mkl包的各个历史版本，在我的截图这里可以看到只有 2021.3.0 一个版本和 latest 链接，latest链接随更新会保持链接到最新版本，因此在工程文件链接库目录的时候可以选择 latest 路径，当然指定某一版本也是可以的。</p>
+
+<h2 id="环境配置">环境配置</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># setvars.sh 脚本通过在各自的 oneAPI 文件夹中找到每个 &lt;install-dir&gt;/latest/env/vars.sh 脚本来设置用于 oneAPI 工具包的环境变量。</span>
+<span class="nb">source</span> /opt/intel/oneapi/setvars.sh intel64
+<span class="c"># 为了避免每次打开一个新的终端都需要重新运行脚本，可以在 ${HOME}/.bashrc中添加一句 source /opt/intel/oneapi/setvars.sh intel64</span>
+<span class="c"># 运行这句后oneAPI会添加所有工具包，可能会污染你的工作环境，比如我就遇到了 intelpython 影响 rospy 的问题，可以写一个 config.txt 文件自定义加载的环境</span>
+<span class="nb">sudo </span>vi /opt/intel/oneapi/config.txt <span class="c"># 在指定目录下新建了一个配置文件，内容如下</span>
+<span class="nv">intelpython</span><span class="o">=</span>exclude <span class="c"># 这句排除了intelpython，可以自己进行设置，这里只是举了我的例子</span>
+<span class="c"># 那么source语句需要进行适当修改如下</span>
+<span class="nb">source</span> /opt/intel/oneapi/setvars.sh <span class="nt">--config</span><span class="o">=</span><span class="s2">"/opt/intel/oneapi/config.txt"</span>
+
+<span class="c">## 其他例子如下</span>
+mkl <span class="o">=</span> 1.1 <span class="c"># 指定使用的mkl版本，如果不指定默认使用最新版本</span>
+default <span class="o">=</span> exclude <span class="c"># 指定默认为排除所有，如果不设置的话默认添加所有工具包</span>
+
+<span class="c">## 去除命令行echo输出</span>
+<span class="c"># source setvars.sh后每次命令行会出现很多反馈，如果像我一样强迫症不希望显示的话可以这样修改source语句</span>
+<span class="nb">source</span> /opt/intel/oneapi/setvars.sh <span class="nt">--config</span><span class="o">=</span><span class="s2">"/opt/intel/oneapi/config.txt"</span> <span class="o">&gt;</span> /dev/null
+<span class="c"># /dev/null 是类Unix系统中的一个特殊文件设备，他的作用是接受一切输入它的数据并丢弃这些数据。通常被当做垃圾桶来用。</span>
+</code></pre></div></div>
+
+<h2 id="如何使用">如何使用</h2>
+
+<h3 id="命令行编译">命令行编译</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "mkl.h"
+</span><span class="c1">// 首先include头文件，具体编译选项非常复杂，参考下方网站进行补充</span>
+</code></pre></div></div>
+
+<p>https://software.intel.com/content/www/us/en/develop/tools/oneapi/components/onemkl/link-line-advisor.html</p>
+
+<h3 id="使用cmake">使用Cmake</h3>
+
+<div class="language-cmake highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># CMakeLists.txt</span>
+<span class="nb">cmake_minimum_required</span><span class="p">(</span>VERSION 3.0.2<span class="p">)</span>
+<span class="nb">project</span><span class="p">(</span>eigen_mkl<span class="p">)</span>
+<span class="c1"># set(CMAKE_BUILD_TYPE "Release" )</span>
+<span class="c1"># set(CMAKE_BUILD_TYPE "Debug" )</span>
+<span class="nb">set</span><span class="p">(</span>CMAKE_CXX_FLAGS <span class="s2">"-O3"</span> <span class="p">)</span>
+
+<span class="c1"># include 头文件</span>
+include_directories
+  <span class="si">${</span><span class="nv">catkin_INCLUDE_DIRS</span><span class="si">}</span>
+  /opt/intel/oneapi/mkl/latest/include/
+<span class="p">)</span>
+
+<span class="c1"># 链接库目录</span>
+<span class="nb">link_directories</span><span class="p">(</span>
+  <span class="si">${</span><span class="nv">catkin_LIB_DIRS</span><span class="si">}</span>
+  /opt/intel/oneapi/mkl/latest/lib/
+ <span class="p">)</span>
+ 
+<span class="c1">## 文件名是eigen_mkl.cpp</span>
+<span class="nb">add_executable</span><span class="p">(</span>eigen_mkl src/eigen_mkl.cpp<span class="p">)</span>
+<span class="c1"># 链接具体的库 libmkl_rt，注意.so是动态库，当然也可以选择静态库，不过文件会大些但更稳定。</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span>eigen_mkl
+libmkl_rt.so
+<span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="简易教程">简易教程</h2>
+
+<h3 id="mkl">MKL</h3>
+
+<p>MKL只在矩阵规模大（千维以上）时才有明显收益，矩阵规模小的话使用Eigen3基本性能和MKL差不多，编译时加上”-O3”就能达到理想速度了。Eigen3逊色于MKL之处大概在于单线程与多线程之差，如果矩阵规模小的话可能收益都不足以填补数据同步的开销。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 设置MKL运行的线程数，mkl_set_num_threads()</span>
+<span class="n">mkl_set_num_threads</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span> <span class="c1">// 我的cpu 6核12线程，实测下来6时性能最好</span>
+<span class="c1">// 构建矩阵</span>
+<span class="n">index</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span> <span class="o">*</span><span class="p">)</span><span class="n">mkl_malloc</span><span class="p">(</span> <span class="n">row</span><span class="o">*</span><span class="n">col</span><span class="o">*</span><span class="nf">sizeof</span><span class="p">(</span> <span class="kt">double</span> <span class="p">),</span> <span class="mi">64</span> <span class="p">);</span> <span class="c1">//64位</span>
+<span class="c1">//释放矩阵内存</span>
+<span class="n">mkl_free</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>一些BLAS的基本矩阵运算指令可以参看 netlib 网站 http://www.netlib.org/blas/index.html#_cblas</p>
+
+<h3 id="利用mkl为eigen3加速">利用MKL为eigen3加速</h3>
+
+<p>因为MKL的指令较为复杂，通过eigen调用会友好很多，当然也可以自己写一个Matrix类</p>
+
+<p>https://eigen.tuxfamily.org/dox/TopicUsingIntelMKL.html</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//在使用eigen的文件中都添加以下宏</span>
+<span class="cp">#define EIGEN_USE_MKL_ALL
+</span><span class="c1">//具体链接库的操作可以回看上方 如何使用 章节</span>
+</code></pre></div></div>
+
+<h3 id="mpi">MPI</h3>
+
+<p>https://mpitutorial.com/</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 编译</span>
+mpicc mpi.c <span class="nt">-o</span> mpi
+<span class="c">## 运行</span>
+mpirun <span class="nt">-n</span> 4 ./mpi  <span class="c">## 其中4是节点的线程数</span>
+</code></pre></div></div>
+
+:ET

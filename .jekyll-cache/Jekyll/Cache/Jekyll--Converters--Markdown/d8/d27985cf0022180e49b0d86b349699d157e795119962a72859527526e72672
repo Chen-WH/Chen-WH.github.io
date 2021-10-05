@@ -1,0 +1,83 @@
+I"�$<h1 id="快速傅里叶变换fft">快速傅里叶变换(FFT)</h1>
+
+<h2 id="原理介绍">原理介绍</h2>
+
+<h3 id="什么是离散傅里叶">什么是离散傅里叶</h3>
+
+\[连续周期信号的傅里叶级数\ c_n=\frac{1}{T}\int_0^Tf(t)e^{-j\frac{2\pi}{T}nt}\mathbf{d}t\]
+
+<p>​		傅里叶变换是用来处理连续系统的，那离散系统如何处理呢？假如 $x(t)$ 为连续系统信号，要转换成离散系统，就要先进行采样，采样频率为 $f_s$，对于连续信号 $x(t)$ 按照采样时间 $T_s$ 进行抽样 $N$ 次 $\delta(t-nT_s)$冲击。
+\(\begin{aligned}
+	&amp;采样序列&amp; &amp;\delta_s(t)=\sum_{n=0}^{N-1}\delta(t-nT_s)\\
+	&amp;周期的离散信号&amp; &amp;x_s(t)=x(t)\sum_{n=0}^{N-1}\delta(t-nT_s)
+\end{aligned}\)
+​		此外频率也需要离散化，将无限长的离散限号进行截短至 $N$ 个采样点，然后将这 $N$ 个采样点进行周期延拓，可以得到周期的离散信号，如此离散周期信号的傅里叶级数为
+\(X[jk\omega]=\frac{1}{T}\int_{-T/2}^{T/2}x(t)\sum_{n=0}^{N-1}\delta(t-nT_s)e^{-j\frac{2\pi}{T}kt}\mathbf{d}t\)
+​		将积分与求和调换顺序
+\(X[jk\omega]=\frac{1}{T}\sum_{n=0}^{N-1}\int_{-T/2}^{T/2}x(t)\delta(t-nT_s)e^{-j\frac{2\pi}{T}kt}\mathbf{d}t\)
+​		由于 $\delta$ 冲激函数的筛选性质 $\int_{-\infty}^{\infty}x(t)\delta(t-t_0)\mathbf{d}t=x(t_0)$ ，上式很容易离散化，积分号内只有采样点 $\sum_{n=0}^{N-1}nT_s$ 处的值被保留。考虑到 $T=NT_s$ 和 $t=nT_s$，上式可以简化为
+\(X[jk\omega]=\frac{1}{NT_s}\sum_{n=0}^{N-1}x(nT_s)e^{-j\frac{2\pi}{NT_s}knT_s}=\frac{1}{NT_s}\sum_{n=0}^{N-1}x[n]e^{-j\frac{2\pi}{N}kn}\)
+​		令 $X[jk\omega]\cdot T_s=X[k]$，得到
+\(X[k]=\frac{1}{N}\sum_{n=0}^{N-1}x(nT_s)e^{-j\frac{2\pi}{NT_s}knT_s}=\frac{1}{N}\sum_{n=0}^{N-1}x[n]e^{-j\frac{2\pi}{N}kn}\)
+​		离散周期傅里叶变换后的第 $k$ 个傅里叶系数对应的频率是 $\frac{k}{N}f_s$</p>
+
+<h3 id="离散傅里叶的定义">离散傅里叶的定义</h3>
+
+<p>​		设 $f(x)$ 是一个周期为 $2\pi$ 的函数，可以将其视作圆周上的函数，即 $f=f(e^{i\theta})$。若我们将 $2\pi$ 周期进行 $N$ 等分，则这等价于将圆周按照弧长进行 $N$ 等分，可以将相应的离散区域记作 $\mathbf{Z}(N)$。</p>
+
+<p>​		在 $\mathbf{Z}(N)$ 上，我们选取如下的函数 ${e_0,e_1,\cdots,e_{N-1}}$
+\(e_l(k)=\zeta^{lk}=e^{\frac{2\pi i}{N}lk},l=0,1,\cdots,N-1,k=0,1,\cdots,N-1\)
+其中 $\zeta=e^{\frac{2\pi i}{N}}$</p>
+
+<h3 id="采样定理">采样定理</h3>
+
+<p><img src="https://i.loli.net/2021/09/08/93lso4UhrjzYFGq.jpg" alt="Nyquist–Shannon sampling theorem" /></p>
+
+<p>对于连续信号的进行抽样离散的话，必须保证采样频率是原连续信号最大频率分量的2倍频率以上。否则原始频谱信号经过周期延拓后会有一部分重叠，这样在重叠的部分就会有信息的丢失，也就无法进行信号复原了。这就是采样定理，又叫奈奎斯特采样定理或香农采样定理。</p>
+
+<h3 id="快速傅里叶">快速傅里叶</h3>
+
+<p>快速傅氏变换，是离散傅氏变换的快速算法，它是根据离散傅氏变换的奇、偶、虚、实等特性，对离散傅立叶变换的算法进行改进获得的。FFT提高了运算速度，但是，也对参与运算的样本序列作出了限制，即要求样本数为 $2^N$ 点。</p>
+
+<p>对固定的 $N$，设 $F(0),\cdots,F(N-1)$ 与 $\omega_N=e^{-\frac{2\pi i}{N}}$ 已知，若记 $a_k^N(F)$ 为 $F$ 在 $\mathbf{Z(N)}$ 上的第 $k$ 个 $Fourier$ 系数，即
+\(a_k^N=\frac{1}{N}\sum_{r=0}^{N-1}F(r)\omega_N^{kr}\)</p>
+
+<h3 id="库利-图基算法">库利-图基算法</h3>
+
+<p>以分治法递归地将长度为 $N=N_1N_2$ 的离散傅里叶变换分解为长度为 $N_1$ 的 $N_2$ 个较短序列的离散傅里叶变换。在下面的MATLAB代码中，我们采用 NFFT = 2^nextpow2(N) 来使长度为比当前长度大的下一个最小的2的次幂值。不过不用担心会影响算法，调用函数fft(Fz, NFFT)中，向量Fz长度小于NFFT，MATLAB会为Fz补上尾零以达到长度NFFT。下面解释选取2的次幂值对算法性能有什么帮助。
+\(\begin{aligned}
+	a_k^N&amp;=\frac{1}{N}\sum_{r=0}^{N-1}F(r)\omega_N^{kr}\\
+	&amp;=\frac{1}{N}\sum_{r=2t}F(r)\omega_N^{kr}+\frac{1}{N}\sum_{r=2t+1}F(r)\omega_N^{kr}\\
+	&amp;=\frac{1}{N}\sum_{t}F(2t)\omega_{N/2}^{kt}+\frac{\omega_N^k}{N}\sum_{t}F(2t+1)\omega_{N/2}^{kt}\\
+	&amp;=\frac{1}{N}[F_{even}(k)+\omega_N^kF_{odd}(k)]
+\end{aligned}\)
+将单个离散傅里叶变换分成两个项，一个在奇数值上，一个在偶数值上。对于每一个子问题，我们只需要一半的计算次数，也就是时间复杂度由 $\mathcal{O}\left[N^{2}\right]$ 变成了 $\mathcal{O}\left[\frac{N}{2}^{2}\right]$。而对于2的次幂值长度数据可以不断递归，在渐进的极限中可以达到 $\mathcal{O}\left[N\log N\right]$ 的复杂度。</p>
+
+<h2 id="代码示例">代码示例</h2>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="n">flapFrequency</span> <span class="o">=</span> <span class="n">getFlapFrequency_F</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span>
+<span class="n">N</span> <span class="o">=</span> <span class="nb">size</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>  <span class="c1">% 获取原数据长度</span>
+<span class="n">N</span> <span class="o">=</span> <span class="n">N</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="n">Fz</span> <span class="o">=</span> <span class="n">data</span><span class="p">(:,</span><span class="mi">3</span><span class="p">);</span>
+<span class="n">NFFT</span> <span class="o">=</span> <span class="mi">2</span><span class="o">^</span><span class="nb">nextpow2</span><span class="p">(</span><span class="n">N</span><span class="p">);</span>  <span class="c1">% 获取比当前长度大的下一个最小的2的次幂值</span>
+<span class="n">f</span><span class="o">=</span> <span class="n">frequency</span><span class="p">/</span><span class="mi">2</span><span class="o">*</span><span class="nb">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">NFFT</span><span class="p">/</span><span class="mi">2</span><span class="p">);</span>  <span class="c1">% 频率离散化</span>
+<span class="n">y</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">fft</span><span class="p">(</span><span class="n">Fz</span><span class="p">,</span><span class="n">NFFT</span><span class="p">))/</span><span class="n">N</span><span class="p">;</span>  <span class="c1">% 快速傅里叶</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">NFFT</span><span class="p">/</span><span class="mi">2</span><span class="p">);</span>
+<span class="n">start_point</span> <span class="o">=</span> <span class="nb">find</span><span class="p">(</span><span class="n">f</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'first'</span><span class="p">);</span>  <span class="c1">% 根据经验，扑翼频率应大于5Hz</span>
+<span class="n">end_point</span> <span class="o">=</span> <span class="nb">find</span><span class="p">(</span><span class="n">f</span> <span class="o">&lt;</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'last'</span><span class="p">);</span>  <span class="c1">% 根据经验，扑翼频率应小于19Hz</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">(</span><span class="n">start_point</span><span class="p">:</span><span class="n">end_point</span><span class="p">);</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">start_point</span><span class="p">:</span><span class="n">end_point</span><span class="p">);</span>
+<span class="n">position</span> <span class="o">=</span> <span class="n">y</span> <span class="o">==</span> <span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>  <span class="c1">% Fourier系数最大的频率点视为扑翼频率</span>
+<span class="n">flapFrequency</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">position</span><span class="p">);</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h2 id="参考资料">参考资料</h2>
+
+<ol>
+  <li><a href="https://zh.wikipedia.org/wiki/%E5%BF%AB%E9%80%9F%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2">快速傅里叶变换 维基百科</a></li>
+  <li><a href="https://zh.wikipedia.org/wiki/%E9%87%87%E6%A0%B7%E5%AE%9A%E7%90%86">采样定理 维基百科</a></li>
+  <li><a href="https://ww2.mathworks.cn/help/matlab/ref/fft.html?searchHighlight=fft&amp;s_tid=srchtitle">MATALB Help</a></li>
+  <li><a href="./Notes 3.9.pdf">《数学分析》课件</a></li>
+</ol>
+:ET
