@@ -15,19 +15,19 @@ tags:
 
 ## 欧拉角
 
-![欧拉角](20151125212621964.png)
+![欧拉角](https://raw.githubusercontent.com/Chen-WH/PicGo/main/Typora/202110112245394.png)
 
 Roll桶滚，Pitch俯仰，Yaw偏航
 
 ## 万向节死锁
 
-![v2-78acd2f7074ed777c9b18e37d77252f6_720w](v2-78acd2f7074ed777c9b18e37d77252f6_720w.jpg)
+![v2-78acd2f7074ed777c9b18e37d77252f6_720w](https://raw.githubusercontent.com/Chen-WH/PicGo/main/Typora/202110112245520.jpg)
 
 （图示为万向节）当俯角为±90时，整个旋转表示系统被限制在只能绕竖直轴旋转，丢失了一个表示维度。称为万向节死锁，并不是说不能旋转了，而是会导致旋转不自然。要规避万向节死锁，需要选择合适的旋转顺序。在编程中很难规避死锁问题，所以需要引入四元数
 
 ## 四元数
 
-参考资料：https://github.com/Krasjet/quaternion         文档版：[quaternion.pdf](quaternion.pdf) 
+参考资料：[GitHub rep](https://github.com/Krasjet/quaternion)         文档版：[quaternion.pdf](quaternion.pdf) 
 
 具体证明推导过程参见上方资料，下面仅记录阶段性的结论。速记要点：
 
