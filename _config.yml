@@ -50,8 +50,8 @@ kramdown:
 # Gitalk
 gitalk:
   enable: true    #是否开启Gitalk评论
-  clientID: d18b343dd9c7ca49518a                            #生成的clientID
-  clientSecret: 539e88b8a7feffaddbb553b9c421dfefcbc6eced    #生成的clientSecret
+  clientID: d4419ce02ddf2299f909                            #生成的clientID
+  clientSecret: 38e68046624e7e54cf0c9372506e0657110ac0e6    #生成的clientSecret
   repo: Chen-WH.github.io    #仓库名称
   owner: Chen-WH    #github用户名
   admin: Chen-WH
