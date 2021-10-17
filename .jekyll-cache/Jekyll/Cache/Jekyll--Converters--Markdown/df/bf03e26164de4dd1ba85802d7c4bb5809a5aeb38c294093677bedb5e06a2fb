@@ -1,0 +1,216 @@
+I"�S<h1 id="openblaslapack">OpenBLAS+LAPACK</h1>
+
+<p>基于OpenBLAS使用LAPACK</p>
+
+<h2 id="openblas">OpenBLAS</h2>
+
+<h3 id="下载安装">下载安装</h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 下载源码</span>
+git clone git@github.com:xianyi/OpenBLAS.git
+<span class="c"># 编译</span>
+<span class="nb">cd </span>OpenBLAS
+make <span class="nt">-j12</span> <span class="c"># 这里j后面的数字是cpu线程数</span>
+<span class="c"># 安装</span>
+<span class="nb">sudo </span>make <span class="nv">PREFIX</span><span class="o">=</span>/opt/OpenBLAS <span class="nb">install</span> <span class="c"># 选择安装路径，这里我选择的是/opt/OpenBLAS</span>
+</code></pre></div></div>
+
+<h3 id="路径配置">路径配置</h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 找到上一步中设置的安装路径，可以把以下命令加入.profile文件，或者像我一样写一个sh文件每次使用单独source防止污染</span>
+<span class="nb">export </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_LIBRARY_PATH</span>:/opt/OpenBLAS/lib
+<span class="nb">export </span><span class="nv">LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LIBRARY_PATH</span>:/opt/OpenBLAS/lib
+<span class="nb">export </span><span class="nv">C_INCLUDE_PATH</span><span class="o">=</span><span class="nv">$C_INCLUDE_PATH</span>:/opt/OpenBLAS/include
+<span class="nb">export </span><span class="nv">CPLUS_INCLUDE_PATH</span><span class="o">=</span><span class="nv">$CPLUS_INCLUDE_PATH</span>:/opt/OpenBLAS/include
+<span class="nb">export </span><span class="nv">OPENBLAS_NUM_THREADS</span><span class="o">=</span>1 <span class="c"># 指定线程数，建议保持设定为1，最后结论给出原因。</span>
+</code></pre></div></div>
+
+<h3 id="测试运行">测试运行</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 调用方式与BLAS一样，可以去Netlib上查找</span>
+<span class="cp">#include &lt;cblas.h&gt;
+#include &lt;stdio.h&gt;
+</span>
+<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">A</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">3</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">};</span>         
+    <span class="kt">double</span> <span class="n">B</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">3</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">};</span>  
+    <span class="kt">double</span> <span class="n">C</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span> <span class="o">=</span> <span class="p">{.</span><span class="mi">5</span><span class="p">,.</span><span class="mi">5</span><span class="p">,.</span><span class="mi">5</span><span class="p">,.</span><span class="mi">5</span><span class="p">,.</span><span class="mi">5</span><span class="p">,.</span><span class="mi">5</span><span class="p">,.</span><span class="mi">5</span><span class="p">,.</span><span class="mi">5</span><span class="p">,.</span><span class="mi">5</span><span class="p">};</span> 
+
+    <span class="kt">int</span> <span class="n">M</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="c1">// row of A and C</span>
+    <span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="c1">// col of B and C</span>
+    <span class="kt">int</span> <span class="n">K</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="c1">// col of A and row of B</span>
+
+    <span class="kt">double</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">beta</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+    <span class="n">cblas_dgemm</span><span class="p">(</span><span class="n">CblasRowMajor</span><span class="p">,</span> <span class="n">CblasNoTrans</span><span class="p">,</span> <span class="n">CblasNoTrans</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">9</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%lf "</span><span class="p">,</span> <span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>函数命名为cblas_?????（比如cblas_dgemm）</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 命令行编译</span>
+g++ test.cpp <span class="nt">-o</span> <span class="nb">test</span> <span class="nt">-lopenblas</span>
+</code></pre></div></div>
+
+<div class="language-cmake highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># cmake生成</span>
+<span class="c1"># CMakeLists.txt</span>
+<span class="nb">cmake_minimum_required</span><span class="p">(</span>VERSION 3.0.2<span class="p">)</span>
+<span class="nb">project</span><span class="p">(</span>eigen_mkl<span class="p">)</span>
+<span class="c1"># set(CMAKE_BUILD_TYPE "Release" )</span>
+<span class="c1"># set(CMAKE_BUILD_TYPE "Debug" )</span>
+<span class="nb">set</span><span class="p">(</span>CMAKE_CXX_FLAGS <span class="s2">"-O3"</span> <span class="p">)</span>
+
+<span class="c1"># include 头文件</span>
+include_directories
+  <span class="si">${</span><span class="nv">catkin_INCLUDE_DIRS</span><span class="si">}</span>
+<span class="p">)</span>
+
+<span class="c1"># 链接库目录</span>
+<span class="nb">link_directories</span><span class="p">(</span>
+  <span class="si">${</span><span class="nv">catkin_LIB_DIRS</span><span class="si">}</span>
+ <span class="p">)</span>
+ 
+<span class="c1">## 文件名是eigen_mkl.cpp</span>
+<span class="nb">add_executable</span><span class="p">(</span>openblas src/openblas.cpp<span class="p">)</span>
+<span class="c1"># 链接具体的库 libmkl_rt，注意.so是动态库，当然也可以选择静态库，不过文件会大些但更稳定。</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span>openblas
+-lopenblas
+<span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="lapack">LAPACK</h2>
+
+<h3 id="安装配置">安装配置</h3>
+
+<p>在以下两个网页中选择一个打开下载LAPACK源码并解压</p>
+
+<p><a href="https://github.com/Reference-LAPACK/lapack">GitHub链接</a></p>
+
+<p><a href="http://www.netlib.org/lapack/">Netlib链接</a></p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 在解压后lapack目录下新建build目录并cmake</span>
+<span class="nb">cd </span>lapack-3.10.0
+<span class="nb">mkdir </span>build
+<span class="nb">cd </span>build
+cmake ..
+<span class="c"># cmake后打开并修改CMakeCache.txt文件</span>
+修改　CMAKE_INSTALL_PREFIX:PATH<span class="o">=</span>　等号后面为希望lapack安装的目录，如：CMAKE_INSTALL_PREFIX:PATH<span class="o">=</span>/opt/LAPACK
+修改　USE_OPTIMIZED_BLAS:BOOL<span class="o">=</span>　等号后面的OFF修改为　ON，如：USE_OPTIMIZED_BLAS:BOOL<span class="o">=</span>ON
+修改　blas_LIB_DEPENDS:STATIC<span class="o">=</span>　等候后面改为OpenBLAS静态库的绝对地址，如：blas_LIB_DEPENDS:STATIC<span class="o">=</span>/opt/OpenBLAS/liboopenblas.a
+<span class="c"># 编译安装</span>
+保存CMakeCache.txt文件修改
+make <span class="c"># 编译</span>
+<span class="nb">sudo </span>make <span class="nb">install</span> <span class="c"># 安装</span>
+</code></pre></div></div>
+
+<h3 id="路径配置-1">路径配置</h3>
+
+<p>安装完后安装路径下只有lib文件夹，需要自己添加include并配置路径，include文件夹在原下载路径下</p>
+
+<p><img src="https://raw.githubusercontent.com/Chen-WH/PicGo/main/Typora/202110111155580.png" alt="image-20211011115438531" /></p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo cp</span> <span class="nt">-r</span> ~/Downloads/lapack-3.10.0/LAPACKE/include /opt/LAPACK/
+
+<span class="c"># 添加路径，同上OpenBLAS，这里把两者汇总如下</span>
+<span class="nb">export </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_LIBRARY_PATH</span>:/opt/OpenBLAS/lib:/opt/LAPACK/lib
+<span class="nb">export </span><span class="nv">LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LIBRARY_PATH</span>:/opt/OpenBLAS/lib:/opt/LAPACK/lib
+<span class="nb">export </span><span class="nv">C_INCLUDE_PATH</span><span class="o">=</span><span class="nv">$C_INCLUDE_PATH</span>:/opt/OpenBLAS/include:/opt/LAPACK/include
+<span class="nb">export </span><span class="nv">CPLUS_INCLUDE_PATH</span><span class="o">=</span><span class="nv">$CPLUS_INCLUDE_PATH</span>:/opt/OpenBLAS/include::/opt/LAPACK/include
+<span class="nb">export </span><span class="nv">OPENBLAS_NUM_THREADS</span><span class="o">=</span>1
+</code></pre></div></div>
+
+<h3 id="测试运行-1">测试运行</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span><span class="k">extern</span> <span class="s">"C"</span> <span class="p">{</span>
+     <span class="kt">void</span> <span class="n">dgesv_</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="n">nrhs</span><span class="p">,</span>  <span class="kt">double</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span>  <span class="kt">int</span>  <span class="o">*</span><span class="n">lda</span><span class="p">,</span>  
+           <span class="kt">int</span> <span class="o">*</span><span class="n">ipivot</span><span class="p">,</span> <span class="kt">double</span> <span class="o">*</span><span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="n">ldb</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="n">info</span><span class="p">)</span> <span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="cp">#define MAX 10
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+   <span class="c1">// Values needed for dgesv</span>
+   <span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+   <span class="kt">int</span> <span class="n">nrhs</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+   <span class="kt">double</span> <span class="n">a</span><span class="p">[</span><span class="n">MAX</span><span class="p">][</span><span class="n">MAX</span><span class="p">];</span>
+   <span class="kt">double</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">MAX</span><span class="p">];</span>
+   <span class="kt">int</span> <span class="n">lda</span> <span class="o">=</span> <span class="n">MAX</span><span class="p">;</span>
+   <span class="kt">int</span> <span class="n">ldb</span> <span class="o">=</span> <span class="n">MAX</span><span class="p">;</span>
+   <span class="kt">int</span> <span class="n">ipiv</span><span class="p">[</span><span class="n">MAX</span><span class="p">];</span>
+   <span class="kt">int</span> <span class="n">info</span><span class="p">;</span>
+   <span class="c1">// Other values</span>
+   <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">;</span>
+
+   <span class="c1">// Read the values of the matrix</span>
+   <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Enter n </span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+   <span class="n">std</span><span class="o">::</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+   <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"On each line type a row of the matrix A followed by one element of b:</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+   <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+     <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"row "</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span><span class="p">;</span>
+     <span class="k">for</span><span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="n">std</span><span class="o">::</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">];</span>
+     <span class="n">std</span><span class="o">::</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">];</span>
+   <span class="p">}</span>
+
+   <span class="c1">// Solve the linear system</span>
+   <span class="n">dgesv_</span><span class="p">(</span><span class="o">&amp;</span><span class="n">n</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">nrhs</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">lda</span><span class="p">,</span> <span class="n">ipiv</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">ldb</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">info</span><span class="p">);</span>
+
+   <span class="c1">// Check for success</span>
+   <span class="k">if</span><span class="p">(</span><span class="n">info</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+   <span class="p">{</span>
+      <span class="c1">// Write the answer</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"The answer is</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+      <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"b["</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="s">"]</span><span class="se">\t</span><span class="s">"</span> <span class="o">&lt;&lt;</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+   <span class="p">}</span>
+   <span class="k">else</span>
+   <span class="p">{</span>
+      <span class="c1">// Write an error message</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"dgesv returned error "</span> <span class="o">&lt;&lt;</span> <span class="n">info</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+   <span class="p">}</span>
+   <span class="k">return</span> <span class="n">info</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 编译选项</span>
+g++ test.cpp <span class="nt">-o</span> test-llapack <span class="nt">-lopenblas</span> <span class="nt">-lgfortran</span> <span class="nt">-lm</span>
+</code></pre></div></div>
+
+<p>实际使用中不需要extern外部引用，加上include后就可以直接调用，函数命名为LAPACK_?????（比如LAPACK_dgesv）</p>
+
+<h2 id="性能对比">性能对比</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">测试项目</th>
+      <th style="text-align: center">MKL单线程</th>
+      <th style="text-align: center">MKL多线程</th>
+      <th style="text-align: center">OpenBLAS+LAPACK单线程</th>
+      <th style="text-align: center">OpenBLAS+LAPACK多线程</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">84维小矩阵</td>
+      <td style="text-align: center">0.385ms</td>
+      <td style="text-align: center">0.76ms</td>
+      <td style="text-align: center">0.08386ms</td>
+      <td style="text-align: center">0.80ms</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>可以看到对于小矩阵运算，OpenBLAS性能明显优于MKL，同时多线程也没有收益，大概是数据同步的损失，基本和洪健的说法以及网上的结论一致。本着严谨治学的态度，先mark以下，后续来补全其他情况的测试。</p>
+
+<p><strong>结论：小矩阵采用OpenBLAS单线程，大矩阵采用MKL多线程。</strong></p>
+:ET
