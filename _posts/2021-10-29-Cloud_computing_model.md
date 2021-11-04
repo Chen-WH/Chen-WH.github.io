@@ -1,5 +1,3 @@
-
-
 ---
 layout:     post
 title:      云计算服务模型
@@ -11,7 +9,6 @@ catalog:   true
 tags:
 
     - Cloud Computing
-
 ---
 
 # 云计算服务模型
