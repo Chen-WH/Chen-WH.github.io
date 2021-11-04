@@ -5,9 +5,158 @@
     <description>人难免天生有自怜的情绪，唯有时刻保持清醒，才能看清真正的价值在哪里。</description>
     <link>https://Chen-WH.github.io/</link>
     <atom:link href="https://Chen-WH.github.io/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 12 Oct 2021 14:59:01 +0800</pubDate>
-    <lastBuildDate>Tue, 12 Oct 2021 14:59:01 +0800</lastBuildDate>
+    <pubDate>Thu, 28 Oct 2021 15:20:20 +0800</pubDate>
+    <lastBuildDate>Thu, 28 Oct 2021 15:20:20 +0800</lastBuildDate>
     <generator>Jekyll v4.2.0</generator>
+    
+      <item>
+        <title>Formation_control</title>
+        <description>&lt;h1 id=&quot;图刚性与编队控制&quot;&gt;图刚性与编队控制&lt;/h1&gt;
+
+</description>
+        <pubDate>Wed, 27 Oct 2021 00:00:00 +0800</pubDate>
+        <link>https://Chen-WH.github.io/2021/10/27/Formation_Control/</link>
+        <guid isPermaLink="true">https://Chen-WH.github.io/2021/10/27/Formation_Control/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Zotero</title>
+        <description>
+</description>
+        <pubDate>Tue, 26 Oct 2021 00:00:00 +0800</pubDate>
+        <link>https://Chen-WH.github.io/2021/10/26/Zotero/</link>
+        <guid isPermaLink="true">https://Chen-WH.github.io/2021/10/26/Zotero/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Cg</title>
+        <description>&lt;h1 id=&quot;conjugate-gradient-method&quot;&gt;Conjugate gradient method&lt;/h1&gt;
+
+</description>
+        <pubDate>Tue, 26 Oct 2021 00:00:00 +0800</pubDate>
+        <link>https://Chen-WH.github.io/2021/10/26/CG/</link>
+        <guid isPermaLink="true">https://Chen-WH.github.io/2021/10/26/CG/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>虚拟化技术</title>
+        <description>&lt;h1 id=&quot;虚拟化技术&quot;&gt;虚拟化技术&lt;/h1&gt;
+
+&lt;h2 id=&quot;cpu运行级别&quot;&gt;CPU运行级别&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Priv_rings.svg/1200px-Priv_rings.svg.png&quot; alt=&quot;Protection ring - Wikipedia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Intel的CPU将特权级别分为4个级别：RING0,RING1,RING2,RING3。Windows只使用其中的两个级别RING0和RING3，RING0只给操作系统用，RING3任何程序都能用。应用程序运行在RING3上，不能做受控操作。如果要做，比如要访问磁盘，写文件，那就要通过执行系统调用（函数），执行系统调用的时候，CPU的运行级别会发生从ring3到ring0的切换，并跳转到系统调用对应的内核代码位置执行，这样内核就为你完成了设备访问，完成之后再从ring0返回ring3。这个过程也称作用户态和内核态的切换。&lt;/p&gt;
+
+&lt;p&gt;RING设计的初衷是将系统权限与程序分离出来，使之能够让OS更好的管理当前系统资源，也使得系统更加稳定。举个RING权限的最简单的例子：一个停止响应的应用程式，它运行在比RING0更低的指令环上，你不必大费周章的想着如何使系统回复运作，这期间，只需要启动任务管理器便能轻松终止它，因为它运行在比程式更低的RING0指令环中，拥有更高的权限，可以直接影响到RING0以上运行的程序，当然有利就有弊，RING保证了系统稳定运行的同时，也产生了一些十分麻烦的问题。比如一些OS虚拟化技术，在处理RING指令环时便遇到了麻烦，系统是运行在RING0指令环上的，但是虚拟的OS毕竟也是一个系统，也需要与系统相匹配的权限。而RING0不允许出现多个OS同时运行在上面，最早的解决办法便是使用虚拟机，把OS当成一个程序来运行。&lt;/p&gt;
+
+&lt;h2 id=&quot;虚拟机中快照与克隆的区别&quot;&gt;虚拟机中快照与克隆的区别&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;一个虚拟机的克隆就是原始虚拟机全部数据的一个拷贝，克隆的操作一但完成，克隆的虚拟机就可以脱离原始虚拟机独立存在，而且克隆的虚拟机和原始虚拟机完全独立，不共享任何资源。&lt;/li&gt;
+  &lt;li&gt;虚拟机的快照指对某一个特定文件系统在某一个特定时间内的一个具有只读属性的镜像。快照时复制一份原磁盘的索引，指向的实际数据均为原始磁盘的数据，只有当原镜像的的数据发生变化时，才将变化区域的在变化之前的数据复制一份给快照对应位置。&lt;/li&gt;
+  &lt;li&gt;快照和克隆都是某一时间点的镜像，区别在于快照只能读，而克隆可以写。快照仅能用于同一虚拟机不同时间点之间跳转，因为它保存的是原始磁盘数据的索引，有些类似git的commit操作；而虚拟机克隆储存了所有数据，可以进行新的部署。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;全虚拟化半虚拟化硬件辅助虚拟化三者之间的区别&quot;&gt;全虚拟化、半虚拟化、硬件辅助虚拟化三者之间的区别。&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;全虚拟化：客户操作系统运行在 Ring 1，在执行特权指令时，会触发异常，然后 VMM 捕获这个异常，在异常里面做翻译，模拟，最后返回到客户操作系统内，客户操作系统认为自己的特权指令工作正常，继续运行。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;半虚拟化：修改操作系统内核，替换掉不能虚拟化的指令，通过超级调用（hypercall）直接和底层的虚拟化层hypervisor来通讯，hypervisor 同时也提供了超级调用接口来满足其他关键内核操作，比如内存管理、中断和时间保持。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;硬件辅助虚拟化：硬件层面直接分配给虚拟机物理设备，这样全虚拟化下，那些靠“捕获异常-翻译-模拟”的实现就不需要了。Intel和AMD的CPU都提供了能使hypervisor存取Ring 0硬件的x86虚拟化指令集。Intel VT-x 和AMD-V都创建了一个新的“Ring -1”，这样客户操作系统就可以本机运行 Ring 0 操作而不影响其他来宾或主机操作系统。为了辅助虚拟化，VT-x 和 SVM 在 Ring 0 下插入了一个新的特权级别。两者都添加了九个新的机器代码指令，这些指令仅适用于“Ring -1”，旨在供虚拟机管理程序使用。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt; &lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;全虚拟化&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;半虚拟化&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;硬件辅助虚拟化&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;兼容性&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;无需修改客户操作系统，最佳兼容性&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;客户操作系统需要修改来支持hypercall，兼容性差，不支持Windows&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;无需修改客户操作系统，最佳兼容性&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;性能&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;差，因为需要经过异常处理过程&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;好，虚拟机的性能接近于物理机。&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;CPU需要在两种模式之间切换，带来性能开销；但其性能在逐渐逼近半虚拟化。&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;table&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;
+          &lt;td&gt;[分级保护域&lt;/td&gt;
+          &lt;td&gt;维基百科](https://zh.wikipedia.org/wiki/%E5%88%86%E7%BA%A7%E4%BF%9D%E6%8A%A4%E5%9F%9F)&lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        <pubDate>Sat, 16 Oct 2021 00:00:00 +0800</pubDate>
+        <link>https://Chen-WH.github.io/2021/10/16/Virtualization_Technology/</link>
+        <guid isPermaLink="true">https://Chen-WH.github.io/2021/10/16/Virtualization_Technology/</guid>
+        
+        <category>Cloud Computing</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>呓语1</title>
+        <description>&lt;h1 id=&quot;呓语&quot;&gt;呓语&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;现在好像每个想要努力的人，都需要自己为自己带上枷锁：远离亲朋，远离安逸，投身到撕扯的洪流之中，不够快活，不够快活。同样是安居乐业，同样是英雄辈出，可比之千年前，好像缺了那挥洒肆意的风流。我们这个年纪，正是梦想与现实激烈碰撞的年纪，我们可以突然热泪盈眶，我们也能够瞬间冷静下来。有人问我：“你读研是为了什么？”我说：“读研会让我觉得自己还是个学生，可以骗自己未来还有无限可能。”有人说你一直学习就够了，学历决定一切。可真的是这样吗？我越学习我就越是迷茫，因为我看到我好多学长博士毕业去考公务员了，也有好多学长跨界去做金融了。人永远无法走在时间前面，人也不知道自己做的选择是对是错。有时候我干脆想吧，放弃思考，踏实做好脚下，但我又担心没有思考的努力终将变成南辕北辙，高中时我写作文我最喜欢用的一句话“十年饮冰，难凉热血。”现在就当时好像还没有十年，但我好像也没有那么坚定了。当然啊，以上只是我的胡思乱想，因为千年前的古人 他们也并不是一帆风顺，他们的命途也并不总是春风得意，但他们仍然写下“大鹏一日同风起，扶摇直上九万里。”他们仍然说“竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。”他们在自己沉厄顿挫之时仍书写慷慨激昂鼓励后辈，我们又岂能自怨自艾。后人视今，亦犹今之视昔。所以我想，我可能要尽我所能，这世间其实还有很多美好。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+</description>
+        <pubDate>Sat, 16 Oct 2021 00:00:00 +0800</pubDate>
+        <link>https://Chen-WH.github.io/2021/10/16/Babble1/</link>
+        <guid isPermaLink="true">https://Chen-WH.github.io/2021/10/16/Babble1/</guid>
+        
+        <category>Article</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>OpenBLAS和LAPACK学习笔记</title>
+        <description>&lt;p&gt;真正重要的从来不是什么机遇，而是你选择迈出那一步。能改变自己的人，只有你自己。&lt;/p&gt;
+</description>
+        <pubDate>Fri, 08 Oct 2021 00:00:00 +0800</pubDate>
+        <link>https://Chen-WH.github.io/2021/10/08/Babble2/</link>
+        <guid isPermaLink="true">https://Chen-WH.github.io/2021/10/08/Babble2/</guid>
+        
+        <category>Note</category>
+        
+        
+      </item>
     
       <item>
         <title>OpenBLAS和LAPACK学习笔记</title>
@@ -451,782 +600,6 @@ normal
         <guid isPermaLink="true">https://Chen-WH.github.io/2021/09/08/FFT/</guid>
         
         <category>Math</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>ML读书随笔</title>
-        <description>&lt;h1 id=&quot;machine-learning&quot;&gt;Machine Learning&lt;/h1&gt;
-
-&lt;h2 id=&quot;多变量线性回归&quot;&gt;多变量线性回归&lt;/h2&gt;
-
-&lt;h3 id=&quot;正规方程&quot;&gt;正规方程&lt;/h3&gt;
-
-\[\begin{aligned}
-	&amp;amp;&amp;amp; &amp;amp;\theta=(X^TX)^{-1}X^Ty\\
-	&amp;amp;s.t.&amp;amp; &amp;amp;训练集特征矩阵为X，训练集结果为向量y\\
-\end{aligned}\]
-
-&lt;h3 id=&quot;正规方程推导过程&quot;&gt;正规方程推导过程&lt;/h3&gt;
-
-\[\begin{aligned}
-	&amp;amp;首先变换&amp;amp; J(\theta)&amp;amp;=\frac{1}{2}(X\theta-y)^T(X\theta-y)\\
-	&amp;amp;&amp;amp; &amp;amp;=\frac{1}{2}(\theta^TX^TX\theta-\theta^TX^Ty-y^TX\theta-y^Ty)\\
-	&amp;amp;矩阵求导法则&amp;amp; &amp;amp;\frac{\mathbf{d}AB}{\mathbf{d}B}=A^T&amp;amp; &amp;amp;\frac{\mathbf{d}X^TAX}{\mathbf{d}X}=2AX\\
-	&amp;amp;得到&amp;amp; \frac{\partial{J(\theta)}}{\partial \theta}&amp;amp;=\frac{1}{2}(2X^TX\theta-X^Ty)
-\end{aligned}\]
-
-</description>
-        <pubDate>Sat, 04 Sep 2021 00:00:00 +0800</pubDate>
-        <link>https://Chen-WH.github.io/2021/09/04/ML/</link>
-        <guid isPermaLink="true">https://Chen-WH.github.io/2021/09/04/ML/</guid>
-        
-        <category>Essay</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>HTML学习笔记</title>
-        <description>&lt;h1 id=&quot;html&quot;&gt;HTML&lt;/h1&gt;
-
-&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   标题   --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;h1&amp;gt;&lt;/span&gt;This is a heading&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h1&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;h2&amp;gt;&lt;/span&gt;This is a heading&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h2&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;h3&amp;gt;&lt;/span&gt;This is a heading&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h3&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   段落   --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;This is a paragraph.&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;This is another paragraph.&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   链接   --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3school.com.cn&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;This is a link&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3school.com.cn/&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;target=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;_blank&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Visit W3School!&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
-如果把链接的 target 属性设置为 &quot;_blank&quot;，该链接会在新窗口中打开。
-&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   图像   --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;img&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;w3school.jpg&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;width=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;104&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;height=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;142&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   水平线   --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;hr&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   换行   --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;br&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   元素样式   --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;p&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;style=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;font-family:times;color:green;font-size:30px&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;This text is in Times and green&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
-&quot;background-color:yellow&quot;
-&quot;text-align:center&quot;
-
-&lt;span class=&quot;c&quot;&gt;&amp;lt;!----------------&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;b&amp;gt;&lt;/span&gt;This text is bold&lt;span class=&quot;nt&quot;&gt;&amp;lt;/b&amp;gt;&lt;/span&gt;
-
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;strong&amp;gt;&lt;/span&gt;This text is strong&lt;span class=&quot;nt&quot;&gt;&amp;lt;/strong&amp;gt;&lt;/span&gt;
-
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;big&amp;gt;&lt;/span&gt;This text is big&lt;span class=&quot;nt&quot;&gt;&amp;lt;/big&amp;gt;&lt;/span&gt;
-
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;em&amp;gt;&lt;/span&gt;This text is emphasized&lt;span class=&quot;nt&quot;&gt;&amp;lt;/em&amp;gt;&lt;/span&gt;
-
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;i&amp;gt;&lt;/span&gt;This text is italic&lt;span class=&quot;nt&quot;&gt;&amp;lt;/i&amp;gt;&lt;/span&gt;
-
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;small&amp;gt;&lt;/span&gt;This text is small&lt;span class=&quot;nt&quot;&gt;&amp;lt;/small&amp;gt;&lt;/span&gt;
-
-This text contains&lt;span class=&quot;nt&quot;&gt;&amp;lt;sub&amp;gt;&lt;/span&gt;subscript&lt;span class=&quot;nt&quot;&gt;&amp;lt;/sub&amp;gt;&lt;/span&gt;
-
-This text contains&lt;span class=&quot;nt&quot;&gt;&amp;lt;sup&amp;gt;&lt;/span&gt;superscript&lt;span class=&quot;nt&quot;&gt;&amp;lt;/sup&amp;gt;&lt;/span&gt;
-
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;pre&amp;gt;&lt;/span&gt;
-这是
-预格式文本。
-它保留了      空格
-和换行。
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/pre&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   外部样式   --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;stylesheet&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text/css&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;mystyle.css&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   图片作为链接   --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/example/html/lastpage.html&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;img&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;border=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;0&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/i/eg_buttonnext.gif&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;tips&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;基本的注意事项 - 有用的提示&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;#tips&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;有用的提示&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;&amp;lt;!--也可以在其他页面中创建指向该锚的链接--&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3school.com.cn/html/html_links.asp#tips&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;有用的提示&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;在未来 HTML 版本中强制使用小写。&lt;/li&gt;
-  &lt;li&gt;浏览器会移除&lt;em&gt;源代码中&lt;/em&gt;多余的空格和空行。所有连续的空格或空行都会被算作一个空格。&lt;/li&gt;
-&lt;/ol&gt;
-
-</description>
-        <pubDate>Wed, 01 Sep 2021 00:00:00 +0800</pubDate>
-        <link>https://Chen-WH.github.io/2021/09/01/HTML/</link>
-        <guid isPermaLink="true">https://Chen-WH.github.io/2021/09/01/HTML/</guid>
-        
-        <category>Web</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Git笔记</title>
-        <description>&lt;h1 id=&quot;git教程&quot;&gt;Git教程&lt;/h1&gt;
-
-&lt;h2 id=&quot;时光机穿梭&quot;&gt;时光机穿梭&lt;/h2&gt;
-
-&lt;h3 id=&quot;工作区和暂存区&quot;&gt;工作区和暂存区&lt;/h3&gt;
-
-&lt;p&gt;第一步是用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git add&lt;/code&gt;把文件添加进去，实际上就是把文件修改添加到暂存区；&lt;/p&gt;
-
-&lt;p&gt;第二步是用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git commit&lt;/code&gt;提交更改，实际上就是把暂存区的所有内容提交到当前分支。&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;## 添加全局配置&lt;/span&gt;
-git config &lt;span class=&quot;nt&quot;&gt;--global&lt;/span&gt; user.email &lt;span class=&quot;s2&quot;&gt;&quot;1773904345@qq.com&quot;&lt;/span&gt;
-git config &lt;span class=&quot;nt&quot;&gt;--global&lt;/span&gt; user.name &lt;span class=&quot;s2&quot;&gt;&quot;ChenWH&quot;&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;## 创建版本库&lt;/span&gt;
-git init &lt;span class=&quot;c&quot;&gt;# 初始化&lt;/span&gt;
-git add read.txt &lt;span class=&quot;c&quot;&gt;# 把文件添加到仓库&lt;/span&gt;
-git commit &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;wrote a readme file&quot;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# 把文件提交到仓库&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;# 为什么Git添加文件需要 add，commit 一共两步呢？因为 commit 可以一次提交很多文件，所以你可以多次 add 不同的文件，比如：&lt;/span&gt;
-
-git add file1.txt
-git add file2.txt file3.txt
-git &lt;span class=&quot;nb&quot;&gt;rm &lt;/span&gt;test.txt &lt;span class=&quot;c&quot;&gt;# 删除文件&lt;/span&gt;
-git commit &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;add 3 files.&quot;&lt;/span&gt;
-
-git status &lt;span class=&quot;c&quot;&gt;# 查看仓库状态&lt;/span&gt;
-git diff &lt;span class=&quot;c&quot;&gt;# 查看修改内容&lt;/span&gt;
-git log &lt;span class=&quot;c&quot;&gt;# 查看提交日志&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;# 在 Git 中，用 HEAD 表示当前版本，也就是最新的提交1094adb...（注意我的提交ID和你的肯定不一样），上一个版本就是 HEAD^ ，上上一个版本就是 HEAD^^ ，当然往上100个版本写100个^比较容易数不过来，所以写成 HEAD~100 。&lt;/span&gt;
-
-git reset &lt;span class=&quot;nt&quot;&gt;--hard&lt;/span&gt; HEAD^ &lt;span class=&quot;c&quot;&gt;# 回溯&lt;/span&gt;
-git reset &lt;span class=&quot;nt&quot;&gt;--hard&lt;/span&gt; 1094a &lt;span class=&quot;c&quot;&gt;# 取消回溯&lt;/span&gt;
-git reflog &lt;span class=&quot;c&quot;&gt;# 查看命令历史，便于获取commit id&lt;/span&gt;
-git checkout &lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt; readme.txt &lt;span class=&quot;c&quot;&gt;# 让工作区文件回到最近一次git commit或git add时的状态&lt;/span&gt;
-git reset HEAD readme.txt &lt;span class=&quot;c&quot;&gt;# 可以把暂存区的修改撤销掉（unstage），重新放回工作区&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;远程仓库&quot;&gt;远程仓库&lt;/h2&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;## 添加 SSH key&lt;/span&gt;
-ssh-keygen &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; rsa &lt;span class=&quot;nt&quot;&gt;-C&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;youremail@example.com&quot;&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 如果一切顺利的话，可以在用户主目录里找到.ssh目录，里面有id_rsa和id_rsa.pub两个文件，这两个就是SSH Key的秘钥对，id_rsa是私钥，不能泄露出去，id_rsa.pub是公钥，可以放心地告诉任何人。&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;## 登录GitHub&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 登陆GitHub，打开“Account settings”，“SSH Keys”页面，然后，点“Add SSH Key”，填上任意Title，在Key文本框里粘贴id_rsa.pub文件的内容&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;添加远程库&quot;&gt;添加远程库&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 登陆GitHub，然后，在右上角找到“Create a new repo”按钮，创建一个新的仓库&lt;/span&gt;
-git remote add origin git@github.com:Spectre1229/learning.git
-&lt;span class=&quot;c&quot;&gt;# 添加后，远程库的名字就是origin，这是Git默认的叫法，也可以改成别的&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;# 把本地库的内容推送到远程，实际上是把当前分支master推送到远程。&lt;/span&gt;
-git push &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt; origin master
-&lt;span class=&quot;c&quot;&gt;# 由于远程库是空的，我们第一次推送master分支时，加上了-u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令。&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 后续提交只需要&lt;/span&gt;
-git push origin master  / git push origin main
-&lt;span class=&quot;c&quot;&gt;## 注意github创建的所有新的源代码仓库将默认被命名为 “main”，而不是原先的&quot;master&quot;。&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 删除远程库&lt;/span&gt;
-git remote &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# 查看远程库信息&lt;/span&gt;
-git remote &lt;span class=&quot;nb&quot;&gt;rm &lt;/span&gt;origin &lt;span class=&quot;c&quot;&gt;# 然后，根据名字删除，比如删除origin&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 此处的“删除”其实是解除了本地和远程的绑定关系，并不是物理上删除了远程库。远程库本身并没有任何改动。要真正删除远程库，需要登录到GitHub，在后台页面找到删除按钮再删除。&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;从远程库克隆&quot;&gt;从远程库克隆&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone git@github.com:Spectre1229/SQP.git &lt;span class=&quot;c&quot;&gt;# ssh协议clone&lt;/span&gt;
-git clone https://github.com/michaelliao/gitskills.git &lt;span class=&quot;c&quot;&gt;# https协议&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;分支管理&quot;&gt;分支管理&lt;/h2&gt;
-
-&lt;h3 id=&quot;创建与合并分支&quot;&gt;创建与合并分支&lt;/h3&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;每次提交，Git都把它们串成一条时间线，这条时间线就是一个分支。截止到目前，只有一条时间线，在Git里，这个分支叫主分支，即master分支。HEAD严格来说不是指向提交，而是指向master，master才是指向提交的，所以，HEAD指向的就是当前分支。&lt;/li&gt;
-  &lt;li&gt;一开始的时候，master分支是一条线，Git用master指向最新的提交，再用HEAD指向master，就能确定当前分支，以及当前分支的提交点。&lt;/li&gt;
-  &lt;li&gt;每次提交，master分支都会向前移动一步，这样，随着你不断提交，master分支的线也越来越长。
-当我们创建新的分支，例如dev时，Git新建了一个指针叫dev，指向master相同的提交，再把HEAD指向dev，就表示当前分支在dev上。&lt;/li&gt;
-  &lt;li&gt;Git创建一个分支很快，因为除了增加一个dev指针，改改HEAD的指向，工作区的文件都没有任何变化。&lt;/li&gt;
-  &lt;li&gt;不过，从现在开始，对工作区的修改和提交就是针对&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dev&lt;/code&gt;分支了，比如新提交一次后，&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dev&lt;/code&gt;指针往前移动一步，而&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;master&lt;/code&gt;指针不变。&lt;/li&gt;
-  &lt;li&gt;假如我们在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dev&lt;/code&gt;上的工作完成了，就可以把&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dev&lt;/code&gt;合并到&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;master&lt;/code&gt;上。Git怎么合并呢？最简单的方法，就是直接把&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;master&lt;/code&gt;指向&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dev&lt;/code&gt;的当前提交，就完成了合并。&lt;/li&gt;
-  &lt;li&gt;合并完分支后，甚至可以删除&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dev&lt;/code&gt;分支。删除&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dev&lt;/code&gt;分支就是把&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dev&lt;/code&gt;指针给删掉，删掉后，我们就剩下了一条&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;master&lt;/code&gt;分支。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git checkout &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; dev &lt;span class=&quot;c&quot;&gt;# 创建dev分支并切换到dev分支&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# git checkout 命令加上-b参数表示创建并切换，相当于以下两条命令 &lt;/span&gt;
-git branch dev &lt;span class=&quot;c&quot;&gt;# 创建dev&lt;/span&gt;
-git checkout dev &lt;span class=&quot;c&quot;&gt;# 切换至dev&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 新版Git使用 git switch -c dev 以及 git switch master&lt;/span&gt;
-git branch &lt;span class=&quot;c&quot;&gt;# 查看当前分支&lt;/span&gt;
-git merge dev &lt;span class=&quot;c&quot;&gt;# dev合并至当前分支&lt;/span&gt;
-git branch &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; dev &lt;span class=&quot;c&quot;&gt;# 删除dev分支&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;解决冲突&quot;&gt;解决冲突&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git log &lt;span class=&quot;nt&quot;&gt;--graph&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--pretty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;oneline &lt;span class=&quot;nt&quot;&gt;--abbrev-commit&lt;/span&gt;
-git log &lt;span class=&quot;nt&quot;&gt;--graph&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# 查看分支合并图&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;分支管理策略&quot;&gt;分支管理策略&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Fast-forward 会直接将master指向dev的当前提交，但会损失分支信息，而且看不出合并的痕迹&lt;/span&gt;
-git merge &lt;span class=&quot;nt&quot;&gt;--no-ff&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;merge with no-ff&quot;&lt;/span&gt; dev
-&lt;span class=&quot;c&quot;&gt;#--no-ff参数，表示禁用Fast forward，因为本次合并要创建一个新的commit，所以加上-m参数，把commit描述写进去。&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;bug分支&quot;&gt;Bug分支&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git stash &lt;span class=&quot;c&quot;&gt;# Git还提供了一个stash功能，可以把当前工作现场“储藏”起来，等以后恢复现场后继续工作&lt;/span&gt;
-git stash list
-&lt;span class=&quot;nt&quot;&gt;----&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; stash@&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;0&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;: WIP on dev: f52c633 add merge
-git stash apply &lt;span class=&quot;c&quot;&gt;# 恢复stash到dev&lt;/span&gt;
-git stash apply stash@&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;0&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# 恢复指定stash&lt;/span&gt;
-git stash drop &lt;span class=&quot;c&quot;&gt;# 删除stash内容&lt;/span&gt;
-git stash pop &lt;span class=&quot;c&quot;&gt;# 恢复并删除stash内容&lt;/span&gt;
-
-git cherry-pick 4c805e2 &lt;span class=&quot;c&quot;&gt;# 复制一个特定的提交到当前分支&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;feature分支&quot;&gt;Feature分支&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git branch &lt;span class=&quot;nt&quot;&gt;-D&lt;/span&gt; feature-vulcan &lt;span class=&quot;c&quot;&gt;# 丢弃一个没有被合并过的分支&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;多人协作&quot;&gt;多人协作&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git checkout &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; dev origin/dev &lt;span class=&quot;c&quot;&gt;# 创建远程origin的dev分支到本地&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;## 如果你的小伙伴已经向origin/dev分支推送了他的提交，而碰巧你也对同样的文件作了修改，并试图推送&lt;/span&gt;
-git branch &lt;span class=&quot;nt&quot;&gt;--set-upstream-to&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;origin/dev dev &lt;span class=&quot;c&quot;&gt;# 如果git pull提示no tracking information，则说明本地分支和远程分支的链接关系没有创建，先指定本地dev分支与远程origin/dev分支的链接&lt;/span&gt;
-git pull &lt;span class=&quot;c&quot;&gt;# 而后抓取最新的提交&lt;/span&gt;
-git commit &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;fix env conflict&quot;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# 提交本地修改&lt;/span&gt;
-git push origin dev &lt;span class=&quot;c&quot;&gt;# &lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;rebase&quot;&gt;Rebase&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git rebase &lt;span class=&quot;c&quot;&gt;# 把分叉的提交历史“整理”成一条直线&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;标签管理&quot;&gt;标签管理&lt;/h2&gt;
-
-&lt;p&gt;tag就是一个让人容易记住的有意义的名字，它跟某个commit绑在一起。&lt;/p&gt;
-
-&lt;h3 id=&quot;创建标签&quot;&gt;创建标签&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git tag v1.0 &lt;span class=&quot;c&quot;&gt;# 打标签，默认标签打在最新提交的commit&lt;/span&gt;
-git tag v0.9 f52c633 &lt;span class=&quot;c&quot;&gt;# 给指定commit打标签&lt;/span&gt;
-git tag &lt;span class=&quot;c&quot;&gt;# 查看所有标签，标签不是按时间顺序列出，而是按字母排序的。&lt;/span&gt;
-git show v0.9 &lt;span class=&quot;c&quot;&gt;# 查看标签信息&lt;/span&gt;
-git tag &lt;span class=&quot;nt&quot;&gt;-a&lt;/span&gt; v0.1 &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;version 0.1 released&quot;&lt;/span&gt; 1094adb &lt;span class=&quot;c&quot;&gt;# 创建带有说明的标签，用-a指定标签名，-m指定说明文字&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;操作标签&quot;&gt;操作标签&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git tag &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; v0.1 &lt;span class=&quot;c&quot;&gt;# 删除标签&lt;/span&gt;
-git push origin v1.0 &lt;span class=&quot;c&quot;&gt;# 推送某个标签到远程&lt;/span&gt;
-git push origin &lt;span class=&quot;nt&quot;&gt;--tags&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# 一次性推送全部未推送的本地标签&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;## 删除已推送的标签&lt;/span&gt;
-git tag &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; v0.9 &lt;span class=&quot;c&quot;&gt;# 先删除本地标签&lt;/span&gt;
-git push origin :refs/tags/v0.9 &lt;span class=&quot;c&quot;&gt;# 从远程删除&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;使用github&quot;&gt;使用GitHub&lt;/h2&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;点“Fork”在自己的账号下克隆了一个仓库，然后，从自己的账号下clone&lt;/li&gt;
-  &lt;li&gt;一定要从自己的账号下clone仓库，这样你才能推送修改。如果从bootstrap的作者的仓库地址&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git@github.com:twbs/bootstrap.git&lt;/code&gt;克隆，因为没有权限，你将不能推送修改。&lt;/li&gt;
-  &lt;li&gt;如果你希望bootstrap的官方库能接受你的修改，你就可以在GitHub上发起一个pull request。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;使用gitee&quot;&gt;使用Gitee&lt;/h2&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;使用多个远程库时，我们要注意，git给远程库起的默认名称是&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;origin&lt;/code&gt;，如果有多个远程库，我们需要用不同的名称来标识不同的远程库。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;自定义git&quot;&gt;自定义Git&lt;/h2&gt;
-
-&lt;h3 id=&quot;忽略特殊文件&quot;&gt;忽略特殊文件&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 忽略某些文件时，需要编写.gitignore&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 检验.gitignore的标准是git status命令是不是说working directory clean&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# .gitignore文件本身要放到版本库里，并且可以对.gitignore做版本管理&lt;/span&gt;
-git add App.class &lt;span class=&quot;c&quot;&gt;# 添加文件到Git&lt;/span&gt;
-git add &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; App.class &lt;span class=&quot;c&quot;&gt;# 强制添加到Git&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;## .gitignore文件内容示例&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 排除所有.开头的隐藏文件:&lt;/span&gt;
-.&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 排除所有.class文件:&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;.class
-&lt;span class=&quot;c&quot;&gt;# 不排除.gitignore和App.class:&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;.gitignore
-&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;App.class
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-</description>
-        <pubDate>Fri, 27 Aug 2021 00:00:00 +0800</pubDate>
-        <link>https://Chen-WH.github.io/2021/08/27/Git/</link>
-        <guid isPermaLink="true">https://Chen-WH.github.io/2021/08/27/Git/</guid>
-        
-        <category>Coding</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>CS读书随笔</title>
-        <description>&lt;h1 id=&quot;计算机是怎样跑起来的&quot;&gt;《计算机是怎样跑起来的》&lt;/h1&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;PIO：parallel I/O中的寄存器：赋予 $B/\overline{A}$ 引脚1则表示选中B端口，反之则表示选中A端口；$C/\overline{D}$​ 引脚C表示Control控制模式，D表示Data数据模式。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;CPU的A0和A1引脚与内存和PIO均有连接，为了区分访问的对象，需要CPU上MREQ引脚和IORQ引脚，为0时表示有数据输入输出，反之没有。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;上拉（Pull-up），指的就是像这样通过加入电阻把元件的引脚和 +5V 连接起来。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;ARP，地址解析协议：实现由IP到MAC的转换&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;对称密钥加密技术和公开密钥加密技术（阮一峰博客）&lt;/p&gt;
-
-    &lt;ol&gt;
-      &lt;li&gt;
-        &lt;p&gt;欧拉函数 $\varphi(n)$ 表示在小于等于 $n$​ 的正整数之中，与之互质的数字个数。其中 $\varphi(ab)=\varphi(a)\varphi(b)$&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;欧拉定理：若a和n互质，则 $a^{\varphi(n)}\equiv 1(\mod n)$​​ ​，费马小定理是其特例。&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;模反元素：a和n互质，则一定有b使得 $ab\equiv1(\mod n)$​​​，b是a的模反元素。&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;graph TB
-	subgraph 公钥
-		n拷贝一 &amp;amp; e
-	end
-	subgraph 私钥
-		n拷贝二 &amp;amp; d
-	end
-	subgraph 运算区
-		质数p &amp;amp; 质数q--&amp;gt;A(n=p*q)
-		A--&amp;gt;n
-		质数p &amp;amp; 质数q--&amp;gt;B(φ_n=p-1*q-1)
-		B--&amp;gt;φ_n
-		φ_n--&amp;gt;C(随机e与之互质)
-		C--&amp;gt;e
-		e &amp;amp; φ_n--&amp;gt;D(ed模φ_n余1)
-		D--&amp;gt;d
-		n--&amp;gt;n拷贝一 &amp;amp; n拷贝二
-	end
-&lt;/code&gt;&lt;/pre&gt;
-      &lt;/li&gt;
-    &lt;/ol&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;xmlns=”命名空间的名字”作为标签的一个属性记述，可以为标签设定命名空间。&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h1 id=&quot;程序是怎样跑起来的&quot;&gt;《程序是怎样跑起来的》&lt;/h1&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;浮点数是指用符号、尾数、基数和指数这四部分来表示的小数 $\pm(符号) m(尾数)\times n(基数)^{e(指数)}$，计算机内部基数为2，无论单、双精度，32/64位中均只有1位表示符号。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;正则表达式：十进制数确保小数点前为0，小数点后第一位非0；二进制数确保小数点前首位1，再前均为0，因第一位必零，故只需存储小数点后部分。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;EXCESS系统：注意这里指数部分正负的表示方法不同于整数，无符号位，而是将范围中位数设为0&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;graph LR
-内存IC分类--&amp;gt;ROM/Read_Only_Memory &amp;amp; RAM/Random_Access_Memory
-RAM/Random_Access_Memory--&amp;gt;DRAM/Dynamic_RAM &amp;amp; SRAM/Static_RAM
-&lt;/code&gt;&lt;/pre&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;内存IC引脚&lt;/p&gt;
-
-    &lt;ul&gt;
-      &lt;li&gt;VCC、GND：电源&lt;/li&gt;
-      &lt;li&gt;A0~A9：地址信号，用于指定数据的存储场所&lt;/li&gt;
-      &lt;li&gt;D0~D7：数据信号，一次吞吐的数据量&lt;/li&gt;
-      &lt;li&gt;RD、WR：控制信号&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;虚拟内存（Page In与Page Out）与磁盘缓存&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;节约内存：DLL文件实现函数共有，动态链接加载（Dynamic Link Library）&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;压缩数据：RLE（重复部分用数字表示），哈夫曼算法LHA（参考莫斯编码，哈夫曼树实现，高频者短编码）&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;汇编语言源代码与本地代码一一对应&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;在多线程处理中，用汇编语言记述的代码每运行 1 行，处理都有可能切换到其他线程（函数）中。（可能会有数据混乱或错误）&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;要将一些位设定为ON只需把目标位定为1其他位0后与原数做OR运算即可（得到其他位不变，目标位全1）；要将一些位设定为OFF只需把目标位定为0其他位1后与原数做AND运算即可（得到其他位不变，目标位全0）&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;DMA （Direct Memory Access）是指在不通过 CPU 的情况下，外围设备直接和主内存进行数据传送。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h1 id=&quot;深入理解计算机系统&quot;&gt;《深入理解计算机系统》&lt;/h1&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;正数补码即原码，负数补码=反码+1&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;负数取反：相反数=反码+1            -(-5)补码=(-5)补码的反码+1&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;负数就是求正数的相反数，减法就是求减数的相反数再相加。NEG指令&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;浮点数编码  为什么会有相同部分&lt;/p&gt;
-
-&lt;p&gt;布尔代数&lt;/p&gt;
-</description>
-        <pubDate>Sat, 21 Aug 2021 00:00:00 +0800</pubDate>
-        <link>https://Chen-WH.github.io/2021/08/21/CS/</link>
-        <guid isPermaLink="true">https://Chen-WH.github.io/2021/08/21/CS/</guid>
-        
-        <category>Essay</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>ANSYS学习笔记</title>
-        <description>&lt;h1 id=&quot;ansys&quot;&gt;ANSYS&lt;/h1&gt;
-
-&lt;h2 id=&quot;安装及使用&quot;&gt;安装及使用&lt;/h2&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Microsoft账户名应为英文&lt;/li&gt;
-  &lt;li&gt;Linux平台目前Ubuntu未受支持&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;geometry&quot;&gt;Geometry&lt;/h2&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;SW作图后导入，推荐$x_T$格式&lt;/li&gt;
-  &lt;li&gt;流体域抽取：
-    &lt;ol&gt;
-      &lt;li&gt;Fills 内流域：By Cavity不需要流道封闭，而By Caps要求封闭&lt;/li&gt;
-      &lt;li&gt;Enclosure 外流域&lt;/li&gt;
-    &lt;/ol&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;mesh&quot;&gt;Mesh&lt;/h2&gt;
-
-&lt;p&gt;注意Physics Preference的选择！&lt;/p&gt;
-
-&lt;h3 id=&quot;一些概念&quot;&gt;一些概念&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;网格：Grid Cell Mesh&lt;/li&gt;
-  &lt;li&gt;节点：离散计算域的分割线的交点
-    &lt;ul&gt;
-      &lt;li&gt;Node 固体计算&lt;/li&gt;
-      &lt;li&gt;Vertices 流体计算&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;控制体：control volume&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;详细设置&quot;&gt;详细设置&lt;/h3&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Quality-&amp;gt;Mesh Metric中选择Element Quality&lt;/li&gt;
-  &lt;li&gt;创建边界命名&lt;/li&gt;
-  &lt;li&gt;Inflation实现边界层网络&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;参数优先级&quot;&gt;参数优先级&lt;/h3&gt;
-
-&lt;p&gt;边-&amp;gt;面-&amp;gt;体-&amp;gt;全局尺寸&lt;/p&gt;
-
-&lt;h2 id=&quot;静力学分析&quot;&gt;静力学分析&lt;/h2&gt;
-
-&lt;p&gt;选择分析系统（一般Static Structural）&lt;/p&gt;
-
-&lt;h3 id=&quot;开始分析&quot;&gt;开始分析&lt;/h3&gt;
-&lt;ol&gt;
-  &lt;li&gt;材料确认&lt;/li&gt;
-  &lt;li&gt;网格划分 （Sizeing -&amp;gt; Element Size）&lt;/li&gt;
-  &lt;li&gt;添加约束&lt;/li&gt;
-  &lt;li&gt;进行分析&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;流体力学setup&quot;&gt;流体力学Setup&lt;/h2&gt;
-&lt;h3 id=&quot;边界条件setup&quot;&gt;边界条件Setup&lt;/h3&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;$Default\ domain$右击，$boundary$设置$inlet$入口，$outlet$出口，$opening$开放但未知流向，$wall$不可通过&lt;/li&gt;
-  &lt;li&gt;流动混乱程度设置&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;monitors&quot;&gt;Monitors&lt;/h2&gt;
-
-&lt;p&gt;设置残差标准&lt;/p&gt;
-
-&lt;h3 id=&quot;求解solution&quot;&gt;求解Solution&lt;/h3&gt;
-
-&lt;p&gt;$Run Mode$：$Serial$串行，$Parallel$并行（建议6Processes 1GPU）&lt;/p&gt;
-
-&lt;h3 id=&quot;结果results&quot;&gt;结果Results&lt;/h3&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;$Streamline$ 流速&lt;/li&gt;
-  &lt;li&gt;$Contour$ 面上压力等数据&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;fluent&quot;&gt;FLUENT&lt;/h2&gt;
-
-&lt;h3 id=&quot;general&quot;&gt;General&lt;/h3&gt;
-
-&lt;p&gt;压力基求解器(Pressure-Based)适用于低速不可压缩流动，密度基求解器(Density-Based)适用于高速可压流动。&lt;/p&gt;
-
-&lt;h3 id=&quot;关于udfuser-defined-functions&quot;&gt;关于UDF(User Defined Functions)&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;graph LR
-Fluent_Core--调用计算--&amp;gt;CPUs,GPUs
-Fluent_Core--存储文件/数据--&amp;gt;硬盘
-Fluent_Core--网格数据--&amp;gt;内存
-编译型UDF--动态链接库.so--&amp;gt;Fluent_Core
-解释型UDF--静态链接--&amp;gt;内存
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;graph LR
-User_Defined--&amp;gt;Functions
-Functions--&amp;gt;interpreted解释型 &amp;amp; compiled编译型
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&quot;udf语法及编写&quot;&gt;UDF语法及编写&lt;/h3&gt;
-
-&lt;p&gt;链接UDF与FLUENT的关键：thread数据类型&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;graph TB
-Domain--&amp;gt;Cell_thread &amp;amp; Face_thread
-Cell_thread--&amp;gt;Cells
-Face_thread--&amp;gt;Faces面或边界
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;cell_t：单元整型数据类型&lt;/li&gt;
-  &lt;li&gt;face_t：面&lt;/li&gt;
-  &lt;li&gt;Domain&lt;/li&gt;
-  &lt;li&gt;Thread&lt;/li&gt;
-  &lt;li&gt;Node&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;使用快捷键&quot;&gt;使用快捷键&lt;/h2&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;平移 Ctrl+中键&lt;/li&gt;
-  &lt;li&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;注意点&quot;&gt;注意点&lt;/h2&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;分析结果建议设置 true scale&lt;/li&gt;
-  &lt;li&gt;图例中的数值可以手动修改&lt;/li&gt;
-  &lt;li&gt;网格划分&lt;/li&gt;
-&lt;/ol&gt;
-
-</description>
-        <pubDate>Fri, 20 Aug 2021 00:00:00 +0800</pubDate>
-        <link>https://Chen-WH.github.io/2021/08/20/ANSYS/</link>
-        <guid isPermaLink="true">https://Chen-WH.github.io/2021/08/20/ANSYS/</guid>
-        
-        <category>Mechanical</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>oneAPI学习笔记</title>
-        <description>&lt;h1 id=&quot;oneapi&quot;&gt;oneAPI&lt;/h1&gt;
-
-&lt;p&gt;因为项目中有矩阵计算的需要，所以选择了Intel的MKL，想在这里记录一下Intel的oneAPI Base Toolkit学习使用过程。&lt;/p&gt;
-
-&lt;h2 id=&quot;下载安装&quot;&gt;下载安装&lt;/h2&gt;
-
-&lt;p&gt;https://software.intel.com/content/www/us/en/develop/tools/oneapi/components/onemkl.html#gs.852ahl&lt;/p&gt;
-
-&lt;p&gt;进入官网后注册账户即可进行下载，这里我选择的是命令行下载、本地安装&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget https://registrationcenter-download.intel.com/akdlm/irc_nas/17977/l_BaseKit_p_2021.3.0.3219_offline.sh
-
-&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;bash l_BaseKit_p_2021.3.0.3219_offline.sh
-&lt;span class=&quot;c&quot;&gt;# 这里我选择安装在根目录下所以加上了sudo，安装在home目录下应该也是可以的，不过要记住路径以便后续环境变量配置&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 安装过程全都默认即可，也可以自己更换安装目录&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;关于目录&quot;&gt;关于目录&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/Chen-WH/PicGo/main/Typora/202109301536568.png&quot; alt=&quot;chenwh@Inspiron-7590 _009&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;oneapi
-    &lt;ul&gt;
-      &lt;li&gt;mkl/
-        &lt;ul&gt;
-          &lt;li&gt;2021.3.0/
-            &lt;ul&gt;
-              &lt;li&gt;include/&lt;/li&gt;
-              &lt;li&gt;lib/&lt;/li&gt;
-              &lt;li&gt;其他&lt;/li&gt;
-            &lt;/ul&gt;
-          &lt;/li&gt;
-          &lt;li&gt;latest/ –&amp;gt; 2021.3.0/&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;mpi/&lt;/li&gt;
-      &lt;li&gt;tbb/&lt;/li&gt;
-      &lt;li&gt;其他工具包以及安装程序等&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;以mkl工具包为例，底下存放有mkl包的各个历史版本，在我的截图这里可以看到只有 2021.3.0 一个版本和 latest 链接，latest链接随更新会保持链接到最新版本，因此在工程文件链接库目录的时候可以选择 latest 路径，当然指定某一版本也是可以的。&lt;/p&gt;
-
-&lt;h2 id=&quot;环境配置&quot;&gt;环境配置&lt;/h2&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# setvars.sh 脚本通过在各自的 oneAPI 文件夹中找到每个 &amp;lt;install-dir&amp;gt;/latest/env/vars.sh 脚本来设置用于 oneAPI 工具包的环境变量。&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;source&lt;/span&gt; /opt/intel/oneapi/setvars.sh intel64
-&lt;span class=&quot;c&quot;&gt;# 为了避免每次打开一个新的终端都需要重新运行脚本，可以在 ${HOME}/.bashrc中添加一句 source /opt/intel/oneapi/setvars.sh intel64&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 运行这句后oneAPI会添加所有工具包，可能会污染你的工作环境，比如我就遇到了 intelpython 影响 rospy 的问题，可以写一个 config.txt 文件自定义加载的环境&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;vi /opt/intel/oneapi/config.txt &lt;span class=&quot;c&quot;&gt;# 在指定目录下新建了一个配置文件，内容如下&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;intelpython&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;exclude &lt;span class=&quot;c&quot;&gt;# 这句排除了intelpython，可以自己进行设置，这里只是举了我的例子&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 那么source语句需要进行适当修改如下&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;source&lt;/span&gt; /opt/intel/oneapi/setvars.sh &lt;span class=&quot;nt&quot;&gt;--config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/opt/intel/oneapi/config.txt&quot;&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;## 其他例子如下&lt;/span&gt;
-mkl &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 1.1 &lt;span class=&quot;c&quot;&gt;# 指定使用的mkl版本，如果不指定默认使用最新版本&lt;/span&gt;
-default &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; exclude &lt;span class=&quot;c&quot;&gt;# 指定默认为排除所有，如果不设置的话默认添加所有工具包&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;## 去除命令行echo输出&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# source setvars.sh后每次命令行会出现很多反馈，如果像我一样强迫症不希望显示的话可以这样修改source语句&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;source&lt;/span&gt; /opt/intel/oneapi/setvars.sh &lt;span class=&quot;nt&quot;&gt;--config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/opt/intel/oneapi/config.txt&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; /dev/null
-&lt;span class=&quot;c&quot;&gt;# /dev/null 是类Unix系统中的一个特殊文件设备，他的作用是接受一切输入它的数据并丢弃这些数据。通常被当做垃圾桶来用。&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;如何使用&quot;&gt;如何使用&lt;/h2&gt;
-
-&lt;h3 id=&quot;命令行编译&quot;&gt;命令行编译&lt;/h3&gt;
-
-&lt;div class=&quot;language-c highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include &quot;mkl.h&quot;
-&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;// 首先include头文件，具体编译选项非常复杂，参考下方网站进行补充&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;https://software.intel.com/content/www/us/en/develop/tools/oneapi/components/onemkl/link-line-advisor.html&lt;/p&gt;
-
-&lt;h3 id=&quot;使用cmake&quot;&gt;使用Cmake&lt;/h3&gt;
-
-&lt;div class=&quot;language-cmake highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# CMakeLists.txt&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;cmake_minimum_required&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;VERSION 3.0.2&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;project&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;eigen_mkl&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# set(CMAKE_BUILD_TYPE &quot;Release&quot; )&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# set(CMAKE_BUILD_TYPE &quot;Debug&quot; )&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;CMAKE_CXX_FLAGS &lt;span class=&quot;s2&quot;&gt;&quot;-O3&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# include 头文件&lt;/span&gt;
-include_directories
-  &lt;span class=&quot;si&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;catkin_INCLUDE_DIRS&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;
-  /opt/intel/oneapi/mkl/latest/include/
-&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# 链接库目录&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;link_directories&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-  &lt;span class=&quot;si&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;catkin_LIB_DIRS&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;
-  /opt/intel/oneapi/mkl/latest/lib/
- &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
- 
-&lt;span class=&quot;c1&quot;&gt;## 文件名是eigen_mkl.cpp&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;add_executable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;eigen_mkl src/eigen_mkl.cpp&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# 链接具体的库 libmkl_rt，注意.so是动态库，当然也可以选择静态库，不过文件会大些但更稳定。&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;target_link_libraries&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;eigen_mkl
-libmkl_rt.so
-&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;简易教程&quot;&gt;简易教程&lt;/h2&gt;
-
-&lt;h3 id=&quot;mkl&quot;&gt;MKL&lt;/h3&gt;
-
-&lt;p&gt;MKL只在矩阵规模大（千维以上）时才有明显收益，矩阵规模小的话使用Eigen3基本性能和MKL差不多，编译时加上”-O3”就能达到理想速度了。Eigen3逊色于MKL之处大概在于单线程与多线程之差，如果矩阵规模小的话可能收益都不足以填补数据同步的开销。&lt;/p&gt;
-
-&lt;div class=&quot;language-c++ highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// 设置MKL运行的线程数，mkl_set_num_threads()&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;mkl_set_num_threads&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 我的cpu 6核12线程，实测下来6时性能最好&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// 构建矩阵&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mkl_malloc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;row&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;col&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;sizeof&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;64&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//64位&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//释放矩阵内存&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;mkl_free&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;一些BLAS的基本矩阵运算指令可以参看 netlib 网站 http://www.netlib.org/blas/index.html#_cblas&lt;/p&gt;
-
-&lt;h3 id=&quot;利用mkl为eigen3加速&quot;&gt;利用MKL为eigen3加速&lt;/h3&gt;
-
-&lt;p&gt;因为MKL的指令较为复杂，通过eigen调用会友好很多，当然也可以自己写一个Matrix类&lt;/p&gt;
-
-&lt;p&gt;https://eigen.tuxfamily.org/dox/TopicUsingIntelMKL.html&lt;/p&gt;
-
-&lt;div class=&quot;language-c++ highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;//在使用eigen的文件中都添加以下宏&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#define EIGEN_USE_MKL_ALL
-&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//具体链接库的操作可以回看上方 如何使用 章节&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;mpi&quot;&gt;MPI&lt;/h3&gt;
-
-&lt;p&gt;https://mpitutorial.com/&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 编译&lt;/span&gt;
-mpicc mpi.c &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; mpi
-&lt;span class=&quot;c&quot;&gt;## 运行&lt;/span&gt;
-mpirun &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; 4 ./mpi  &lt;span class=&quot;c&quot;&gt;## 其中4是节点的线程数&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-</description>
-        <pubDate>Tue, 03 Aug 2021 00:00:00 +0800</pubDate>
-        <link>https://Chen-WH.github.io/2021/08/03/oneAPI/</link>
-        <guid isPermaLink="true">https://Chen-WH.github.io/2021/08/03/oneAPI/</guid>
-        
-        <category>Note</category>
         
         
       </item>
