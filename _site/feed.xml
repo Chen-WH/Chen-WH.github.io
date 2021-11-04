@@ -5,41 +5,37 @@
     <description>人难免天生有自怜的情绪，唯有时刻保持清醒，才能看清真正的价值在哪里。</description>
     <link>https://Chen-WH.github.io/</link>
     <atom:link href="https://Chen-WH.github.io/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 28 Oct 2021 15:20:20 +0800</pubDate>
-    <lastBuildDate>Thu, 28 Oct 2021 15:20:20 +0800</lastBuildDate>
+    <pubDate>Thu, 04 Nov 2021 19:10:22 +0800</pubDate>
+    <lastBuildDate>Thu, 04 Nov 2021 19:10:22 +0800</lastBuildDate>
     <generator>Jekyll v4.2.0</generator>
     
       <item>
-        <title>Formation_control</title>
-        <description>&lt;h1 id=&quot;图刚性与编队控制&quot;&gt;图刚性与编队控制&lt;/h1&gt;
-
-</description>
-        <pubDate>Wed, 27 Oct 2021 00:00:00 +0800</pubDate>
-        <link>https://Chen-WH.github.io/2021/10/27/Formation_Control/</link>
-        <guid isPermaLink="true">https://Chen-WH.github.io/2021/10/27/Formation_Control/</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>Zotero</title>
+        <title>Cloud_computing_model</title>
         <description>
-</description>
-        <pubDate>Tue, 26 Oct 2021 00:00:00 +0800</pubDate>
-        <link>https://Chen-WH.github.io/2021/10/26/Zotero/</link>
-        <guid isPermaLink="true">https://Chen-WH.github.io/2021/10/26/Zotero/</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>Cg</title>
-        <description>&lt;h1 id=&quot;conjugate-gradient-method&quot;&gt;Conjugate gradient method&lt;/h1&gt;
+&lt;hr /&gt;
+&lt;p&gt;layout:     post
+title:      云计算服务模型
+subtitle:   云计算技术3
+date:       2021-10-29
+author:     ChenWH 
+header-img: img/MoonJellyDay.jpg
+catalog:   true
+tags:&lt;/p&gt;
 
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- Cloud Computing
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;云计算服务模型&quot;&gt;云计算服务模型&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/Chen-WH/PicGo/main/Typora/202111041827565.png&quot; alt=&quot;image-20211029131849645&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;MoonJellyDay.jpg&lt;/p&gt;
 </description>
-        <pubDate>Tue, 26 Oct 2021 00:00:00 +0800</pubDate>
-        <link>https://Chen-WH.github.io/2021/10/26/CG/</link>
-        <guid isPermaLink="true">https://Chen-WH.github.io/2021/10/26/CG/</guid>
+        <pubDate>Fri, 29 Oct 2021 00:00:00 +0800</pubDate>
+        <link>https://Chen-WH.github.io/2021/10/29/Cloud_computing_model/</link>
+        <guid isPermaLink="true">https://Chen-WH.github.io/2021/10/29/Cloud_computing_model/</guid>
         
         
       </item>
@@ -62,6 +58,18 @@
   &lt;li&gt;一个虚拟机的克隆就是原始虚拟机全部数据的一个拷贝，克隆的操作一但完成，克隆的虚拟机就可以脱离原始虚拟机独立存在，而且克隆的虚拟机和原始虚拟机完全独立，不共享任何资源。&lt;/li&gt;
   &lt;li&gt;虚拟机的快照指对某一个特定文件系统在某一个特定时间内的一个具有只读属性的镜像。快照时复制一份原磁盘的索引，指向的实际数据均为原始磁盘的数据，只有当原镜像的的数据发生变化时，才将变化区域的在变化之前的数据复制一份给快照对应位置。&lt;/li&gt;
   &lt;li&gt;快照和克隆都是某一时间点的镜像，区别在于快照只能读，而克隆可以写。快照仅能用于同一虚拟机不同时间点之间跳转，因为它保存的是原始磁盘数据的索引，有些类似git的commit操作；而虚拟机克隆储存了所有数据，可以进行新的部署。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;关于裸金属&quot;&gt;关于裸金属&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/Chen-WH/PicGo/main/Typora/202111041855822.png&quot; alt=&quot;image-20211029134118126&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;根据 wiki 的解释，裸金属是指可以不经过操作系统干预的情况下，直接在逻辑硬件上执行指令。Bare，正是强调了直面硬件，中间并无遮拦。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;安全方面：裸金属服务器具有安全物理隔离的特性，裸金属服务器与其他租户物理隔离。&lt;/li&gt;
+  &lt;li&gt;性能方面：裸金属资源完全独占，完全没有性能损耗，能够胜任高 IO 应用、高性能计算等业务，例如海量数据采集和挖掘，高性能数据库，大型在线游戏等。&lt;/li&gt;
+  &lt;li&gt;弹性和自动化：除了裸金属的固有特性，裸金属云完全继承了虚拟化云服务器的 &lt;strong&gt;云&lt;/strong&gt; 特性，例如，快速交付，弹性伸缩等，并且整个过程都是自动化管理。唯一的差距在于相对于虚机和容器的秒级响应，裸金属是分钟级别的响应。&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;全虚拟化半虚拟化硬件辅助虚拟化三者之间的区别&quot;&gt;全虚拟化、半虚拟化、硬件辅助虚拟化三者之间的区别。&lt;/h2&gt;
@@ -141,19 +149,6 @@
         <guid isPermaLink="true">https://Chen-WH.github.io/2021/10/16/Babble1/</guid>
         
         <category>Article</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>OpenBLAS和LAPACK学习笔记</title>
-        <description>&lt;p&gt;真正重要的从来不是什么机遇，而是你选择迈出那一步。能改变自己的人，只有你自己。&lt;/p&gt;
-</description>
-        <pubDate>Fri, 08 Oct 2021 00:00:00 +0800</pubDate>
-        <link>https://Chen-WH.github.io/2021/10/08/Babble2/</link>
-        <guid isPermaLink="true">https://Chen-WH.github.io/2021/10/08/Babble2/</guid>
-        
-        <category>Note</category>
         
         
       </item>
@@ -600,6 +595,343 @@ normal
         <guid isPermaLink="true">https://Chen-WH.github.io/2021/09/08/FFT/</guid>
         
         <category>Math</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>ML读书随笔</title>
+        <description>&lt;h1 id=&quot;machine-learning&quot;&gt;Machine Learning&lt;/h1&gt;
+
+&lt;h2 id=&quot;多变量线性回归&quot;&gt;多变量线性回归&lt;/h2&gt;
+
+&lt;h3 id=&quot;正规方程&quot;&gt;正规方程&lt;/h3&gt;
+
+\[\begin{aligned}
+	&amp;amp;&amp;amp; &amp;amp;\theta=(X^TX)^{-1}X^Ty\\
+	&amp;amp;s.t.&amp;amp; &amp;amp;训练集特征矩阵为X，训练集结果为向量y\\
+\end{aligned}\]
+
+&lt;h3 id=&quot;正规方程推导过程&quot;&gt;正规方程推导过程&lt;/h3&gt;
+
+\[\begin{aligned}
+	&amp;amp;首先变换&amp;amp; J(\theta)&amp;amp;=\frac{1}{2}(X\theta-y)^T(X\theta-y)\\
+	&amp;amp;&amp;amp; &amp;amp;=\frac{1}{2}(\theta^TX^TX\theta-\theta^TX^Ty-y^TX\theta-y^Ty)\\
+	&amp;amp;矩阵求导法则&amp;amp; &amp;amp;\frac{\mathbf{d}AB}{\mathbf{d}B}=A^T&amp;amp; &amp;amp;\frac{\mathbf{d}X^TAX}{\mathbf{d}X}=2AX\\
+	&amp;amp;得到&amp;amp; \frac{\partial{J(\theta)}}{\partial \theta}&amp;amp;=\frac{1}{2}(2X^TX\theta-X^Ty)
+\end{aligned}\]
+
+</description>
+        <pubDate>Sat, 04 Sep 2021 00:00:00 +0800</pubDate>
+        <link>https://Chen-WH.github.io/2021/09/04/ML/</link>
+        <guid isPermaLink="true">https://Chen-WH.github.io/2021/09/04/ML/</guid>
+        
+        <category>Essay</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>HTML学习笔记</title>
+        <description>&lt;h1 id=&quot;html&quot;&gt;HTML&lt;/h1&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   标题   --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;h1&amp;gt;&lt;/span&gt;This is a heading&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h1&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;h2&amp;gt;&lt;/span&gt;This is a heading&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h2&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;h3&amp;gt;&lt;/span&gt;This is a heading&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h3&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   段落   --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;This is a paragraph.&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;This is another paragraph.&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   链接   --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3school.com.cn&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;This is a link&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3school.com.cn/&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;target=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;_blank&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Visit W3School!&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
+如果把链接的 target 属性设置为 &quot;_blank&quot;，该链接会在新窗口中打开。
+&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   图像   --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;img&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;w3school.jpg&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;width=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;104&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;height=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;142&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   水平线   --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;hr&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   换行   --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;br&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   元素样式   --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;p&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;style=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;font-family:times;color:green;font-size:30px&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;This text is in Times and green&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+&quot;background-color:yellow&quot;
+&quot;text-align:center&quot;
+
+&lt;span class=&quot;c&quot;&gt;&amp;lt;!----------------&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;b&amp;gt;&lt;/span&gt;This text is bold&lt;span class=&quot;nt&quot;&gt;&amp;lt;/b&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;strong&amp;gt;&lt;/span&gt;This text is strong&lt;span class=&quot;nt&quot;&gt;&amp;lt;/strong&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;big&amp;gt;&lt;/span&gt;This text is big&lt;span class=&quot;nt&quot;&gt;&amp;lt;/big&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;em&amp;gt;&lt;/span&gt;This text is emphasized&lt;span class=&quot;nt&quot;&gt;&amp;lt;/em&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;i&amp;gt;&lt;/span&gt;This text is italic&lt;span class=&quot;nt&quot;&gt;&amp;lt;/i&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;small&amp;gt;&lt;/span&gt;This text is small&lt;span class=&quot;nt&quot;&gt;&amp;lt;/small&amp;gt;&lt;/span&gt;
+
+This text contains&lt;span class=&quot;nt&quot;&gt;&amp;lt;sub&amp;gt;&lt;/span&gt;subscript&lt;span class=&quot;nt&quot;&gt;&amp;lt;/sub&amp;gt;&lt;/span&gt;
+
+This text contains&lt;span class=&quot;nt&quot;&gt;&amp;lt;sup&amp;gt;&lt;/span&gt;superscript&lt;span class=&quot;nt&quot;&gt;&amp;lt;/sup&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;pre&amp;gt;&lt;/span&gt;
+这是
+预格式文本。
+它保留了      空格
+和换行。
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/pre&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   外部样式   --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;stylesheet&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text/css&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;mystyle.css&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   图片作为链接   --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/example/html/lastpage.html&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;img&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;border=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;0&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/i/eg_buttonnext.gif&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;tips&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;基本的注意事项 - 有用的提示&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;#tips&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;有用的提示&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;&amp;lt;!--也可以在其他页面中创建指向该锚的链接--&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3school.com.cn/html/html_links.asp#tips&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;有用的提示&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;在未来 HTML 版本中强制使用小写。&lt;/li&gt;
+  &lt;li&gt;浏览器会移除&lt;em&gt;源代码中&lt;/em&gt;多余的空格和空行。所有连续的空格或空行都会被算作一个空格。&lt;/li&gt;
+&lt;/ol&gt;
+
+</description>
+        <pubDate>Wed, 01 Sep 2021 00:00:00 +0800</pubDate>
+        <link>https://Chen-WH.github.io/2021/09/01/HTML/</link>
+        <guid isPermaLink="true">https://Chen-WH.github.io/2021/09/01/HTML/</guid>
+        
+        <category>Web</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Git笔记</title>
+        <description>&lt;h1 id=&quot;git教程&quot;&gt;Git教程&lt;/h1&gt;
+
+&lt;h2 id=&quot;时光机穿梭&quot;&gt;时光机穿梭&lt;/h2&gt;
+
+&lt;h3 id=&quot;工作区和暂存区&quot;&gt;工作区和暂存区&lt;/h3&gt;
+
+&lt;p&gt;第一步是用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git add&lt;/code&gt;把文件添加进去，实际上就是把文件修改添加到暂存区；&lt;/p&gt;
+
+&lt;p&gt;第二步是用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git commit&lt;/code&gt;提交更改，实际上就是把暂存区的所有内容提交到当前分支。&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;## 添加全局配置&lt;/span&gt;
+git config &lt;span class=&quot;nt&quot;&gt;--global&lt;/span&gt; user.email &lt;span class=&quot;s2&quot;&gt;&quot;1773904345@qq.com&quot;&lt;/span&gt;
+git config &lt;span class=&quot;nt&quot;&gt;--global&lt;/span&gt; user.name &lt;span class=&quot;s2&quot;&gt;&quot;ChenWH&quot;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;## 创建版本库&lt;/span&gt;
+git init &lt;span class=&quot;c&quot;&gt;# 初始化&lt;/span&gt;
+git add read.txt &lt;span class=&quot;c&quot;&gt;# 把文件添加到仓库&lt;/span&gt;
+git commit &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;wrote a readme file&quot;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# 把文件提交到仓库&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# 为什么Git添加文件需要 add，commit 一共两步呢？因为 commit 可以一次提交很多文件，所以你可以多次 add 不同的文件，比如：&lt;/span&gt;
+
+git add file1.txt
+git add file2.txt file3.txt
+git &lt;span class=&quot;nb&quot;&gt;rm &lt;/span&gt;test.txt &lt;span class=&quot;c&quot;&gt;# 删除文件&lt;/span&gt;
+git commit &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;add 3 files.&quot;&lt;/span&gt;
+
+git status &lt;span class=&quot;c&quot;&gt;# 查看仓库状态&lt;/span&gt;
+git diff &lt;span class=&quot;c&quot;&gt;# 查看修改内容&lt;/span&gt;
+git log &lt;span class=&quot;c&quot;&gt;# 查看提交日志&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# 在 Git 中，用 HEAD 表示当前版本，也就是最新的提交1094adb...（注意我的提交ID和你的肯定不一样），上一个版本就是 HEAD^ ，上上一个版本就是 HEAD^^ ，当然往上100个版本写100个^比较容易数不过来，所以写成 HEAD~100 。&lt;/span&gt;
+
+git reset &lt;span class=&quot;nt&quot;&gt;--hard&lt;/span&gt; HEAD^ &lt;span class=&quot;c&quot;&gt;# 回溯&lt;/span&gt;
+git reset &lt;span class=&quot;nt&quot;&gt;--hard&lt;/span&gt; 1094a &lt;span class=&quot;c&quot;&gt;# 取消回溯&lt;/span&gt;
+git reflog &lt;span class=&quot;c&quot;&gt;# 查看命令历史，便于获取commit id&lt;/span&gt;
+git checkout &lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt; readme.txt &lt;span class=&quot;c&quot;&gt;# 让工作区文件回到最近一次git commit或git add时的状态&lt;/span&gt;
+git reset HEAD readme.txt &lt;span class=&quot;c&quot;&gt;# 可以把暂存区的修改撤销掉（unstage），重新放回工作区&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;远程仓库&quot;&gt;远程仓库&lt;/h2&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;## 添加 SSH key&lt;/span&gt;
+ssh-keygen &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; rsa &lt;span class=&quot;nt&quot;&gt;-C&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;youremail@example.com&quot;&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 如果一切顺利的话，可以在用户主目录里找到.ssh目录，里面有id_rsa和id_rsa.pub两个文件，这两个就是SSH Key的秘钥对，id_rsa是私钥，不能泄露出去，id_rsa.pub是公钥，可以放心地告诉任何人。&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;## 登录GitHub&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 登陆GitHub，打开“Account settings”，“SSH Keys”页面，然后，点“Add SSH Key”，填上任意Title，在Key文本框里粘贴id_rsa.pub文件的内容&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;添加远程库&quot;&gt;添加远程库&lt;/h3&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 登陆GitHub，然后，在右上角找到“Create a new repo”按钮，创建一个新的仓库&lt;/span&gt;
+git remote add origin git@github.com:Spectre1229/learning.git
+&lt;span class=&quot;c&quot;&gt;# 添加后，远程库的名字就是origin，这是Git默认的叫法，也可以改成别的&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# 把本地库的内容推送到远程，实际上是把当前分支master推送到远程。&lt;/span&gt;
+git push &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt; origin master
+&lt;span class=&quot;c&quot;&gt;# 由于远程库是空的，我们第一次推送master分支时，加上了-u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令。&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 后续提交只需要&lt;/span&gt;
+git push origin master  / git push origin main
+&lt;span class=&quot;c&quot;&gt;## 注意github创建的所有新的源代码仓库将默认被命名为 “main”，而不是原先的&quot;master&quot;。&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 删除远程库&lt;/span&gt;
+git remote &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# 查看远程库信息&lt;/span&gt;
+git remote &lt;span class=&quot;nb&quot;&gt;rm &lt;/span&gt;origin &lt;span class=&quot;c&quot;&gt;# 然后，根据名字删除，比如删除origin&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 此处的“删除”其实是解除了本地和远程的绑定关系，并不是物理上删除了远程库。远程库本身并没有任何改动。要真正删除远程库，需要登录到GitHub，在后台页面找到删除按钮再删除。&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;从远程库克隆&quot;&gt;从远程库克隆&lt;/h3&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone git@github.com:Spectre1229/SQP.git &lt;span class=&quot;c&quot;&gt;# ssh协议clone&lt;/span&gt;
+git clone https://github.com/michaelliao/gitskills.git &lt;span class=&quot;c&quot;&gt;# https协议&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;分支管理&quot;&gt;分支管理&lt;/h2&gt;
+
+&lt;h3 id=&quot;创建与合并分支&quot;&gt;创建与合并分支&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;每次提交，Git都把它们串成一条时间线，这条时间线就是一个分支。截止到目前，只有一条时间线，在Git里，这个分支叫主分支，即master分支。HEAD严格来说不是指向提交，而是指向master，master才是指向提交的，所以，HEAD指向的就是当前分支。&lt;/li&gt;
+  &lt;li&gt;一开始的时候，master分支是一条线，Git用master指向最新的提交，再用HEAD指向master，就能确定当前分支，以及当前分支的提交点。&lt;/li&gt;
+  &lt;li&gt;每次提交，master分支都会向前移动一步，这样，随着你不断提交，master分支的线也越来越长。
+当我们创建新的分支，例如dev时，Git新建了一个指针叫dev，指向master相同的提交，再把HEAD指向dev，就表示当前分支在dev上。&lt;/li&gt;
+  &lt;li&gt;Git创建一个分支很快，因为除了增加一个dev指针，改改HEAD的指向，工作区的文件都没有任何变化。&lt;/li&gt;
+  &lt;li&gt;不过，从现在开始，对工作区的修改和提交就是针对&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dev&lt;/code&gt;分支了，比如新提交一次后，&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dev&lt;/code&gt;指针往前移动一步，而&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;master&lt;/code&gt;指针不变。&lt;/li&gt;
+  &lt;li&gt;假如我们在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dev&lt;/code&gt;上的工作完成了，就可以把&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dev&lt;/code&gt;合并到&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;master&lt;/code&gt;上。Git怎么合并呢？最简单的方法，就是直接把&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;master&lt;/code&gt;指向&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dev&lt;/code&gt;的当前提交，就完成了合并。&lt;/li&gt;
+  &lt;li&gt;合并完分支后，甚至可以删除&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dev&lt;/code&gt;分支。删除&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dev&lt;/code&gt;分支就是把&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dev&lt;/code&gt;指针给删掉，删掉后，我们就剩下了一条&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;master&lt;/code&gt;分支。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git checkout &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; dev &lt;span class=&quot;c&quot;&gt;# 创建dev分支并切换到dev分支&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# git checkout 命令加上-b参数表示创建并切换，相当于以下两条命令 &lt;/span&gt;
+git branch dev &lt;span class=&quot;c&quot;&gt;# 创建dev&lt;/span&gt;
+git checkout dev &lt;span class=&quot;c&quot;&gt;# 切换至dev&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 新版Git使用 git switch -c dev 以及 git switch master&lt;/span&gt;
+git branch &lt;span class=&quot;c&quot;&gt;# 查看当前分支&lt;/span&gt;
+git merge dev &lt;span class=&quot;c&quot;&gt;# dev合并至当前分支&lt;/span&gt;
+git branch &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; dev &lt;span class=&quot;c&quot;&gt;# 删除dev分支&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;解决冲突&quot;&gt;解决冲突&lt;/h3&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git log &lt;span class=&quot;nt&quot;&gt;--graph&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--pretty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;oneline &lt;span class=&quot;nt&quot;&gt;--abbrev-commit&lt;/span&gt;
+git log &lt;span class=&quot;nt&quot;&gt;--graph&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# 查看分支合并图&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;分支管理策略&quot;&gt;分支管理策略&lt;/h3&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Fast-forward 会直接将master指向dev的当前提交，但会损失分支信息，而且看不出合并的痕迹&lt;/span&gt;
+git merge &lt;span class=&quot;nt&quot;&gt;--no-ff&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;merge with no-ff&quot;&lt;/span&gt; dev
+&lt;span class=&quot;c&quot;&gt;#--no-ff参数，表示禁用Fast forward，因为本次合并要创建一个新的commit，所以加上-m参数，把commit描述写进去。&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;bug分支&quot;&gt;Bug分支&lt;/h3&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git stash &lt;span class=&quot;c&quot;&gt;# Git还提供了一个stash功能，可以把当前工作现场“储藏”起来，等以后恢复现场后继续工作&lt;/span&gt;
+git stash list
+&lt;span class=&quot;nt&quot;&gt;----&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; stash@&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;0&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;: WIP on dev: f52c633 add merge
+git stash apply &lt;span class=&quot;c&quot;&gt;# 恢复stash到dev&lt;/span&gt;
+git stash apply stash@&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;0&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# 恢复指定stash&lt;/span&gt;
+git stash drop &lt;span class=&quot;c&quot;&gt;# 删除stash内容&lt;/span&gt;
+git stash pop &lt;span class=&quot;c&quot;&gt;# 恢复并删除stash内容&lt;/span&gt;
+
+git cherry-pick 4c805e2 &lt;span class=&quot;c&quot;&gt;# 复制一个特定的提交到当前分支&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;feature分支&quot;&gt;Feature分支&lt;/h3&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git branch &lt;span class=&quot;nt&quot;&gt;-D&lt;/span&gt; feature-vulcan &lt;span class=&quot;c&quot;&gt;# 丢弃一个没有被合并过的分支&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;多人协作&quot;&gt;多人协作&lt;/h3&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git checkout &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; dev origin/dev &lt;span class=&quot;c&quot;&gt;# 创建远程origin的dev分支到本地&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;## 如果你的小伙伴已经向origin/dev分支推送了他的提交，而碰巧你也对同样的文件作了修改，并试图推送&lt;/span&gt;
+git branch &lt;span class=&quot;nt&quot;&gt;--set-upstream-to&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;origin/dev dev &lt;span class=&quot;c&quot;&gt;# 如果git pull提示no tracking information，则说明本地分支和远程分支的链接关系没有创建，先指定本地dev分支与远程origin/dev分支的链接&lt;/span&gt;
+git pull &lt;span class=&quot;c&quot;&gt;# 而后抓取最新的提交&lt;/span&gt;
+git commit &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;fix env conflict&quot;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# 提交本地修改&lt;/span&gt;
+git push origin dev &lt;span class=&quot;c&quot;&gt;# &lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;rebase&quot;&gt;Rebase&lt;/h3&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git rebase &lt;span class=&quot;c&quot;&gt;# 把分叉的提交历史“整理”成一条直线&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;标签管理&quot;&gt;标签管理&lt;/h2&gt;
+
+&lt;p&gt;tag就是一个让人容易记住的有意义的名字，它跟某个commit绑在一起。&lt;/p&gt;
+
+&lt;h3 id=&quot;创建标签&quot;&gt;创建标签&lt;/h3&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git tag v1.0 &lt;span class=&quot;c&quot;&gt;# 打标签，默认标签打在最新提交的commit&lt;/span&gt;
+git tag v0.9 f52c633 &lt;span class=&quot;c&quot;&gt;# 给指定commit打标签&lt;/span&gt;
+git tag &lt;span class=&quot;c&quot;&gt;# 查看所有标签，标签不是按时间顺序列出，而是按字母排序的。&lt;/span&gt;
+git show v0.9 &lt;span class=&quot;c&quot;&gt;# 查看标签信息&lt;/span&gt;
+git tag &lt;span class=&quot;nt&quot;&gt;-a&lt;/span&gt; v0.1 &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;version 0.1 released&quot;&lt;/span&gt; 1094adb &lt;span class=&quot;c&quot;&gt;# 创建带有说明的标签，用-a指定标签名，-m指定说明文字&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;操作标签&quot;&gt;操作标签&lt;/h3&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git tag &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; v0.1 &lt;span class=&quot;c&quot;&gt;# 删除标签&lt;/span&gt;
+git push origin v1.0 &lt;span class=&quot;c&quot;&gt;# 推送某个标签到远程&lt;/span&gt;
+git push origin &lt;span class=&quot;nt&quot;&gt;--tags&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# 一次性推送全部未推送的本地标签&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;## 删除已推送的标签&lt;/span&gt;
+git tag &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; v0.9 &lt;span class=&quot;c&quot;&gt;# 先删除本地标签&lt;/span&gt;
+git push origin :refs/tags/v0.9 &lt;span class=&quot;c&quot;&gt;# 从远程删除&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;使用github&quot;&gt;使用GitHub&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;点“Fork”在自己的账号下克隆了一个仓库，然后，从自己的账号下clone&lt;/li&gt;
+  &lt;li&gt;一定要从自己的账号下clone仓库，这样你才能推送修改。如果从bootstrap的作者的仓库地址&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git@github.com:twbs/bootstrap.git&lt;/code&gt;克隆，因为没有权限，你将不能推送修改。&lt;/li&gt;
+  &lt;li&gt;如果你希望bootstrap的官方库能接受你的修改，你就可以在GitHub上发起一个pull request。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;使用gitee&quot;&gt;使用Gitee&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;使用多个远程库时，我们要注意，git给远程库起的默认名称是&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;origin&lt;/code&gt;，如果有多个远程库，我们需要用不同的名称来标识不同的远程库。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;自定义git&quot;&gt;自定义Git&lt;/h2&gt;
+
+&lt;h3 id=&quot;忽略特殊文件&quot;&gt;忽略特殊文件&lt;/h3&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 忽略某些文件时，需要编写.gitignore&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 检验.gitignore的标准是git status命令是不是说working directory clean&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# .gitignore文件本身要放到版本库里，并且可以对.gitignore做版本管理&lt;/span&gt;
+git add App.class &lt;span class=&quot;c&quot;&gt;# 添加文件到Git&lt;/span&gt;
+git add &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; App.class &lt;span class=&quot;c&quot;&gt;# 强制添加到Git&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;## .gitignore文件内容示例&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 排除所有.开头的隐藏文件:&lt;/span&gt;
+.&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 排除所有.class文件:&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;.class
+&lt;span class=&quot;c&quot;&gt;# 不排除.gitignore和App.class:&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;.gitignore
+&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;App.class
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+</description>
+        <pubDate>Fri, 27 Aug 2021 00:00:00 +0800</pubDate>
+        <link>https://Chen-WH.github.io/2021/08/27/Git/</link>
+        <guid isPermaLink="true">https://Chen-WH.github.io/2021/08/27/Git/</guid>
+        
+        <category>Coding</category>
         
         
       </item>

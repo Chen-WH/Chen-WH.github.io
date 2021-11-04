@@ -233,6 +233,18 @@
   <li>快照和克隆都是某一时间点的镜像，区别在于快照只能读，而克隆可以写。快照仅能用于同一虚拟机不同时间点之间跳转，因为它保存的是原始磁盘数据的索引，有些类似git的commit操作；而虚拟机克隆储存了所有数据，可以进行新的部署。</li>
 </ul>
 
+<h2 id="关于裸金属">关于裸金属</h2>
+
+<p><img src="https://raw.githubusercontent.com/Chen-WH/PicGo/main/Typora/202111041855822.png" alt="image-20211029134118126" /></p>
+
+<p>根据 wiki 的解释，裸金属是指可以不经过操作系统干预的情况下，直接在逻辑硬件上执行指令。Bare，正是强调了直面硬件，中间并无遮拦。</p>
+
+<ul>
+  <li>安全方面：裸金属服务器具有安全物理隔离的特性，裸金属服务器与其他租户物理隔离。</li>
+  <li>性能方面：裸金属资源完全独占，完全没有性能损耗，能够胜任高 IO 应用、高性能计算等业务，例如海量数据采集和挖掘，高性能数据库，大型在线游戏等。</li>
+  <li>弹性和自动化：除了裸金属的固有特性，裸金属云完全继承了虚拟化云服务器的 <strong>云</strong> 特性，例如，快速交付，弹性伸缩等，并且整个过程都是自动化管理。唯一的差距在于相对于虚机和容器的秒级响应，裸金属是分钟级别的响应。</li>
+</ul>
+
 <h2 id="全虚拟化半虚拟化硬件辅助虚拟化三者之间的区别">全虚拟化、半虚拟化、硬件辅助虚拟化三者之间的区别。</h2>
 
 <ul>
@@ -301,9 +313,9 @@
                     
                     
                     <li class="next">
-                        <a href="/2021/10/26/CG/" data-toggle="tooltip" data-placement="top" title="Cg">
+                        <a href="/2021/10/29/Cloud_computing_model/" data-toggle="tooltip" data-placement="top" title="Cloud_computing_model">
                         Next<br>
-                        <span>Cg</span>
+                        <span>Cloud_computing_model</span>
                         </a>
                     </li>
                     
@@ -375,7 +387,7 @@
                             
         				
                             
-                				<a href="/2-tags/#Note" title="Note" rel="5">
+                				<a href="/2-tags/#Note" title="Note" rel="4">
                                     Note
                                 </a>
                             
