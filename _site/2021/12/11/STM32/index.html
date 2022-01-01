@@ -10,7 +10,7 @@
     <meta name="keywords"  content="待办事项, 学习笔记, 思考随笔">
     <meta name="theme-color" content="#000000">
     
-    <title>GPM - 思过崖 - 晴耕三亩，雨读千年。</title>
+    <title>STM32学习笔记 - 思过崖 - 晴耕三亩，雨读千年。</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -22,7 +22,7 @@
     <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://Chen-WH.github.io/2021/04/24/GPM/">
+    <link rel="canonical" href="https://Chen-WH.github.io/2021/12/11/STM32/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -168,13 +168,13 @@
 
     <!-- Image to hack wechat -->
 <!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
-<!-- <img src="/img/the-first.png" width="0" height="0"> -->
+<!-- <img src="/img/WesterheverLight.jpg" width="0" height="0"> -->
 
 <!-- Post Header -->
 <style type="text/css">
     header.intro-header{
         position: relative;
-        background-image: url('/img/the-first.png')
+        background-image: url('/img/WesterheverLight.jpg')
     }
 
     
@@ -187,15 +187,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/2-tags/#Math" title="Math">Math</a>
+                        <a class="tag" href="/2-tags/#Note" title="Note">Note</a>
                         
                     </div>
-                    <h1>GPM</h1>
+                    <h1>STM32学习笔记</h1>
                     
                     
-                    <h2 class="subheading">高斯伪谱法</h2>
+                    <h2 class="subheading"></h2>
                     
-                    <span class="meta">Posted by ChenWH on April 24, 2021</span>
+                    <span class="meta">Posted by ChenWH on December 11, 2021</span>
 										<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 										<span id="busuanzi_container_page_pv">本文总阅读量<span id="busuanzi_value_page_pv"></span>次</span>
 								</div>
@@ -215,69 +215,207 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-				<h1 id="gpm">GPM</h1>
+				<h1 id="stm32">STM32</h1>
 
-<hr />
-<h2 id="问题陈述">问题陈述</h2>
-
-\[\min\ J=\int_0^{t_f}h(\boldsymbol{x}(t),\boldsymbol{u}(t),t)\boldsymbol{d}t\\
-s.t.\ \boldsymbol{\dot{x}}=\boldsymbol{f}(\boldsymbol{x}(t),\boldsymbol{u}(t),\boldsymbol{x}(0))=\boldsymbol{x_0}\\
-\text{式中：}\boldsymbol{\dot{x}}=\boldsymbol{f}(\boldsymbol{x}(t),\boldsymbol{u}(t))=[x_3,x_4,gu_2-c_1x_5,u_1-g-c_2x_5,gu_2-c_1x_5]^T\\
-h=\frac{1}{2}(u_1-g)^2+\frac{1}{2}u_2^2+k_1(x_1+3)^2+k_2(x_2+x_1u_2)^2\\
-t_f=2,g=9.8,k_1=k_2=50,c_1=1.5,c_2=0.38\]
-
-<hr />
-
-<h2 id="continuous-bolza-problem">Continuous Bolza Problem</h2>
-
-\[\begin{aligned}
-	&amp;J=\Phi\left[\mathbf{x}(-1), t_{0}, \mathbf{x}(1), t_{f}\right]+\frac{t_{f}-t_{0}}{2} \int_{-1}^{1} g\left[\mathbf{x}(\tau), \mathbf{u}(\tau), \tau ; t_{0}, t_{f}\right] \mathrm{d} \tau\ \ \ (目标函数)\\
-	&amp;\frac{\mathrm{d} \mathbf{x}}{\mathrm{d} \tau}=\frac{t_{f}-t_{0}}{2} \mathbf{f}\left[\mathbf{x}(\tau), \mathbf{u}(\tau), \tau ; t_{0}, t_{f}\right] \\
-	&amp;\phi\left[\mathbf{x}(-1), t_{0}, \mathbf{x}(1), t_{f}\right]=\mathbf{0} \in \mathbb{R}^{q}\ \ \ (边界约束) \\
-	&amp;\mathbf{C}\left[\mathbf{x}(\tau), \mathbf{u}(\tau), \tau ; t_{0}, t_{f}\right] \leq \mathbf{0} \in \mathbb{R}^{c}\ \ \ (路径约束)
-\end{aligned}\]
-
-<p>$\mathbf{x}(\tau)状态函数，\mathbf{u}(\tau)控制函数求取极值$</p>
-
-<hr />
-
-<h2 id="问题化简">问题化简</h2>
+<h2 id="installation">Installation</h2>
 
 <ol>
-  <li>拉格朗日插值多项式，化简$\mathbf{x}(\tau)和\mathbf{u}(\tau)$</li>
+  <li>安装STM32CubeMX</li>
+  <li>选择生成 makefile / STM32CubeIDE 版本的工程</li>
+  <li>配置 arm-none-eabi-gcc</li>
+  <li>安装 stlink / STM32Programmer</li>
 </ol>
 
-\[\begin{aligned}
-	&amp;\sum_{i=0}^{N} D_{k i} \mathbf{X}_{i}-\frac{t_{f}}{2} \mathbf{f}\left(\mathbf{X}_{k}, \mathbf{U}_{k}, \tau_{k} ; t_{0}, t_{f}\right)=\mathbf{0} \quad(k=1, \ldots, N)\\
-	
-\Longrightarrow&amp;\sum^{N}_{i=0}X_{\tau_{i}}\left[\sum^{N}_{l=0,l\not=i}\frac{\prod^{N}_{j=0,j\not=i,l}(\tau_{k}-\tau_{j})}{\prod^{N}_{j=0,j\not=i}(\tau_{i}-\tau_{j})} \right] -\frac{t_{f}}{2}X_{\tau_{k}}=0\\
-\end{aligned}\]
+<h2 id="boot-configuration">Boot configuration</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">BOOT 0</th>
+      <th style="text-align: center">BOOT 1</th>
+      <th style="text-align: center">启动方式</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">从用户闪存启动，这是正常的工作模式</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">从系统存储器启动，这种模式启动的程序功能由厂家设置</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">从内置SRAM启动，这种模式可以用于调试</td>
+    </tr>
+  </tbody>
+</table>
 
 <ol>
-  <li>计算微分逼近矩阵$D$和高斯权重$w$，其中LG点$\tau$由legendre多项式取零点得到</li>
+  <li>用户闪存 = 芯片内置的Flash。</li>
+  <li>SRAM = 芯片内置的RAM区，就是内存。</li>
+  <li>系统存储器 = 芯片内部一块特定的区域，芯片出厂时在这个区域预置了一段Bootloader，就是通常说的ISP程序。这个区域的内容在芯片出厂后没有人能够修改或擦除，即它是一个ROM区。一般来说，我们选用这种启动模式时，是为了从串口下载程序，因为在厂家提供的BootLoader中，提供了串口下载程序的固件，可以通过这个BootLoader将程序下载到系统的Flash中。</li>
 </ol>
 
-<p>\(D_{ki}=\sum^{N}_{l=0,l\not=i}\frac{\prod^{N}_{j=0,j\not=i,l}(\tau_{k}-\tau_{j})}{\prod^{N}_{j=0,j\not=i}(\tau_{i}-\tau_{j})}\\
-	w_{i}=\frac{2}{(1-\tau_{i}^2)\left[ P_n'(\tau_i)^2\right]},其中P_n(\tau)=\prod_{1\leq i\leq N}(\tau-\tau_i)\)
-\(\begin{aligned}
-	\mathbf{X}_{f} &amp;\equiv \mathbf{X}_{0}+\frac{t_{f}-t_{0}}{2} \sum_{k=1}^{N} w_{k} \mathbf{f}\left(\mathbf{X}_{k}, \mathbf{U}_{k}, \tau_{k} ; t_{0}, t_{f}\right)\\
-	J&amp;=\Phi\left(\mathbf{X}_{0}, t_{0}, \mathbf{X}_{f}, t_{f}\right)+\frac{t_{f}-t_{0}}{2} \sum_{k=1}^{N} w_{k} g\left(\mathbf{X}_{k}, \mathbf{U}_{k}, \tau_{k} ; t_{0}, t_{f}\right)
-\end{aligned}\)</p>
+<h2 id="download">Download</h2>
 
-<ol>
-  <li>原连续Bolza问题转化为NLP如下</li>
-</ol>
+<p>ST-Link / STM32CubeProgrammer</p>
 
-\[\begin{aligned}
-	min\ J&amp;=\frac{t_{f}}{2} w^T\left[ \frac{1}{2}(U_1-g)\odot(U_1-g)+\frac{1}{2}U_2\odot U_2+k_1(X_1+3)\odot(X_1+3)+k_2(X_1\odot U_2+X_2)\odot(X_1\odot U_2+X_2) \right]\\
-	s.t.&amp;D\widetilde X_1-\frac{t_f}{2}X_3=0 \\
-	&amp;D\widetilde X_2-\frac{t_f}{2}X_4=0\\
-	&amp;D\widetilde X_3-\frac{t_f}{2}(gU_2-c_1X_5)=0\\
-	&amp;D\widetilde X_4-\frac{t_f}{2}(U_1-g-c_2X_5)=0\\
-	&amp;D\widetilde X_5-\frac{t_f}{2}(gU_2-c_1X_5)=0\\
-\end{aligned}\]
+<p>每次烧录后记得重新上电开机才会运行！</p>
 
-<p>其中$\odot$为数组乘法,$\widetilde X_i$为$X$的拓展矩阵，即$\widetilde X_i=[X_{0,i};X_i]$</p>
+<h2 id="serial-port">Serial Port</h2>
+
+<h3 id="概念">概念</h3>
+
+<ul>
+  <li>并行通信：数据各个位同时传输，速度快，占用引脚资源多</li>
+  <li>串行通信：数据按位顺序传输，占用引脚资源少，速度相对较慢
+    <ul>
+      <li>单工：数据传输只支持数据在一个方向上传输</li>
+      <li>半双工：允许数据在两个方向上传输，但是，在某一时刻，只允许数据在一个方向上传输，它实际上是一种切换方向的单工通信</li>
+      <li>全双工：允许数据同时在两个方向上传输，因此，全双工通信是两个单工通信方式的结合，它要求发送设备和接收设备都有独立的接收和发送能力。</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="应用">应用</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 发送</span>
+<span class="kt">uint8_t</span> <span class="n">Test</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"Hello World !!!</span><span class="se">\r\n</span><span class="s">"</span><span class="p">;</span>          <span class="c1">// Data to send</span>
+<span class="n">HAL_UART_Transmit</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart1</span><span class="p">,</span><span class="n">Test</span><span class="p">,</span><span class="k">sizeof</span><span class="p">(</span><span class="n">Test</span><span class="p">),</span><span class="mi">10</span><span class="p">);</span> <span class="c1">// Sending in normal mode</span>
+<span class="n">HAL_Delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>                                 <span class="c1">// 延时1s</span>
+<span class="c1">// 接收</span>
+<span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>                                  <span class="c1">// 注意实际长度中有换行符</span>
+<span class="kt">uint8_t</span> <span class="n">Buffer</span><span class="p">[</span><span class="n">length</span><span class="p">];</span>                          <span class="c1">// 用来接收串口发送的数据</span>
+<span class="n">HAL_UART_Receive_IT</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart1</span><span class="p">,</span><span class="n">Buffer</span><span class="p">,</span><span class="n">length</span><span class="p">);</span>      <span class="c1">// Enable the USART1 Interrupt</span>
+
+<span class="kt">void</span> <span class="nf">HAL_UART_RxCpltCallback</span><span class="p">(</span><span class="n">UART_HandleTypeDef</span> <span class="o">*</span><span class="n">huart</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">HAL_UART_Transmit</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart1</span><span class="p">,</span><span class="n">Buffer</span><span class="p">,</span><span class="n">length</span><span class="p">,</span><span class="mi">100</span><span class="p">);</span> <span class="c1">// 接收到数据马上使用串口1发送出去</span>
+	<span class="n">HAL_UART_Receive_IT</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart1</span><span class="p">,</span><span class="n">Buffer</span><span class="p">,</span><span class="n">length</span><span class="p">);</span>   <span class="c1">// 重新使能串口1接收中断</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>https://blog.csdn.net/ouening/article/details/79218971</p>
+
+<p>PC端与开发板RX/TX分别互换相接</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 串口参数配置</span>
+<span class="c"># 设置了ttyUSB0设备的数据流格式为raw，波特率9600，-echo表示不回显输入字符（-号在选项前面表示否定），min 0 表示读取内容时最少读取0个字符， time 10 表示读取执行结果时的超时时间是10/10秒，如果为time 1则此超时时间为1/10秒。不设置读取的超时时间，读取操作不能自动结束。</span>
+<span class="nb">stty</span> <span class="nt">-F</span> /dev/ttyUSB0 raw speed 115200 <span class="nt">-echo</span> min 0 <span class="nb">time </span>10
+<span class="c"># 读取串口回显</span>
+<span class="nb">cat</span> /dev/ttyUSB0
+<span class="c"># 向串口写（输入）命令（数据）</span>
+<span class="nb">echo</span> <span class="nt">-e</span> <span class="s2">"数据"</span> <span class="o">&gt;</span> /dev/ttyUSB0
+<span class="c"># 按十六进制数据进行发送</span>
+<span class="nb">echo</span> <span class="nt">-e</span> <span class="nt">-n</span> <span class="s2">"</span><span class="se">\x</span><span class="s2">dd</span><span class="se">\x</span><span class="s2">ff"</span> <span class="o">&gt;</span> /dev/ttymxc0
+<span class="c"># minicom 参数设置</span>
+<span class="nb">sudo </span>minicom <span class="nt">-s</span> 
+</code></pre></div></div>
+
+<h2 id="gpio-io">GPIO I/O</h2>
+
+<p>IO输出是3.3V,但IO大部分都是可以容忍5V电压输入。一般在芯片手册的“引脚定义”章节可以查看到有FT标识表示该IO可以容忍5V电压输入。</p>
+
+<h3 id="配置输入输出">配置输入输出</h3>
+
+<p>No pull-up and no pull-down，浮空输入，配置为不上拉和下拉</p>
+
+<p>Output Open Drain，开漏输出，可以输出低电平    Output Push Pull，推挽输出，可以输出低电平和高电平</p>
+
+<h3 id="相关函数">相关函数</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 输出</span>
+<span class="n">HAL_GPIO_WritePin</span><span class="p">(</span><span class="n">GPIOA</span><span class="p">,</span> <span class="n">GPIO_PIN_10</span><span class="p">,</span> <span class="n">GPIO_PIN_SET</span><span class="p">);</span>  <span class="c1">// 高电平</span>
+<span class="n">HAL_GPIO_WritePin</span><span class="p">(</span><span class="n">GPIOA</span><span class="p">,</span> <span class="n">GPIO_PIN_10</span><span class="p">,</span> <span class="n">GPIO_PIN_RESET</span><span class="p">);</span>  <span class="c1">// 低电平</span>
+<span class="n">HAL_GPIO_WritePin</span><span class="p">(</span><span class="n">GPIOA</span><span class="p">,</span> <span class="n">DONG_OUT_1_Pin</span><span class="o">|</span><span class="n">DONG_OUT_2_Pin</span><span class="p">,</span> <span class="n">GPIO_PIN_RESET</span><span class="p">);</span>  <span class="c1">// 两个设置为低电平</span>
+<span class="c1">// 输入</span>
+<span class="n">GPIO_PinState</span> <span class="n">res</span><span class="o">=</span><span class="n">HAL_GPIO_ReadPin</span><span class="p">(</span><span class="n">DONG_IN_1_GPIO_Port</span><span class="p">,</span><span class="n">DONG_IN_1_Pin</span><span class="p">);</span><span class="c1">//读取电平</span>
+<span class="k">if</span><span class="p">(</span><span class="n">res</span><span class="o">==</span><span class="n">GPIO_PIN_RESET</span><span class="p">){</span>
+     <span class="n">HAL_GPIO_WritePin</span><span class="p">(</span><span class="n">GPIOA</span><span class="p">,</span> <span class="n">DONG_OUT_1_Pin</span><span class="o">|</span><span class="n">DONG_OUT_2_Pin</span><span class="p">,</span> <span class="n">GPIO_PIN_SET</span><span class="p">);</span><span class="c1">//两个设置为高电平</span>
+<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+     <span class="n">HAL_GPIO_WritePin</span><span class="p">(</span><span class="n">GPIOA</span><span class="p">,</span> <span class="n">DONG_OUT_1_Pin</span><span class="o">|</span><span class="n">DONG_OUT_2_Pin</span><span class="p">,</span> <span class="n">GPIO_PIN_RESET</span><span class="p">);</span><span class="c1">//两个设置为低电平</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="关于printf">关于printf</h2>
+
+<h3 id="重定向printf">重定向printf</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+</span>
+<span class="cp">#ifdef __GNUC__
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#else
+#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif
+</span>
+<span class="n">PUTCHAR_PROTOTYPE</span>
+<span class="p">{</span>
+	<span class="n">HAL_UART_Transmit</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart1</span><span class="p">,</span> <span class="p">(</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">ch</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">HAL_MAX_DELAY</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">ch</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>使用printf注意\n换行</strong></p>
+
+<h3 id="使用float">使用float</h3>
+
+<p>Project -&gt; Properties -&gt; C/C++ Build -&gt; settings -&gt; MCU settings -&gt; use float</p>
+
+<h2 id="da">D/A</h2>
+
+<ul>
+  <li>DO 数字信号 0/1 输出</li>
+  <li>AO 模拟信号</li>
+</ul>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// ADC</span>
+<span class="kt">uint16_t</span> <span class="n">adc_value</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">vol</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="n">HAL_ADC_Start</span><span class="p">(</span><span class="o">&amp;</span><span class="n">hadc1</span><span class="p">);</span>	                <span class="c1">//启动ADC单次转换</span>
+<span class="n">HAL_ADC_PollForConversion</span><span class="p">(</span><span class="o">&amp;</span><span class="n">hadc1</span><span class="p">,</span> <span class="mi">50</span><span class="p">);</span>	<span class="c1">//等待ADC转换完成</span>
+<span class="n">adc_value</span> <span class="o">=</span> <span class="n">HAL_ADC_GetValue</span><span class="p">(</span><span class="o">&amp;</span><span class="n">hadc1</span><span class="p">);</span> 	<span class="c1">//读取ADC转换数据</span>
+<span class="n">vol</span> <span class="o">=</span> <span class="p">((</span><span class="kt">double</span><span class="p">)</span><span class="n">adc_value</span><span class="o">/</span><span class="mi">4096</span><span class="p">)</span><span class="o">*</span><span class="mi">3</span><span class="p">.</span><span class="mi">3</span><span class="p">;</span>       <span class="c1">//电压转换</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">vol</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">.</span><span class="mi">65</span><span class="p">){</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">"低亮度 电压值vol = %.2fV</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">vol</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">else</span> <span class="p">{</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">"高亮度 电压值vol = %.2fV</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">vol</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// DAC</span>
+<span class="kt">uint16_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span>
+<span class="n">HAL_DAC_Start</span><span class="p">(</span><span class="o">&amp;</span><span class="n">hdac</span><span class="p">,</span> <span class="n">DAC_CHANNEL_1</span><span class="p">);</span>
+<span class="n">HAL_DAC_SetValue</span><span class="p">(</span><span class="o">&amp;</span><span class="n">hdac</span><span class="p">,</span> <span class="n">DAC_CHANNEL_1</span><span class="p">,</span> <span class="n">DAC_ALIGN_12B_R</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+<span class="n">HAL_Delay</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="gpio-引脚枚举">GPIO 引脚枚举</h2>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">typedef</span> <span class="k">struct</span><span class="p">{</span>
+  <span class="n">GPIO_TypeDef</span><span class="o">*</span> <span class="n">GPIOx</span><span class="p">;</span>
+  <span class="kt">uint16_t</span> <span class="n">GPIO_Pin</span><span class="p">;</span>
+<span class="p">}</span><span class="n">Pin</span><span class="p">;</span>
+
+<span class="n">Pin</span> <span class="n">MotorDir</span><span class="p">[]</span><span class="o">=</span><span class="p">{</span> <span class="p">{</span><span class="n">GPIOD</span><span class="p">,</span><span class="n">GPIO_PIN_0</span><span class="p">},{</span><span class="n">GPIOD</span><span class="p">,</span><span class="n">GPIO_PIN_2</span><span class="p">},{</span><span class="n">GPIOD</span><span class="p">,</span><span class="n">GPIO_PIN_4</span><span class="p">},{</span><span class="n">GPIOD</span><span class="p">,</span><span class="n">GPIO_PIN_6</span><span class="p">},{</span><span class="n">GPIOB</span><span class="p">,</span><span class="n">GPIO_PIN_3</span><span class="p">}</span> <span class="p">};</span>
+
+<span class="n">HAL_GPIO_WritePin</span><span class="p">(</span><span class="n">MotorDir</span><span class="p">[</span><span class="n">motor_num</span><span class="p">].</span><span class="n">GPIOx</span><span class="p">,</span> <span class="n">MotorDir</span><span class="p">[</span><span class="n">motor_num</span><span class="p">].</span><span class="n">GPIO_Pin</span><span class="p">,</span> <span class="n">GPIO_PIN_SET</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="other">Other</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Device /dev/ttyUSB0 is locked.
+<span class="c"># 进入/var/lock，删除lockfile</span>
+<span class="nb">sudo rm</span> /var/lock/LCK..ttyUSB0
+</code></pre></div></div>
+
 
 
                 <hr style="visibility: hidden;">
@@ -285,19 +423,12 @@ t_f=2,g=9.8,k_1=k_2=50,c_1=1.5,c_2=0.38\]
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2021/04/20/Ubuntu/" data-toggle="tooltip" data-placement="top" title="Ubuntu配置">
+                        <a href="/2021/10/29/Cloud_computing_model/" data-toggle="tooltip" data-placement="top" title="云计算服务模型">
                         Previous<br>
-                        <span>Ubuntu配置</span>
+                        <span>云计算服务模型</span>
                         </a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2021/04/24/SQP/" data-toggle="tooltip" data-placement="top" title="SQP">
-                        Next<br>
-                        <span>SQP</span>
-                        </a>
-                    </li>
                     
                 </ul>
 

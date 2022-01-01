@@ -200,37 +200,61 @@
             ">
     			
 <div class="post-preview">
-    <a href="/2021/10/29/Cloud_computing_model/">
+    <a href="/2021/12/11/STM32/">
         <h2 class="post-title">
-            Cloud_computing_model
+            STM32学习笔记
         </h2>
         
         <div class="post-content-preview">
-            
+            STM32
 
-layout:     post
-title:      云计算服务模型
-subtitle:   云计算技术3
-date:       2021-10-29
-author:     ChenWH 
-header-img: img/MoonJellyDay.jpg
-catalog:   true
-tags:
-
-- Cloud Computing
+Installation
 
 
+  安装STM32CubeMX
+  选择生成 makefile / STM32CubeIDE 版本的工程
+  配置 arm-none-eabi-gcc
+  安装 stlink / STM32Programmer
 
 
-云计算服务模型
+Boot configuration
 
 
-
-MoonJel...
+  
+    
+      BOOT 0
+      BOOT 1
+      启动方式
+ ...
         </div>
     </a>
     <p class="post-meta">
-        Posted by 思过崖 on October 29, 2021
+        Posted by ChenWH on December 11, 2021
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2021/10/29/Cloud_computing_model/">
+        <h2 class="post-title">
+            云计算服务模型
+        </h2>
+        
+        <h3 class="post-subtitle">
+            云计算技术3
+        </h3>
+        
+        <div class="post-content-preview">
+            云计算服务模型
+
+
+
+MoonJellyDay.jpg
+
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on October 29, 2021
     </p>
 </div>
 <hr>
@@ -444,34 +468,6 @@ $ sudo apt update
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2021/08/27/Git/">
-        <h2 class="post-title">
-            Git笔记
-        </h2>
-        
-        <div class="post-content-preview">
-            Git教程
-
-时光机穿梭
-
-工作区和暂存区
-
-第一步是用git add把文件添加进去，实际上就是把文件修改添加到暂存区；
-
-第二步是用git commit提交更改，实际上就是把暂存区的所有内容提交到当前分支。
-
-## 添加全局配置
-git config --global user.email "1773904345@qq.com"
-git config --global user.name ...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by ChenWH on August 27, 2021
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -508,7 +504,7 @@ git config --global user.name ...
                             
                         
                             
-                                <a href="/2-tags/#Note" title="Note" rel="4">
+                                <a href="/2-tags/#Note" title="Note" rel="5">
                                     Note
                                 </a>
                             
@@ -543,6 +539,10 @@ git config --global user.name ...
                         
                             
                         
+                            
+                                <a href="/2-tags/#Cloud Computing" title="Cloud Computing" rel="2">
+                                    Cloud Computing
+                                </a>
                             
                         
                     </div>
@@ -617,7 +617,7 @@ git config --global user.name ...
                     
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; 思过崖 2021
+                    Copyright &copy; 思过崖 2022
                     <br>
                     Theme on <a href="https://github.com/Chen-WH/Chen-WH.github.io.git">GitHub</a> |
                     <iframe

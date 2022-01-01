@@ -5,29 +5,226 @@
     <description>人难免天生有自怜的情绪，唯有时刻保持清醒，才能看清真正的价值在哪里。</description>
     <link>https://Chen-WH.github.io/</link>
     <atom:link href="https://Chen-WH.github.io/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 04 Nov 2021 19:10:22 +0800</pubDate>
-    <lastBuildDate>Thu, 04 Nov 2021 19:10:22 +0800</lastBuildDate>
+    <pubDate>Sat, 01 Jan 2022 13:12:18 +0800</pubDate>
+    <lastBuildDate>Sat, 01 Jan 2022 13:12:18 +0800</lastBuildDate>
     <generator>Jekyll v4.2.0</generator>
     
       <item>
-        <title>Cloud_computing_model</title>
-        <description>
-&lt;hr /&gt;
-&lt;p&gt;layout:     post
-title:      云计算服务模型
-subtitle:   云计算技术3
-date:       2021-10-29
-author:     ChenWH 
-header-img: img/MoonJellyDay.jpg
-catalog:   true
-tags:&lt;/p&gt;
+        <title>STM32学习笔记</title>
+        <description>&lt;h1 id=&quot;stm32&quot;&gt;STM32&lt;/h1&gt;
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- Cloud Computing
+&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;安装STM32CubeMX&lt;/li&gt;
+  &lt;li&gt;选择生成 makefile / STM32CubeIDE 版本的工程&lt;/li&gt;
+  &lt;li&gt;配置 arm-none-eabi-gcc&lt;/li&gt;
+  &lt;li&gt;安装 stlink / STM32Programmer&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;boot-configuration&quot;&gt;Boot configuration&lt;/h2&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;BOOT 0&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;BOOT 1&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;启动方式&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;x&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;从用户闪存启动，这是正常的工作模式&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;1&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;从系统存储器启动，这种模式启动的程序功能由厂家设置&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;1&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;1&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;从内置SRAM启动，这种模式可以用于调试&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;用户闪存 = 芯片内置的Flash。&lt;/li&gt;
+  &lt;li&gt;SRAM = 芯片内置的RAM区，就是内存。&lt;/li&gt;
+  &lt;li&gt;系统存储器 = 芯片内部一块特定的区域，芯片出厂时在这个区域预置了一段Bootloader，就是通常说的ISP程序。这个区域的内容在芯片出厂后没有人能够修改或擦除，即它是一个ROM区。一般来说，我们选用这种启动模式时，是为了从串口下载程序，因为在厂家提供的BootLoader中，提供了串口下载程序的固件，可以通过这个BootLoader将程序下载到系统的Flash中。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;download&quot;&gt;Download&lt;/h2&gt;
+
+&lt;p&gt;ST-Link / STM32CubeProgrammer&lt;/p&gt;
+
+&lt;p&gt;每次烧录后记得重新上电开机才会运行！&lt;/p&gt;
+
+&lt;h2 id=&quot;serial-port&quot;&gt;Serial Port&lt;/h2&gt;
+
+&lt;h3 id=&quot;概念&quot;&gt;概念&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;并行通信：数据各个位同时传输，速度快，占用引脚资源多&lt;/li&gt;
+  &lt;li&gt;串行通信：数据按位顺序传输，占用引脚资源少，速度相对较慢
+    &lt;ul&gt;
+      &lt;li&gt;单工：数据传输只支持数据在一个方向上传输&lt;/li&gt;
+      &lt;li&gt;半双工：允许数据在两个方向上传输，但是，在某一时刻，只允许数据在一个方向上传输，它实际上是一种切换方向的单工通信&lt;/li&gt;
+      &lt;li&gt;全双工：允许数据同时在两个方向上传输，因此，全双工通信是两个单工通信方式的结合，它要求发送设备和接收设备都有独立的接收和发送能力。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;应用&quot;&gt;应用&lt;/h3&gt;
+
+&lt;div class=&quot;language-c highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// 发送&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;uint8_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Hello World !!!&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\r\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;          &lt;span class=&quot;c1&quot;&gt;// Data to send&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;HAL_UART_Transmit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;huart1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;sizeof&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// Sending in normal mode&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;HAL_Delay&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;                                 &lt;span class=&quot;c1&quot;&gt;// 延时1s&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 接收&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;                                  &lt;span class=&quot;c1&quot;&gt;// 注意实际长度中有换行符&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;uint8_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Buffer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;                          &lt;span class=&quot;c1&quot;&gt;// 用来接收串口发送的数据&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;HAL_UART_Receive_IT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;huart1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Buffer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;      &lt;span class=&quot;c1&quot;&gt;// Enable the USART1 Interrupt&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;HAL_UART_RxCpltCallback&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;UART_HandleTypeDef&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;huart&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;HAL_UART_Transmit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;huart1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Buffer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 接收到数据马上使用串口1发送出去&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;HAL_UART_Receive_IT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;huart1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Buffer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// 重新使能串口1接收中断&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;hr /&gt;
+&lt;p&gt;https://blog.csdn.net/ouening/article/details/79218971&lt;/p&gt;
 
-&lt;h1 id=&quot;云计算服务模型&quot;&gt;云计算服务模型&lt;/h1&gt;
+&lt;p&gt;PC端与开发板RX/TX分别互换相接&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 串口参数配置&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 设置了ttyUSB0设备的数据流格式为raw，波特率9600，-echo表示不回显输入字符（-号在选项前面表示否定），min 0 表示读取内容时最少读取0个字符， time 10 表示读取执行结果时的超时时间是10/10秒，如果为time 1则此超时时间为1/10秒。不设置读取的超时时间，读取操作不能自动结束。&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;stty&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-F&lt;/span&gt; /dev/ttyUSB0 raw speed 115200 &lt;span class=&quot;nt&quot;&gt;-echo&lt;/span&gt; min 0 &lt;span class=&quot;nb&quot;&gt;time &lt;/span&gt;10
+&lt;span class=&quot;c&quot;&gt;# 读取串口回显&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;cat&lt;/span&gt; /dev/ttyUSB0
+&lt;span class=&quot;c&quot;&gt;# 向串口写（输入）命令（数据）&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-e&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;数据&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; /dev/ttyUSB0
+&lt;span class=&quot;c&quot;&gt;# 按十六进制数据进行发送&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-e&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\x&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;dd&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\x&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;ff&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; /dev/ttymxc0
+&lt;span class=&quot;c&quot;&gt;# minicom 参数设置&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;minicom &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;gpio-io&quot;&gt;GPIO I/O&lt;/h2&gt;
+
+&lt;p&gt;IO输出是3.3V,但IO大部分都是可以容忍5V电压输入。一般在芯片手册的“引脚定义”章节可以查看到有FT标识表示该IO可以容忍5V电压输入。&lt;/p&gt;
+
+&lt;h3 id=&quot;配置输入输出&quot;&gt;配置输入输出&lt;/h3&gt;
+
+&lt;p&gt;No pull-up and no pull-down，浮空输入，配置为不上拉和下拉&lt;/p&gt;
+
+&lt;p&gt;Output Open Drain，开漏输出，可以输出低电平    Output Push Pull，推挽输出，可以输出低电平和高电平&lt;/p&gt;
+
+&lt;h3 id=&quot;相关函数&quot;&gt;相关函数&lt;/h3&gt;
+
+&lt;div class=&quot;language-c highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// 输出&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;HAL_GPIO_WritePin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GPIOA&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GPIO_PIN_10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GPIO_PIN_SET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 高电平&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;HAL_GPIO_WritePin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GPIOA&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GPIO_PIN_10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GPIO_PIN_RESET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 低电平&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;HAL_GPIO_WritePin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GPIOA&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DONG_OUT_1_Pin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DONG_OUT_2_Pin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GPIO_PIN_RESET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 两个设置为低电平&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 输入&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;GPIO_PinState&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HAL_GPIO_ReadPin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DONG_IN_1_GPIO_Port&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DONG_IN_1_Pin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//读取电平&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GPIO_PIN_RESET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+     &lt;span class=&quot;n&quot;&gt;HAL_GPIO_WritePin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GPIOA&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DONG_OUT_1_Pin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DONG_OUT_2_Pin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GPIO_PIN_SET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//两个设置为高电平&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+     &lt;span class=&quot;n&quot;&gt;HAL_GPIO_WritePin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GPIOA&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DONG_OUT_1_Pin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DONG_OUT_2_Pin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GPIO_PIN_RESET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//两个设置为低电平&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;关于printf&quot;&gt;关于printf&lt;/h2&gt;
+
+&lt;h3 id=&quot;重定向printf&quot;&gt;重定向printf&lt;/h3&gt;
+
+&lt;div class=&quot;language-c highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;stdio.h&amp;gt;
+&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;#ifdef __GNUC__
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#else
+#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif
+&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;PUTCHAR_PROTOTYPE&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;HAL_UART_Transmit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;huart1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;uint8_t&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HAL_MAX_DELAY&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;使用printf注意\n换行&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;使用float&quot;&gt;使用float&lt;/h3&gt;
+
+&lt;p&gt;Project -&amp;gt; Properties -&amp;gt; C/C++ Build -&amp;gt; settings -&amp;gt; MCU settings -&amp;gt; use float&lt;/p&gt;
+
+&lt;h2 id=&quot;da&quot;&gt;D/A&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;DO 数字信号 0/1 输出&lt;/li&gt;
+  &lt;li&gt;AO 模拟信号&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-c highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// ADC&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;uint16_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adc_value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;float&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;vol&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;HAL_ADC_Start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hadc1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;	                &lt;span class=&quot;c1&quot;&gt;//启动ADC单次转换&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;HAL_ADC_PollForConversion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hadc1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;50&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;	&lt;span class=&quot;c1&quot;&gt;//等待ADC转换完成&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;adc_value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HAL_ADC_GetValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hadc1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; 	&lt;span class=&quot;c1&quot;&gt;//读取ADC转换数据&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;vol&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;adc_value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4096&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;       &lt;span class=&quot;c1&quot;&gt;//电压转换&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vol&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;65&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;低亮度 电压值vol = %.2fV&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;vol&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;高亮度 电压值vol = %.2fV&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;vol&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-c highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// DAC&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;uint16_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;HAL_DAC_Start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hdac&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DAC_CHANNEL_1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;HAL_DAC_SetValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hdac&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DAC_CHANNEL_1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DAC_ALIGN_12B_R&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;HAL_Delay&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;gpio-引脚枚举&quot;&gt;GPIO 引脚枚举&lt;/h2&gt;
+
+&lt;div class=&quot;language-c highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;typedef&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;GPIO_TypeDef&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GPIOx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;kt&quot;&gt;uint16_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GPIO_Pin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Pin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;Pin&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MotorDir&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GPIOD&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GPIO_PIN_0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GPIOD&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GPIO_PIN_2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GPIOD&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GPIO_PIN_4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GPIOD&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GPIO_PIN_6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GPIOB&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GPIO_PIN_3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;HAL_GPIO_WritePin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MotorDir&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;motor_num&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GPIOx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MotorDir&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;motor_num&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GPIO_Pin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GPIO_PIN_SET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;other&quot;&gt;Other&lt;/h2&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Device /dev/ttyUSB0 is locked.
+&lt;span class=&quot;c&quot;&gt;# 进入/var/lock，删除lockfile&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;sudo rm&lt;/span&gt; /var/lock/LCK..ttyUSB0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+</description>
+        <pubDate>Sat, 11 Dec 2021 00:00:00 +0800</pubDate>
+        <link>https://Chen-WH.github.io/2021/12/11/STM32/</link>
+        <guid isPermaLink="true">https://Chen-WH.github.io/2021/12/11/STM32/</guid>
+        
+        <category>Note</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>云计算服务模型</title>
+        <description>&lt;h1 id=&quot;云计算服务模型&quot;&gt;云计算服务模型&lt;/h1&gt;
 
 &lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/Chen-WH/PicGo/main/Typora/202111041827565.png&quot; alt=&quot;image-20211029131849645&quot; /&gt;&lt;/p&gt;
 
@@ -36,6 +233,8 @@ tags:&lt;/p&gt;
         <pubDate>Fri, 29 Oct 2021 00:00:00 +0800</pubDate>
         <link>https://Chen-WH.github.io/2021/10/29/Cloud_computing_model/</link>
         <guid isPermaLink="true">https://Chen-WH.github.io/2021/10/29/Cloud_computing_model/</guid>
+        
+        <category>Cloud Computing</category>
         
         
       </item>
@@ -717,221 +916,6 @@ This text contains&lt;span class=&quot;nt&quot;&gt;&amp;lt;sup&amp;gt;&lt;/span&
         <guid isPermaLink="true">https://Chen-WH.github.io/2021/09/01/HTML/</guid>
         
         <category>Web</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Git笔记</title>
-        <description>&lt;h1 id=&quot;git教程&quot;&gt;Git教程&lt;/h1&gt;
-
-&lt;h2 id=&quot;时光机穿梭&quot;&gt;时光机穿梭&lt;/h2&gt;
-
-&lt;h3 id=&quot;工作区和暂存区&quot;&gt;工作区和暂存区&lt;/h3&gt;
-
-&lt;p&gt;第一步是用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git add&lt;/code&gt;把文件添加进去，实际上就是把文件修改添加到暂存区；&lt;/p&gt;
-
-&lt;p&gt;第二步是用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git commit&lt;/code&gt;提交更改，实际上就是把暂存区的所有内容提交到当前分支。&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;## 添加全局配置&lt;/span&gt;
-git config &lt;span class=&quot;nt&quot;&gt;--global&lt;/span&gt; user.email &lt;span class=&quot;s2&quot;&gt;&quot;1773904345@qq.com&quot;&lt;/span&gt;
-git config &lt;span class=&quot;nt&quot;&gt;--global&lt;/span&gt; user.name &lt;span class=&quot;s2&quot;&gt;&quot;ChenWH&quot;&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;## 创建版本库&lt;/span&gt;
-git init &lt;span class=&quot;c&quot;&gt;# 初始化&lt;/span&gt;
-git add read.txt &lt;span class=&quot;c&quot;&gt;# 把文件添加到仓库&lt;/span&gt;
-git commit &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;wrote a readme file&quot;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# 把文件提交到仓库&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;# 为什么Git添加文件需要 add，commit 一共两步呢？因为 commit 可以一次提交很多文件，所以你可以多次 add 不同的文件，比如：&lt;/span&gt;
-
-git add file1.txt
-git add file2.txt file3.txt
-git &lt;span class=&quot;nb&quot;&gt;rm &lt;/span&gt;test.txt &lt;span class=&quot;c&quot;&gt;# 删除文件&lt;/span&gt;
-git commit &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;add 3 files.&quot;&lt;/span&gt;
-
-git status &lt;span class=&quot;c&quot;&gt;# 查看仓库状态&lt;/span&gt;
-git diff &lt;span class=&quot;c&quot;&gt;# 查看修改内容&lt;/span&gt;
-git log &lt;span class=&quot;c&quot;&gt;# 查看提交日志&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;# 在 Git 中，用 HEAD 表示当前版本，也就是最新的提交1094adb...（注意我的提交ID和你的肯定不一样），上一个版本就是 HEAD^ ，上上一个版本就是 HEAD^^ ，当然往上100个版本写100个^比较容易数不过来，所以写成 HEAD~100 。&lt;/span&gt;
-
-git reset &lt;span class=&quot;nt&quot;&gt;--hard&lt;/span&gt; HEAD^ &lt;span class=&quot;c&quot;&gt;# 回溯&lt;/span&gt;
-git reset &lt;span class=&quot;nt&quot;&gt;--hard&lt;/span&gt; 1094a &lt;span class=&quot;c&quot;&gt;# 取消回溯&lt;/span&gt;
-git reflog &lt;span class=&quot;c&quot;&gt;# 查看命令历史，便于获取commit id&lt;/span&gt;
-git checkout &lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt; readme.txt &lt;span class=&quot;c&quot;&gt;# 让工作区文件回到最近一次git commit或git add时的状态&lt;/span&gt;
-git reset HEAD readme.txt &lt;span class=&quot;c&quot;&gt;# 可以把暂存区的修改撤销掉（unstage），重新放回工作区&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;远程仓库&quot;&gt;远程仓库&lt;/h2&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;## 添加 SSH key&lt;/span&gt;
-ssh-keygen &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; rsa &lt;span class=&quot;nt&quot;&gt;-C&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;youremail@example.com&quot;&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 如果一切顺利的话，可以在用户主目录里找到.ssh目录，里面有id_rsa和id_rsa.pub两个文件，这两个就是SSH Key的秘钥对，id_rsa是私钥，不能泄露出去，id_rsa.pub是公钥，可以放心地告诉任何人。&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;## 登录GitHub&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 登陆GitHub，打开“Account settings”，“SSH Keys”页面，然后，点“Add SSH Key”，填上任意Title，在Key文本框里粘贴id_rsa.pub文件的内容&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;添加远程库&quot;&gt;添加远程库&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 登陆GitHub，然后，在右上角找到“Create a new repo”按钮，创建一个新的仓库&lt;/span&gt;
-git remote add origin git@github.com:Spectre1229/learning.git
-&lt;span class=&quot;c&quot;&gt;# 添加后，远程库的名字就是origin，这是Git默认的叫法，也可以改成别的&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;# 把本地库的内容推送到远程，实际上是把当前分支master推送到远程。&lt;/span&gt;
-git push &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt; origin master
-&lt;span class=&quot;c&quot;&gt;# 由于远程库是空的，我们第一次推送master分支时，加上了-u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令。&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 后续提交只需要&lt;/span&gt;
-git push origin master  / git push origin main
-&lt;span class=&quot;c&quot;&gt;## 注意github创建的所有新的源代码仓库将默认被命名为 “main”，而不是原先的&quot;master&quot;。&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 删除远程库&lt;/span&gt;
-git remote &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# 查看远程库信息&lt;/span&gt;
-git remote &lt;span class=&quot;nb&quot;&gt;rm &lt;/span&gt;origin &lt;span class=&quot;c&quot;&gt;# 然后，根据名字删除，比如删除origin&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 此处的“删除”其实是解除了本地和远程的绑定关系，并不是物理上删除了远程库。远程库本身并没有任何改动。要真正删除远程库，需要登录到GitHub，在后台页面找到删除按钮再删除。&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;从远程库克隆&quot;&gt;从远程库克隆&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone git@github.com:Spectre1229/SQP.git &lt;span class=&quot;c&quot;&gt;# ssh协议clone&lt;/span&gt;
-git clone https://github.com/michaelliao/gitskills.git &lt;span class=&quot;c&quot;&gt;# https协议&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;分支管理&quot;&gt;分支管理&lt;/h2&gt;
-
-&lt;h3 id=&quot;创建与合并分支&quot;&gt;创建与合并分支&lt;/h3&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;每次提交，Git都把它们串成一条时间线，这条时间线就是一个分支。截止到目前，只有一条时间线，在Git里，这个分支叫主分支，即master分支。HEAD严格来说不是指向提交，而是指向master，master才是指向提交的，所以，HEAD指向的就是当前分支。&lt;/li&gt;
-  &lt;li&gt;一开始的时候，master分支是一条线，Git用master指向最新的提交，再用HEAD指向master，就能确定当前分支，以及当前分支的提交点。&lt;/li&gt;
-  &lt;li&gt;每次提交，master分支都会向前移动一步，这样，随着你不断提交，master分支的线也越来越长。
-当我们创建新的分支，例如dev时，Git新建了一个指针叫dev，指向master相同的提交，再把HEAD指向dev，就表示当前分支在dev上。&lt;/li&gt;
-  &lt;li&gt;Git创建一个分支很快，因为除了增加一个dev指针，改改HEAD的指向，工作区的文件都没有任何变化。&lt;/li&gt;
-  &lt;li&gt;不过，从现在开始，对工作区的修改和提交就是针对&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dev&lt;/code&gt;分支了，比如新提交一次后，&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dev&lt;/code&gt;指针往前移动一步，而&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;master&lt;/code&gt;指针不变。&lt;/li&gt;
-  &lt;li&gt;假如我们在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dev&lt;/code&gt;上的工作完成了，就可以把&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dev&lt;/code&gt;合并到&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;master&lt;/code&gt;上。Git怎么合并呢？最简单的方法，就是直接把&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;master&lt;/code&gt;指向&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dev&lt;/code&gt;的当前提交，就完成了合并。&lt;/li&gt;
-  &lt;li&gt;合并完分支后，甚至可以删除&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dev&lt;/code&gt;分支。删除&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dev&lt;/code&gt;分支就是把&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dev&lt;/code&gt;指针给删掉，删掉后，我们就剩下了一条&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;master&lt;/code&gt;分支。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git checkout &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; dev &lt;span class=&quot;c&quot;&gt;# 创建dev分支并切换到dev分支&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# git checkout 命令加上-b参数表示创建并切换，相当于以下两条命令 &lt;/span&gt;
-git branch dev &lt;span class=&quot;c&quot;&gt;# 创建dev&lt;/span&gt;
-git checkout dev &lt;span class=&quot;c&quot;&gt;# 切换至dev&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 新版Git使用 git switch -c dev 以及 git switch master&lt;/span&gt;
-git branch &lt;span class=&quot;c&quot;&gt;# 查看当前分支&lt;/span&gt;
-git merge dev &lt;span class=&quot;c&quot;&gt;# dev合并至当前分支&lt;/span&gt;
-git branch &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; dev &lt;span class=&quot;c&quot;&gt;# 删除dev分支&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;解决冲突&quot;&gt;解决冲突&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git log &lt;span class=&quot;nt&quot;&gt;--graph&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--pretty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;oneline &lt;span class=&quot;nt&quot;&gt;--abbrev-commit&lt;/span&gt;
-git log &lt;span class=&quot;nt&quot;&gt;--graph&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# 查看分支合并图&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;分支管理策略&quot;&gt;分支管理策略&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Fast-forward 会直接将master指向dev的当前提交，但会损失分支信息，而且看不出合并的痕迹&lt;/span&gt;
-git merge &lt;span class=&quot;nt&quot;&gt;--no-ff&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;merge with no-ff&quot;&lt;/span&gt; dev
-&lt;span class=&quot;c&quot;&gt;#--no-ff参数，表示禁用Fast forward，因为本次合并要创建一个新的commit，所以加上-m参数，把commit描述写进去。&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;bug分支&quot;&gt;Bug分支&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git stash &lt;span class=&quot;c&quot;&gt;# Git还提供了一个stash功能，可以把当前工作现场“储藏”起来，等以后恢复现场后继续工作&lt;/span&gt;
-git stash list
-&lt;span class=&quot;nt&quot;&gt;----&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; stash@&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;0&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;: WIP on dev: f52c633 add merge
-git stash apply &lt;span class=&quot;c&quot;&gt;# 恢复stash到dev&lt;/span&gt;
-git stash apply stash@&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;0&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# 恢复指定stash&lt;/span&gt;
-git stash drop &lt;span class=&quot;c&quot;&gt;# 删除stash内容&lt;/span&gt;
-git stash pop &lt;span class=&quot;c&quot;&gt;# 恢复并删除stash内容&lt;/span&gt;
-
-git cherry-pick 4c805e2 &lt;span class=&quot;c&quot;&gt;# 复制一个特定的提交到当前分支&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;feature分支&quot;&gt;Feature分支&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git branch &lt;span class=&quot;nt&quot;&gt;-D&lt;/span&gt; feature-vulcan &lt;span class=&quot;c&quot;&gt;# 丢弃一个没有被合并过的分支&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;多人协作&quot;&gt;多人协作&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git checkout &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; dev origin/dev &lt;span class=&quot;c&quot;&gt;# 创建远程origin的dev分支到本地&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;## 如果你的小伙伴已经向origin/dev分支推送了他的提交，而碰巧你也对同样的文件作了修改，并试图推送&lt;/span&gt;
-git branch &lt;span class=&quot;nt&quot;&gt;--set-upstream-to&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;origin/dev dev &lt;span class=&quot;c&quot;&gt;# 如果git pull提示no tracking information，则说明本地分支和远程分支的链接关系没有创建，先指定本地dev分支与远程origin/dev分支的链接&lt;/span&gt;
-git pull &lt;span class=&quot;c&quot;&gt;# 而后抓取最新的提交&lt;/span&gt;
-git commit &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;fix env conflict&quot;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# 提交本地修改&lt;/span&gt;
-git push origin dev &lt;span class=&quot;c&quot;&gt;# &lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;rebase&quot;&gt;Rebase&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git rebase &lt;span class=&quot;c&quot;&gt;# 把分叉的提交历史“整理”成一条直线&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;标签管理&quot;&gt;标签管理&lt;/h2&gt;
-
-&lt;p&gt;tag就是一个让人容易记住的有意义的名字，它跟某个commit绑在一起。&lt;/p&gt;
-
-&lt;h3 id=&quot;创建标签&quot;&gt;创建标签&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git tag v1.0 &lt;span class=&quot;c&quot;&gt;# 打标签，默认标签打在最新提交的commit&lt;/span&gt;
-git tag v0.9 f52c633 &lt;span class=&quot;c&quot;&gt;# 给指定commit打标签&lt;/span&gt;
-git tag &lt;span class=&quot;c&quot;&gt;# 查看所有标签，标签不是按时间顺序列出，而是按字母排序的。&lt;/span&gt;
-git show v0.9 &lt;span class=&quot;c&quot;&gt;# 查看标签信息&lt;/span&gt;
-git tag &lt;span class=&quot;nt&quot;&gt;-a&lt;/span&gt; v0.1 &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;version 0.1 released&quot;&lt;/span&gt; 1094adb &lt;span class=&quot;c&quot;&gt;# 创建带有说明的标签，用-a指定标签名，-m指定说明文字&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;操作标签&quot;&gt;操作标签&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git tag &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; v0.1 &lt;span class=&quot;c&quot;&gt;# 删除标签&lt;/span&gt;
-git push origin v1.0 &lt;span class=&quot;c&quot;&gt;# 推送某个标签到远程&lt;/span&gt;
-git push origin &lt;span class=&quot;nt&quot;&gt;--tags&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# 一次性推送全部未推送的本地标签&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;## 删除已推送的标签&lt;/span&gt;
-git tag &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; v0.9 &lt;span class=&quot;c&quot;&gt;# 先删除本地标签&lt;/span&gt;
-git push origin :refs/tags/v0.9 &lt;span class=&quot;c&quot;&gt;# 从远程删除&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;使用github&quot;&gt;使用GitHub&lt;/h2&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;点“Fork”在自己的账号下克隆了一个仓库，然后，从自己的账号下clone&lt;/li&gt;
-  &lt;li&gt;一定要从自己的账号下clone仓库，这样你才能推送修改。如果从bootstrap的作者的仓库地址&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git@github.com:twbs/bootstrap.git&lt;/code&gt;克隆，因为没有权限，你将不能推送修改。&lt;/li&gt;
-  &lt;li&gt;如果你希望bootstrap的官方库能接受你的修改，你就可以在GitHub上发起一个pull request。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;使用gitee&quot;&gt;使用Gitee&lt;/h2&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;使用多个远程库时，我们要注意，git给远程库起的默认名称是&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;origin&lt;/code&gt;，如果有多个远程库，我们需要用不同的名称来标识不同的远程库。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;自定义git&quot;&gt;自定义Git&lt;/h2&gt;
-
-&lt;h3 id=&quot;忽略特殊文件&quot;&gt;忽略特殊文件&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 忽略某些文件时，需要编写.gitignore&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 检验.gitignore的标准是git status命令是不是说working directory clean&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# .gitignore文件本身要放到版本库里，并且可以对.gitignore做版本管理&lt;/span&gt;
-git add App.class &lt;span class=&quot;c&quot;&gt;# 添加文件到Git&lt;/span&gt;
-git add &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; App.class &lt;span class=&quot;c&quot;&gt;# 强制添加到Git&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;## .gitignore文件内容示例&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 排除所有.开头的隐藏文件:&lt;/span&gt;
-.&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 排除所有.class文件:&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;.class
-&lt;span class=&quot;c&quot;&gt;# 不排除.gitignore和App.class:&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;.gitignore
-&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;App.class
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-</description>
-        <pubDate>Fri, 27 Aug 2021 00:00:00 +0800</pubDate>
-        <link>https://Chen-WH.github.io/2021/08/27/Git/</link>
-        <guid isPermaLink="true">https://Chen-WH.github.io/2021/08/27/Git/</guid>
-        
-        <category>Coding</category>
         
         
       </item>

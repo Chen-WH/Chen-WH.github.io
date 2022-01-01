@@ -1,0 +1,202 @@
+I"�@<h1 id="stm32">STM32</h1>
+
+<h2 id="installation">Installation</h2>
+
+<ol>
+  <li>安装STM32CubeMX</li>
+  <li>选择生成 makefile / STM32CubeIDE 版本的工程</li>
+  <li>配置 arm-none-eabi-gcc</li>
+  <li>安装 stlink / STM32Programmer</li>
+</ol>
+
+<h2 id="boot-configuration">Boot configuration</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">BOOT 0</th>
+      <th style="text-align: center">BOOT 1</th>
+      <th style="text-align: center">启动方式</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">从用户闪存启动，这是正常的工作模式</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">从系统存储器启动，这种模式启动的程序功能由厂家设置</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">从内置SRAM启动，这种模式可以用于调试</td>
+    </tr>
+  </tbody>
+</table>
+
+<ol>
+  <li>用户闪存 = 芯片内置的Flash。</li>
+  <li>SRAM = 芯片内置的RAM区，就是内存。</li>
+  <li>系统存储器 = 芯片内部一块特定的区域，芯片出厂时在这个区域预置了一段Bootloader，就是通常说的ISP程序。这个区域的内容在芯片出厂后没有人能够修改或擦除，即它是一个ROM区。一般来说，我们选用这种启动模式时，是为了从串口下载程序，因为在厂家提供的BootLoader中，提供了串口下载程序的固件，可以通过这个BootLoader将程序下载到系统的Flash中。</li>
+</ol>
+
+<h2 id="download">Download</h2>
+
+<p>ST-Link / STM32CubeProgrammer</p>
+
+<p>每次烧录后记得重新上电开机才会运行！</p>
+
+<h2 id="serial-port">Serial Port</h2>
+
+<h3 id="概念">概念</h3>
+
+<ul>
+  <li>并行通信：数据各个位同时传输，速度快，占用引脚资源多</li>
+  <li>串行通信：数据按位顺序传输，占用引脚资源少，速度相对较慢
+    <ul>
+      <li>单工：数据传输只支持数据在一个方向上传输</li>
+      <li>半双工：允许数据在两个方向上传输，但是，在某一时刻，只允许数据在一个方向上传输，它实际上是一种切换方向的单工通信</li>
+      <li>全双工：允许数据同时在两个方向上传输，因此，全双工通信是两个单工通信方式的结合，它要求发送设备和接收设备都有独立的接收和发送能力。</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="应用">应用</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 发送</span>
+<span class="kt">uint8_t</span> <span class="n">Test</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"Hello World !!!</span><span class="se">\r\n</span><span class="s">"</span><span class="p">;</span>          <span class="c1">// Data to send</span>
+<span class="n">HAL_UART_Transmit</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart1</span><span class="p">,</span><span class="n">Test</span><span class="p">,</span><span class="k">sizeof</span><span class="p">(</span><span class="n">Test</span><span class="p">),</span><span class="mi">10</span><span class="p">);</span> <span class="c1">// Sending in normal mode</span>
+<span class="n">HAL_Delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>                                 <span class="c1">// 延时1s</span>
+<span class="c1">// 接收</span>
+<span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>                                  <span class="c1">// 注意实际长度中有换行符</span>
+<span class="kt">uint8_t</span> <span class="n">Buffer</span><span class="p">[</span><span class="n">length</span><span class="p">];</span>                          <span class="c1">// 用来接收串口发送的数据</span>
+<span class="n">HAL_UART_Receive_IT</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart1</span><span class="p">,</span><span class="n">Buffer</span><span class="p">,</span><span class="n">length</span><span class="p">);</span>      <span class="c1">// Enable the USART1 Interrupt</span>
+
+<span class="kt">void</span> <span class="nf">HAL_UART_RxCpltCallback</span><span class="p">(</span><span class="n">UART_HandleTypeDef</span> <span class="o">*</span><span class="n">huart</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">HAL_UART_Transmit</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart1</span><span class="p">,</span><span class="n">Buffer</span><span class="p">,</span><span class="n">length</span><span class="p">,</span><span class="mi">100</span><span class="p">);</span> <span class="c1">// 接收到数据马上使用串口1发送出去</span>
+	<span class="n">HAL_UART_Receive_IT</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart1</span><span class="p">,</span><span class="n">Buffer</span><span class="p">,</span><span class="n">length</span><span class="p">);</span>   <span class="c1">// 重新使能串口1接收中断</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>https://blog.csdn.net/ouening/article/details/79218971</p>
+
+<p>PC端与开发板RX/TX分别互换相接</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 串口参数配置</span>
+<span class="c"># 设置了ttyUSB0设备的数据流格式为raw，波特率9600，-echo表示不回显输入字符（-号在选项前面表示否定），min 0 表示读取内容时最少读取0个字符， time 10 表示读取执行结果时的超时时间是10/10秒，如果为time 1则此超时时间为1/10秒。不设置读取的超时时间，读取操作不能自动结束。</span>
+<span class="nb">stty</span> <span class="nt">-F</span> /dev/ttyUSB0 raw speed 115200 <span class="nt">-echo</span> min 0 <span class="nb">time </span>10
+<span class="c"># 读取串口回显</span>
+<span class="nb">cat</span> /dev/ttyUSB0
+<span class="c"># 向串口写（输入）命令（数据）</span>
+<span class="nb">echo</span> <span class="nt">-e</span> <span class="s2">"数据"</span> <span class="o">&gt;</span> /dev/ttyUSB0
+<span class="c"># 按十六进制数据进行发送</span>
+<span class="nb">echo</span> <span class="nt">-e</span> <span class="nt">-n</span> <span class="s2">"</span><span class="se">\x</span><span class="s2">dd</span><span class="se">\x</span><span class="s2">ff"</span> <span class="o">&gt;</span> /dev/ttymxc0
+<span class="c"># minicom 参数设置</span>
+<span class="nb">sudo </span>minicom <span class="nt">-s</span> 
+</code></pre></div></div>
+
+<h2 id="gpio-io">GPIO I/O</h2>
+
+<p>IO输出是3.3V,但IO大部分都是可以容忍5V电压输入。一般在芯片手册的“引脚定义”章节可以查看到有FT标识表示该IO可以容忍5V电压输入。</p>
+
+<h3 id="配置输入输出">配置输入输出</h3>
+
+<p>No pull-up and no pull-down，浮空输入，配置为不上拉和下拉</p>
+
+<p>Output Open Drain，开漏输出，可以输出低电平    Output Push Pull，推挽输出，可以输出低电平和高电平</p>
+
+<h3 id="相关函数">相关函数</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 输出</span>
+<span class="n">HAL_GPIO_WritePin</span><span class="p">(</span><span class="n">GPIOA</span><span class="p">,</span> <span class="n">GPIO_PIN_10</span><span class="p">,</span> <span class="n">GPIO_PIN_SET</span><span class="p">);</span>  <span class="c1">// 高电平</span>
+<span class="n">HAL_GPIO_WritePin</span><span class="p">(</span><span class="n">GPIOA</span><span class="p">,</span> <span class="n">GPIO_PIN_10</span><span class="p">,</span> <span class="n">GPIO_PIN_RESET</span><span class="p">);</span>  <span class="c1">// 低电平</span>
+<span class="n">HAL_GPIO_WritePin</span><span class="p">(</span><span class="n">GPIOA</span><span class="p">,</span> <span class="n">DONG_OUT_1_Pin</span><span class="o">|</span><span class="n">DONG_OUT_2_Pin</span><span class="p">,</span> <span class="n">GPIO_PIN_RESET</span><span class="p">);</span>  <span class="c1">// 两个设置为低电平</span>
+<span class="c1">// 输入</span>
+<span class="n">GPIO_PinState</span> <span class="n">res</span><span class="o">=</span><span class="n">HAL_GPIO_ReadPin</span><span class="p">(</span><span class="n">DONG_IN_1_GPIO_Port</span><span class="p">,</span><span class="n">DONG_IN_1_Pin</span><span class="p">);</span><span class="c1">//读取电平</span>
+<span class="k">if</span><span class="p">(</span><span class="n">res</span><span class="o">==</span><span class="n">GPIO_PIN_RESET</span><span class="p">){</span>
+     <span class="n">HAL_GPIO_WritePin</span><span class="p">(</span><span class="n">GPIOA</span><span class="p">,</span> <span class="n">DONG_OUT_1_Pin</span><span class="o">|</span><span class="n">DONG_OUT_2_Pin</span><span class="p">,</span> <span class="n">GPIO_PIN_SET</span><span class="p">);</span><span class="c1">//两个设置为高电平</span>
+<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+     <span class="n">HAL_GPIO_WritePin</span><span class="p">(</span><span class="n">GPIOA</span><span class="p">,</span> <span class="n">DONG_OUT_1_Pin</span><span class="o">|</span><span class="n">DONG_OUT_2_Pin</span><span class="p">,</span> <span class="n">GPIO_PIN_RESET</span><span class="p">);</span><span class="c1">//两个设置为低电平</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="关于printf">关于printf</h2>
+
+<h3 id="重定向printf">重定向printf</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+</span>
+<span class="cp">#ifdef __GNUC__
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#else
+#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif
+</span>
+<span class="n">PUTCHAR_PROTOTYPE</span>
+<span class="p">{</span>
+	<span class="n">HAL_UART_Transmit</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart1</span><span class="p">,</span> <span class="p">(</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">ch</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">HAL_MAX_DELAY</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">ch</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>使用printf注意\n换行</strong></p>
+
+<h3 id="使用float">使用float</h3>
+
+<p>Project -&gt; Properties -&gt; C/C++ Build -&gt; settings -&gt; MCU settings -&gt; use float</p>
+
+<h2 id="da">D/A</h2>
+
+<ul>
+  <li>DO 数字信号 0/1 输出</li>
+  <li>AO 模拟信号</li>
+</ul>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// ADC</span>
+<span class="kt">uint16_t</span> <span class="n">adc_value</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">vol</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="n">HAL_ADC_Start</span><span class="p">(</span><span class="o">&amp;</span><span class="n">hadc1</span><span class="p">);</span>	                <span class="c1">//启动ADC单次转换</span>
+<span class="n">HAL_ADC_PollForConversion</span><span class="p">(</span><span class="o">&amp;</span><span class="n">hadc1</span><span class="p">,</span> <span class="mi">50</span><span class="p">);</span>	<span class="c1">//等待ADC转换完成</span>
+<span class="n">adc_value</span> <span class="o">=</span> <span class="n">HAL_ADC_GetValue</span><span class="p">(</span><span class="o">&amp;</span><span class="n">hadc1</span><span class="p">);</span> 	<span class="c1">//读取ADC转换数据</span>
+<span class="n">vol</span> <span class="o">=</span> <span class="p">((</span><span class="kt">double</span><span class="p">)</span><span class="n">adc_value</span><span class="o">/</span><span class="mi">4096</span><span class="p">)</span><span class="o">*</span><span class="mi">3</span><span class="p">.</span><span class="mi">3</span><span class="p">;</span>       <span class="c1">//电压转换</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">vol</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">.</span><span class="mi">65</span><span class="p">){</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">"低亮度 电压值vol = %.2fV</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">vol</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">else</span> <span class="p">{</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">"高亮度 电压值vol = %.2fV</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">vol</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// DAC</span>
+<span class="kt">uint16_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span>
+<span class="n">HAL_DAC_Start</span><span class="p">(</span><span class="o">&amp;</span><span class="n">hdac</span><span class="p">,</span> <span class="n">DAC_CHANNEL_1</span><span class="p">);</span>
+<span class="n">HAL_DAC_SetValue</span><span class="p">(</span><span class="o">&amp;</span><span class="n">hdac</span><span class="p">,</span> <span class="n">DAC_CHANNEL_1</span><span class="p">,</span> <span class="n">DAC_ALIGN_12B_R</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+<span class="n">HAL_Delay</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="gpio-引脚枚举">GPIO 引脚枚举</h2>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">typedef</span> <span class="k">struct</span><span class="p">{</span>
+  <span class="n">GPIO_TypeDef</span><span class="o">*</span> <span class="n">GPIOx</span><span class="p">;</span>
+  <span class="kt">uint16_t</span> <span class="n">GPIO_Pin</span><span class="p">;</span>
+<span class="p">}</span><span class="n">Pin</span><span class="p">;</span>
+
+<span class="n">Pin</span> <span class="n">MotorDir</span><span class="p">[]</span><span class="o">=</span><span class="p">{</span> <span class="p">{</span><span class="n">GPIOD</span><span class="p">,</span><span class="n">GPIO_PIN_0</span><span class="p">},{</span><span class="n">GPIOD</span><span class="p">,</span><span class="n">GPIO_PIN_2</span><span class="p">},{</span><span class="n">GPIOD</span><span class="p">,</span><span class="n">GPIO_PIN_4</span><span class="p">},{</span><span class="n">GPIOD</span><span class="p">,</span><span class="n">GPIO_PIN_6</span><span class="p">},{</span><span class="n">GPIOB</span><span class="p">,</span><span class="n">GPIO_PIN_3</span><span class="p">}</span> <span class="p">};</span>
+
+<span class="n">HAL_GPIO_WritePin</span><span class="p">(</span><span class="n">MotorDir</span><span class="p">[</span><span class="n">motor_num</span><span class="p">].</span><span class="n">GPIOx</span><span class="p">,</span> <span class="n">MotorDir</span><span class="p">[</span><span class="n">motor_num</span><span class="p">].</span><span class="n">GPIO_Pin</span><span class="p">,</span> <span class="n">GPIO_PIN_SET</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="other">Other</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Device /dev/ttyUSB0 is locked.
+<span class="c"># 进入/var/lock，删除lockfile</span>
+<span class="nb">sudo rm</span> /var/lock/LCK..ttyUSB0
+</code></pre></div></div>
+
+:ET
