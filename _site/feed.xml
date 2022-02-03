@@ -5,9 +5,179 @@
     <description>人难免天生有自怜的情绪，唯有时刻保持清醒，才能看清真正的价值在哪里。</description>
     <link>https://Chen-WH.github.io/</link>
     <atom:link href="https://Chen-WH.github.io/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 01 Jan 2022 13:12:18 +0800</pubDate>
-    <lastBuildDate>Sat, 01 Jan 2022 13:12:18 +0800</lastBuildDate>
+    <pubDate>Tue, 25 Jan 2022 12:55:48 +0800</pubDate>
+    <lastBuildDate>Tue, 25 Jan 2022 12:55:48 +0800</lastBuildDate>
     <generator>Jekyll v4.2.0</generator>
+    
+      <item>
+        <title>Active vision connectivity maintenance</title>
+        <description>&lt;h1 id=&quot;主动视觉连通保持&quot;&gt;主动视觉连通保持&lt;/h1&gt;
+
+&lt;h2 id=&quot;集中式&quot;&gt;集中式&lt;/h2&gt;
+
+&lt;h3 id=&quot;权重函数&quot;&gt;权重函数&lt;/h3&gt;
+
+\[w_{ij}=c_1\exp\left[-(\psi_{ij}-\varphi_i)^2/\sigma_1^2\right]+c_2\exp(-\varphi_i^2/\sigma_2^2)+c_3\exp\left[-c_3(|\theta_j-\theta_i|-\frac{\pi}{2})^2/\sigma_3^2\right]\]
+
+&lt;h3 id=&quot;拉普拉斯矩阵&quot;&gt;拉普拉斯矩阵&lt;/h3&gt;
+
+\[\begin{aligned}
+    \widetilde{w}_{ij}&amp;amp;=w_{ij}+w_{ji}\\
+    &amp;amp;=c_1\exp\left[-(\psi_{ij}-\varphi_i)^2/\sigma_1^2\right]+c_2\exp(-\varphi_i^2/\sigma_2^2)+c_3\exp\left[-c_3(|\theta_j-\theta_i|-\frac{\pi}{2})^2/\sigma_3^2\right]\\
+    &amp;amp;+c_1\exp\left[-(\psi_{ji}-\varphi_j)^2/\sigma_1^2\right]+c_2\exp(-\varphi_j^2/\sigma_2^2)+c_3\exp\left[-c_3(|\theta_j-\theta_i|-\frac{\pi}{2})^2/\sigma_3^2\right]\\
+\end{aligned}\]
+
+\[\begin{aligned}
+L&amp;amp;=\left[\begin{array}{cccc}
+\widetilde{w}_{12}+\widetilde{w}_{13}+\widetilde{w}_{14} &amp;amp; -\widetilde{w}_{12} &amp;amp; -\widetilde{w}_{13} &amp;amp; -\widetilde{w}_{14} \\
+-\widetilde{w}_{12} &amp;amp; \widetilde{w}_{12}+\widetilde{w}_{23}+\widetilde{w}_{24} &amp;amp; -\widetilde{w}_{23} &amp;amp; -\widetilde{w}_{24} \\
+-\widetilde{w}_{13} &amp;amp; -\widetilde{w}_{23} &amp;amp; \widetilde{w}_{13}+\widetilde{w}_{23}+\widetilde{w}_{34} &amp;amp; -\widetilde{w}_{34} \\
+-\widetilde{w}_{14} &amp;amp; -\widetilde{w}_{24} &amp;amp; -\widetilde{w}_{34} &amp;amp; \widetilde{w}_{14}+\widetilde{w}_{24}+\widetilde{w}_{34} \\
+\end{array}\right]\\
+\end{aligned}\]
+
+&lt;h3 id=&quot;控制律&quot;&gt;控制律&lt;/h3&gt;
+
+\[u_i^\theta=\frac{\partial\lambda_2}{\partial \theta_i}\\
+u_i^\varphi=\frac{\partial\lambda_2}{\partial \varphi_i}\\\]
+
+&lt;h2 id=&quot;双积分系统&quot;&gt;双积分系统&lt;/h2&gt;
+
+\[u_i=\dot{p}_i=\frac{\partial \lambda_2}{\partial p_i}\\
+\dot{u}_i=\ddot{p}_i=\frac{\partial}{\partial t}(\frac{\partial \lambda_2}{\partial p_i})=\frac{\partial}{\partial p_i}(\frac{\partial \lambda_2}{\partial p_i})\cdot\frac{\partial p_i}{\partial t}=\frac{\partial}{\partial p_i}(\frac{\partial \lambda_2}{\partial p_i})u_i=\frac{\partial u_i}{\partial p_i}u_i\\\]
+
+\[u_i^\theta=\frac{\partial \lambda_2}{\partial \theta_i}\\
+\dot{u}_i^\theta=\frac{\partial u_i^\theta}{\partial \theta_i}u_i^\theta=\frac{\partial^2\lambda_2}{\partial \theta_i^2}\cdot\frac{\partial \lambda_2}{\partial \theta_i}\\
+u_i^\varphi=\frac{\partial \lambda_2}{\partial \varphi_i}\\
+\dot{u}_i^\varphi=\frac{\partial u_i^\varphi}{\partial \varphi_i}u_i^\varphi=\frac{\partial^2\lambda_2}{\partial \varphi_i^2}\cdot\frac{\partial \lambda_2}{\partial \varphi_i}\\\]
+
+&lt;h2 id=&quot;分布式&quot;&gt;分布式&lt;/h2&gt;
+
+\[u_i=\frac{\partial\lambda_2}{\partial p_i}=v_2^T\frac{\partial L}{\partial p_i}v_2\]
+
+&lt;h3 id=&quot;幂迭代&quot;&gt;幂迭代&lt;/h3&gt;
+
+\[(1) &amp;amp; \dot{\boldsymbol{x}}=-\mathrm{Ave}(\boldsymbol{x})\boldsymbol{1}\\
+(2) &amp;amp; \dot{\boldsymbol{x}}=-\alpha\boldsymbol{Lx}\\
+(3) &amp;amp; \dot{\boldsymbol{x}}=-[\mathrm{Ave}(\boldsymbol{x}\odot\boldsymbol{x})-1]\boldsymbol{x}\\\]
+
+&lt;p&gt;第一步使 $\boldsymbol{x}$ 趋向 $\boldsymbol{1}$ 的零空间，第二步使 $\boldsymbol{x}$ 趋向 $\boldsymbol{v}_2$ ，第三步使 $\boldsymbol{x}$ 趋向半径 $\sqrt{n}$ 的球体（这一步可以用除法单位化代替）。&lt;/p&gt;
+
+&lt;p&gt;构造矩阵 $\boldsymbol{B}=\boldsymbol{I}-\alpha\boldsymbol{L}$ 用于迭代，只要 $\alpha$ 足够小，即可保证 $\boldsymbol{B}$ 特征值 $1-\alpha\lambda_1&amp;gt;1-\alpha\lambda_2&amp;gt;\cdots&amp;gt;0$&lt;/p&gt;
+
+&lt;p&gt;已知拉普拉斯矩阵最小特征值为0，对应特征向量为 $\boldsymbol{1}$
+\(\boldsymbol{x^T1}=0\\
+\left(\sum_{i=1}^n\alpha_i\boldsymbol{v}_i\right)^T\boldsymbol{1}=0\\
+\left(\alpha_1\boldsymbol{1}+\sum_{i=2}^n\alpha_i\boldsymbol{v}_i\right)^T\boldsymbol{1}=0\\
+\alpha_1\boldsymbol{1}^T\boldsymbol{1}=0\\
+\alpha_1=0\\\)
+由幂迭代(Power Iteration)可得此时迭代得到特征向量 $\boldsymbol{v}_2$，实际分布式实现中，可以通过一致性得到 $\mathrm{Ave}(\boldsymbol{x}),\mathrm{Ave}(\boldsymbol{x}\odot\boldsymbol{x})$，但需要提高通讯频率，实测通讯频率为控制频率5~10倍时有较好结果。&lt;/p&gt;
+
+</description>
+        <pubDate>Sun, 23 Jan 2022 00:00:00 +0800</pubDate>
+        <link>https://Chen-WH.github.io/2022/01/23/Active_vision/</link>
+        <guid isPermaLink="true">https://Chen-WH.github.io/2022/01/23/Active_vision/</guid>
+        
+        <category>Robotics</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Power Iteration</title>
+        <description>&lt;h1 id=&quot;power-iteration&quot;&gt;Power Iteration&lt;/h1&gt;
+
+&lt;h2 id=&quot;基本定义&quot;&gt;基本定义&lt;/h2&gt;
+
+&lt;p&gt;对于矩阵 $\boldsymbol{A}$，其特征值为 $\lambda_i$，对应特征向量 $\boldsymbol{v}_i$&lt;/p&gt;
+
+&lt;p&gt;任取 $\boldsymbol{x}_0$ 构造 $\boldsymbol{x}_k=\boldsymbol{A}^k\boldsymbol{x}_0$，前 $r$ 个（一般情况下 $r=1$）为绝对值最大的特征值
+\(\begin{aligned}
+|\lambda_1|=|\lambda_2|=\cdots=|\lambda_r|&amp;gt;|\lambda_{r+1}|\geq\cdots\geq|\lambda_n|
+\end{aligned}\)&lt;/p&gt;
+
+&lt;p&gt;矩阵的特征向量构成一组基&lt;/p&gt;
+
+\[\begin{aligned}
+\boldsymbol{x}_0&amp;amp;=\sum_{i=1}^n\alpha_i\boldsymbol{v}_i\\
+\boldsymbol{x}_k&amp;amp;=\boldsymbol{A}^k\boldsymbol{x}_0=\sum_{i=1}^n\boldsymbol{A}^k\alpha_i\boldsymbol{v}_i\\
+\boldsymbol{x}_k&amp;amp;=\sum_{i=1}^n\alpha_i\lambda_i^k\boldsymbol{v}_i=\lambda_1^k\left[\sum_{i=1}^r\alpha_i\boldsymbol{v}_i+\sum_{i=r+1}^n\left(\frac{\lambda_i}{\lambda_1}\right)^k\alpha_i\boldsymbol{v}_i \right]\\
+\lim_{k\to\infty}(\frac{\lambda_i}{\lambda_1})^k&amp;amp;=0(i=r+1,\dots,n)\\
+\lim_{k\to\infty}\boldsymbol{x}_k&amp;amp;=\lim_{k\to\infty}\lambda_1^k\left(\sum_{i=1}^r\alpha_i\boldsymbol{v}_i \right)\\
+\end{aligned}\]
+
+&lt;p&gt;因为 $\left(\sum_{i=1}^r\alpha_i\boldsymbol{v}_i \right)$ 是固定项&lt;/p&gt;
+
+\[\begin{aligned}
+\lim_{k\to\infty}\frac{(\boldsymbol{x}_{k+1})_i}{(\boldsymbol{x}_k)_i}=\lambda_1
+\end{aligned}\]
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;其中收敛速度由比值 $&lt;/td&gt;
+      &lt;td&gt;\lambda_{r+1}/\lambda_1&lt;/td&gt;
+      &lt;td&gt;$ 决定，越小收敛越快。&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&quot;幂法改进&quot;&gt;幂法改进&lt;/h2&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;以上定义中，随着不断的迭代，如果 $&lt;/td&gt;
+      &lt;td&gt;\lambda_1&lt;/td&gt;
+      &lt;td&gt;&amp;gt;1$ ， $\boldsymbol{x}_k$ 会无限大；如果 $&lt;/td&gt;
+      &lt;td&gt;\lambda_1&lt;/td&gt;
+      &lt;td&gt;&amp;lt;1$ ， $\boldsymbol{x}_k$ 则会趋于0。如果 $&lt;/td&gt;
+      &lt;td&gt;\lambda_{r+1}/\lambda_1&lt;/td&gt;
+      &lt;td&gt;$ 很小，使得能快速收敛也无需优化。&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;但是通常不会碰到那么好的运气，所以就在每次迭代的时候就要对 $\boldsymbol{x}_k$ 进行单位化，防止它溢出。
+\(\begin{aligned}
+|\lambda_1|=\lim_{k\to\infty}\frac{||\boldsymbol{x}_{k+1}||}{||\boldsymbol{x}_k||}
+\end{aligned}\)
+k足够大时，每次迭代各分量正负号不变，则 $\lambda_1$ 为正
+\(\begin{aligned}
+\boldsymbol{v}_1=\lim_{k\to\infty}\boldsymbol{x}_k=\lim_{k\to\infty}\boldsymbol{A}^k\boldsymbol{x}_0
+\end{aligned}\)
+可获得一个单位化的主特征值特征向量。因为还乘上了 $\lambda_1^k$ 的符号，所以向量各个分量的符号和迭代的次数 k 有关。$\alpha_1=0$ 则迭代出第二大特征值/对应特征向量&lt;/p&gt;
+
+&lt;h2 id=&quot;迭代加速&quot;&gt;迭代加速&lt;/h2&gt;
+
+\[\begin{aligned}
+\boldsymbol{B}=\boldsymbol{A}-p\boldsymbol{I}\\
+\end{aligned}\]
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;利用 $\boldsymbol{B}$ 迭代即可得到其特征值 $\lambda_1-p,\lambda_2-p,\dots$ 中绝对值最大者，可以调整迭代比值 $&lt;/td&gt;
+      &lt;td&gt;\lambda_{r+1}/\lambda_1&lt;/td&gt;
+      &lt;td&gt;$ 及目标特征值/特征向量&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&quot;参考资料&quot;&gt;参考资料&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;https://www.cnblogs.com/qizhou/p/12271287.html&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Fri, 21 Jan 2022 00:00:00 +0800</pubDate>
+        <link>https://Chen-WH.github.io/2022/01/21/Power_Iteration/</link>
+        <guid isPermaLink="true">https://Chen-WH.github.io/2022/01/21/Power_Iteration/</guid>
+        
+        <category>Math</category>
+        
+        
+      </item>
     
       <item>
         <title>STM32学习笔记</title>
@@ -794,128 +964,6 @@ normal
         <guid isPermaLink="true">https://Chen-WH.github.io/2021/09/08/FFT/</guid>
         
         <category>Math</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>ML读书随笔</title>
-        <description>&lt;h1 id=&quot;machine-learning&quot;&gt;Machine Learning&lt;/h1&gt;
-
-&lt;h2 id=&quot;多变量线性回归&quot;&gt;多变量线性回归&lt;/h2&gt;
-
-&lt;h3 id=&quot;正规方程&quot;&gt;正规方程&lt;/h3&gt;
-
-\[\begin{aligned}
-	&amp;amp;&amp;amp; &amp;amp;\theta=(X^TX)^{-1}X^Ty\\
-	&amp;amp;s.t.&amp;amp; &amp;amp;训练集特征矩阵为X，训练集结果为向量y\\
-\end{aligned}\]
-
-&lt;h3 id=&quot;正规方程推导过程&quot;&gt;正规方程推导过程&lt;/h3&gt;
-
-\[\begin{aligned}
-	&amp;amp;首先变换&amp;amp; J(\theta)&amp;amp;=\frac{1}{2}(X\theta-y)^T(X\theta-y)\\
-	&amp;amp;&amp;amp; &amp;amp;=\frac{1}{2}(\theta^TX^TX\theta-\theta^TX^Ty-y^TX\theta-y^Ty)\\
-	&amp;amp;矩阵求导法则&amp;amp; &amp;amp;\frac{\mathbf{d}AB}{\mathbf{d}B}=A^T&amp;amp; &amp;amp;\frac{\mathbf{d}X^TAX}{\mathbf{d}X}=2AX\\
-	&amp;amp;得到&amp;amp; \frac{\partial{J(\theta)}}{\partial \theta}&amp;amp;=\frac{1}{2}(2X^TX\theta-X^Ty)
-\end{aligned}\]
-
-</description>
-        <pubDate>Sat, 04 Sep 2021 00:00:00 +0800</pubDate>
-        <link>https://Chen-WH.github.io/2021/09/04/ML/</link>
-        <guid isPermaLink="true">https://Chen-WH.github.io/2021/09/04/ML/</guid>
-        
-        <category>Essay</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>HTML学习笔记</title>
-        <description>&lt;h1 id=&quot;html&quot;&gt;HTML&lt;/h1&gt;
-
-&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   标题   --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;h1&amp;gt;&lt;/span&gt;This is a heading&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h1&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;h2&amp;gt;&lt;/span&gt;This is a heading&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h2&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;h3&amp;gt;&lt;/span&gt;This is a heading&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h3&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   段落   --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;This is a paragraph.&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;This is another paragraph.&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   链接   --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3school.com.cn&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;This is a link&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3school.com.cn/&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;target=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;_blank&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Visit W3School!&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
-如果把链接的 target 属性设置为 &quot;_blank&quot;，该链接会在新窗口中打开。
-&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   图像   --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;img&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;w3school.jpg&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;width=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;104&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;height=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;142&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   水平线   --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;hr&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   换行   --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;br&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   元素样式   --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;p&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;style=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;font-family:times;color:green;font-size:30px&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;This text is in Times and green&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
-&quot;background-color:yellow&quot;
-&quot;text-align:center&quot;
-
-&lt;span class=&quot;c&quot;&gt;&amp;lt;!----------------&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;b&amp;gt;&lt;/span&gt;This text is bold&lt;span class=&quot;nt&quot;&gt;&amp;lt;/b&amp;gt;&lt;/span&gt;
-
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;strong&amp;gt;&lt;/span&gt;This text is strong&lt;span class=&quot;nt&quot;&gt;&amp;lt;/strong&amp;gt;&lt;/span&gt;
-
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;big&amp;gt;&lt;/span&gt;This text is big&lt;span class=&quot;nt&quot;&gt;&amp;lt;/big&amp;gt;&lt;/span&gt;
-
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;em&amp;gt;&lt;/span&gt;This text is emphasized&lt;span class=&quot;nt&quot;&gt;&amp;lt;/em&amp;gt;&lt;/span&gt;
-
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;i&amp;gt;&lt;/span&gt;This text is italic&lt;span class=&quot;nt&quot;&gt;&amp;lt;/i&amp;gt;&lt;/span&gt;
-
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;small&amp;gt;&lt;/span&gt;This text is small&lt;span class=&quot;nt&quot;&gt;&amp;lt;/small&amp;gt;&lt;/span&gt;
-
-This text contains&lt;span class=&quot;nt&quot;&gt;&amp;lt;sub&amp;gt;&lt;/span&gt;subscript&lt;span class=&quot;nt&quot;&gt;&amp;lt;/sub&amp;gt;&lt;/span&gt;
-
-This text contains&lt;span class=&quot;nt&quot;&gt;&amp;lt;sup&amp;gt;&lt;/span&gt;superscript&lt;span class=&quot;nt&quot;&gt;&amp;lt;/sup&amp;gt;&lt;/span&gt;
-
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;pre&amp;gt;&lt;/span&gt;
-这是
-预格式文本。
-它保留了      空格
-和换行。
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/pre&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   外部样式   --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;stylesheet&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text/css&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;mystyle.css&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!--   图片作为链接   --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/example/html/lastpage.html&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;img&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;border=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;0&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/i/eg_buttonnext.gif&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;tips&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;基本的注意事项 - 有用的提示&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;#tips&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;有用的提示&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;&amp;lt;!--也可以在其他页面中创建指向该锚的链接--&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3school.com.cn/html/html_links.asp#tips&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;有用的提示&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;在未来 HTML 版本中强制使用小写。&lt;/li&gt;
-  &lt;li&gt;浏览器会移除&lt;em&gt;源代码中&lt;/em&gt;多余的空格和空行。所有连续的空格或空行都会被算作一个空格。&lt;/li&gt;
-&lt;/ol&gt;
-
-</description>
-        <pubDate>Wed, 01 Sep 2021 00:00:00 +0800</pubDate>
-        <link>https://Chen-WH.github.io/2021/09/01/HTML/</link>
-        <guid isPermaLink="true">https://Chen-WH.github.io/2021/09/01/HTML/</guid>
-        
-        <category>Web</category>
         
         
       </item>

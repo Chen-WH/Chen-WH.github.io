@@ -8,7 +8,7 @@ header-img: img/IcelandBonfire.jpg
 catalog:   true
 tags:
 
-    - Robotics
+    - Swarm
 ---
 
 # 主动视觉连通保持

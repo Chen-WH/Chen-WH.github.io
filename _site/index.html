@@ -38,16 +38,16 @@
     <!-- Hux change font-awesome CDN to qiniu -->
     <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
-		<!-- Equations -->
-		<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
-		<script type="text/x-mathjax-config">
-			MathJax.Hub.Config({
-			  tex2jax: {
-			    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-			    processEscapes: true
-			  }
-			});
-		</script>
+    <!-- Equations -->
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+            inlineMath: [['$','$']]
+            }
+        });
+    </script>
 
     <!-- Hux Delete, sad but pending in China
     <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
@@ -199,6 +199,60 @@
                 postlist-container
             ">
     			
+<div class="post-preview">
+    <a href="/2022/01/23/Active_vision/">
+        <h2 class="post-title">
+            Active vision connectivity maintenance
+        </h2>
+        
+        <h3 class="post-subtitle">
+            主动视觉连通保持
+        </h3>
+        
+        <div class="post-content-preview">
+            主动视觉连通保持
+
+集中式
+
+权重函数
+
+\[w_{ij}=c_1\exp\left[-(\psi_{ij}-\varphi_i)^2/\sigma_1^2\right]+c_2\exp(-\varphi_i^2/\sigma_2^2)+c_3\exp\left[-c_3(|\theta_j-\theta_i|-\frac{\pi}{2})^2/\sigma_3^2\right]\]
+
+拉普...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on January 23, 2022
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2022/01/21/Power_Iteration/">
+        <h2 class="post-title">
+            Power Iteration
+        </h2>
+        
+        <h3 class="post-subtitle">
+            幂迭代算法
+        </h3>
+        
+        <div class="post-content-preview">
+            Power Iteration
+
+基本定义
+
+对于矩阵 $\boldsymbol{A}$，其特征值为 $\lambda_i$，对应特征向量 $\boldsymbol{v}_i$
+
+任取 $\boldsymbol{x}_0$ 构造 $\boldsymbol{x}_k=\boldsymbol{A}^k\boldsymbol{x}_0$，前 $r$ 个（一般情况下 $r=1$）为绝对值最大的特征值...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on January 21, 2022
+    </p>
+</div>
+<hr>
+
 <div class="post-preview">
     <a href="/2021/12/11/STM32/">
         <h2 class="post-title">
@@ -409,65 +463,6 @@ $ sudo apt update
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2021/09/04/ML/">
-        <h2 class="post-title">
-            ML读书随笔
-        </h2>
-        
-        <h3 class="post-subtitle">
-            Machine Learning
-        </h3>
-        
-        <div class="post-content-preview">
-            Machine Learning
-
-多变量线性回归
-
-正规方程
-
-\[\begin{aligned}
-	&amp;&amp; &amp;\theta=(X^TX)^{-1}X^Ty\\
-	&amp;s.t.&amp; &amp;训练集特征矩阵为X，训练集结果为向量y\\
-\end{aligned}\]
-
-正规方程推导过程
-
-\[\begin{aligned}
-	&amp;首先变换&amp; ...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by ChenWH on September 4, 2021
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2021/09/01/HTML/">
-        <h2 class="post-title">
-            HTML学习笔记
-        </h2>
-        
-        <div class="post-content-preview">
-            HTML
-
-&lt;html&gt;
-&lt;body&gt;
-&lt;!--   标题   --&gt;
-&lt;h1&gt;This is a heading&lt;/h1&gt;
-&lt;h2&gt;This is a heading&lt;/h2&gt;
-&lt;h3&gt;This is a heading&lt;/h3&gt;
-&lt;!--   段落   --&gt;
-&lt;...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by ChenWH on September 1, 2021
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -510,7 +505,7 @@ $ sudo apt update
                             
                         
                             
-                                <a href="/2-tags/#Math" title="Math" rel="6">
+                                <a href="/2-tags/#Math" title="Math" rel="7">
                                     Math
                                 </a>
                             
@@ -523,6 +518,10 @@ $ sudo apt update
                                 </a>
                             
                         
+                            
+                                <a href="/2-tags/#Robotics" title="Robotics" rel="2">
+                                    Robotics
+                                </a>
                             
                         
                             

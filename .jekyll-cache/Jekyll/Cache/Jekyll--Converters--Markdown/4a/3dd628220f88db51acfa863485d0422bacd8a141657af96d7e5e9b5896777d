@@ -1,0 +1,75 @@
+I"<h1 id="power-iteration">Power Iteration</h1>
+
+<h2 id="基本定义">基本定义</h2>
+
+<p>对于矩阵 $\boldsymbol{A}$，其特征值为 $\lambda_i$，对应特征向量 $\boldsymbol{v}_i$</p>
+
+<p>任取 $\boldsymbol{x}_0$ 构造 $\boldsymbol{x}_k=\boldsymbol{A}^k\boldsymbol{x}_0$，前 $r$ 个（一般情况下 $r=1$）为绝对值最大的特征值
+\(|\lambda_1|=|\lambda_2|=\cdots=|\lambda_r|&gt;|\lambda_{r+1}|\geq\cdots\geq|\lambda_n|\)</p>
+
+<p>矩阵的特征向量构成一组基</p>
+
+\[\begin{aligned}
+\boldsymbol{x}_0&amp;=\sum_{i=1}^n\alpha_i\boldsymbol{v}_i\\
+\boldsymbol{x}_k&amp;=\boldsymbol{A}^k\boldsymbol{x}_0=\sum_{i=1}^n\boldsymbol{A}^k\alpha_i\boldsymbol{v}_i\\
+\boldsymbol{x}_k&amp;=\sum_{i=1}^n\alpha_i\lambda_i^k\boldsymbol{v}_i=\lambda_1^k\left[\sum_{i=1}^r\alpha_i\boldsymbol{v}_i+\sum_{i=r+1}^n\left(\frac{\lambda_i}{\lambda_1}\right)^k\alpha_i\boldsymbol{v}_i \right]\\
+\lim_{k\to\infty}(\frac{\lambda_i}{\lambda_1})^k&amp;=0(i=r+1,\dots,n)\\
+\lim_{k\to\infty}\boldsymbol{x}_k&amp;=\lim_{k\to\infty}\lambda_1^k\left(\sum_{i=1}^r\alpha_i\boldsymbol{v}_i \right)\\
+\end{aligned}\]
+
+<p>因为 $\left(\sum_{i=1}^r\alpha_i\boldsymbol{v}_i \right)$ 是固定项</p>
+
+\[\lim_{k\to\infty}\frac{(\boldsymbol{x}_{k+1})_i}{(\boldsymbol{x}_k)_i}=\lambda_1\]
+
+<table>
+  <tbody>
+    <tr>
+      <td>其中收敛速度由比值 $</td>
+      <td>\lambda_{r+1}/\lambda_1</td>
+      <td>$ 决定，越小收敛越快。</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="幂法改进">幂法改进</h2>
+
+<table>
+  <tbody>
+    <tr>
+      <td>以上定义中，随着不断的迭代，如果 $</td>
+      <td>\lambda_1</td>
+      <td>&gt;1$ ， $\boldsymbol{x}_k$ 会无限大；如果 $</td>
+      <td>\lambda_1</td>
+      <td>&lt;1$ ， $\boldsymbol{x}_k$ 则会趋于0。如果 $</td>
+      <td>\lambda_{r+1}/\lambda_1</td>
+      <td>$ 很小，使得能快速收敛也无需优化。</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>但是通常不会碰到那么好的运气，所以就在每次迭代的时候就要对 $\boldsymbol{x}_k$ 进行单位化，防止它溢出。
+\(|\lambda_1|=\lim_{k\to\infty}\frac{||\boldsymbol{x}_{k+1}||}{||\boldsymbol{x}_k||}\)
+k足够大时，每次迭代各分量正负号不变，则 $\lambda_1$ 为正
+\(\boldsymbol{v}_1=\lim_{k\to\infty}\boldsymbol{x}_k=\lim_{k\to\infty}\boldsymbol{A}^k\boldsymbol{x}_0\)
+可获得一个单位化的主特征值特征向量。因为还乘上了 $\lambda_1^k$ 的符号，所以向量各个分量的符号和迭代的次数 k 有关。$\alpha_1=0$ 则迭代出第二大特征值/对应特征向量</p>
+
+<h2 id="迭代加速">迭代加速</h2>
+
+\[\boldsymbol{B}=\boldsymbol{A}-p\boldsymbol{I}\\\]
+
+<table>
+  <tbody>
+    <tr>
+      <td>利用 $\boldsymbol{B}$ 迭代即可得到其特征值 $\lambda_1-p,\lambda_2-p,\dots$ 中绝对值最大者，可以调整迭代比值 $</td>
+      <td>\lambda_{r+1}/\lambda_1</td>
+      <td>$ 及目标特征值/特征向量</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="参考资料">参考资料</h2>
+
+<ul>
+  <li>https://www.cnblogs.com/qizhou/p/12271287.html</li>
+</ul>
+:ET
