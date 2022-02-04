@@ -10,7 +10,7 @@
     <meta name="keywords"  content="待办事项, 学习笔记, 思考随笔">
     <meta name="theme-color" content="#000000">
     
-    <title>云计算服务模型 - 思过崖 - 晴耕三亩，雨读千年。</title>
+    <title>Spectral Clustering - 思过崖 - 晴耕三亩，雨读千年。</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -22,7 +22,7 @@
     <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://Chen-WH.github.io/2021/10/29/Cloud_computing_model/">
+    <link rel="canonical" href="https://Chen-WH.github.io/2022/02/03/Graph_Partition/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -168,13 +168,13 @@
 
     <!-- Image to hack wechat -->
 <!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
-<!-- <img src="/img/MoonJellyDay.jpg" width="0" height="0"> -->
+<!-- <img src="/img/FortCorjuem.jpg" width="0" height="0"> -->
 
 <!-- Post Header -->
 <style type="text/css">
     header.intro-header{
         position: relative;
-        background-image: url('/img/MoonJellyDay.jpg')
+        background-image: url('/img/FortCorjuem.jpg')
     }
 
     
@@ -187,15 +187,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/2-tags/#Cloud Computing" title="Cloud Computing">Cloud Computing</a>
+                        <a class="tag" href="/2-tags/#Swarm" title="Swarm">Swarm</a>
                         
                     </div>
-                    <h1>云计算服务模型</h1>
+                    <h1>Spectral Clustering</h1>
                     
                     
-                    <h2 class="subheading">云计算技术3</h2>
+                    <h2 class="subheading">图划分/谱聚类</h2>
                     
-                    <span class="meta">Posted by ChenWH on October 29, 2021</span>
+                    <span class="meta">Posted by ChenWH on February 3, 2022</span>
 										<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 										<span id="busuanzi_container_page_pv">本文总阅读量<span id="busuanzi_value_page_pv"></span>次</span>
 								</div>
@@ -215,11 +215,60 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-				<h1 id="云计算服务模型">云计算服务模型</h1>
+				<h1 id="graph-partition">Graph Partition</h1>
 
-<p><img src="https://raw.githubusercontent.com/Chen-WH/PicGo/main/Typora/202111041827565.png" alt="image-20211029131849645" /></p>
+<p>图 $V$ 的 $k$ 划分 $\mathcal{P}={\boldsymbol{V}<em>1,\boldsymbol{V}_2,\dots,\boldsymbol{V}_k}$ 对应的关联矩阵 $\prod=[\pi]</em>{vj}$ 定义如下
+\(\pi_{vj}=
+\left\{\begin{array}{ll}
+&amp;1 &amp; v\in V_j\\
+&amp;0 &amp; v\not\in V_j\\
+\end{array}\right.\quad
+v\in V\)</p>
 
-<p>MoonJellyDay.jpg</p>
+<h2 id="定义切图">定义切图</h2>
+
+\[切图权重W(\boldsymbol{A},\boldsymbol{B})=\sum_{i\in\boldsymbol{A},j\in\boldsymbol{B}}w_{ij}\\
+\mathrm{cut}(\boldsymbol{V}_1,\boldsymbol{V}_2,\dots,\boldsymbol{V}_k)=\frac{1}{2}\sum_{i=1}^kW(\boldsymbol{V}_i,\overline{\boldsymbol{V}}_i)\]
+
+<p>为了规避最小切的出现，需要对每个子图的规模做出限定</p>
+
+<h2 id="ratiocut">RatioCut</h2>
+
+\[\mathrm{RatioCut}(\boldsymbol{V}_1,\boldsymbol{V}_2,\dots,\boldsymbol{V}_k)=\frac{1}{2}\sum_{i=1}^k\frac{W(\boldsymbol{V}_i,\overline{\boldsymbol{V}}_i)}{|\boldsymbol{V}_i|}\]
+
+<p>引入指示向量
+\(h_{ij}=\left\{\begin{array}{ll}
+&amp;0 &amp; v_i\in V_j\\
+&amp;\frac{1}{\sqrt{|\boldsymbol{V}_j|}} &amp; v_i\not\in V_j\\
+\end{array}\right.\\
+\boldsymbol{h}_i^T\boldsymbol{L}\boldsymbol{h}_i=\frac{1}{2}\sum_{j,k=1}^nw_{jk}(h_{ij}-h_{ik})^2=\frac{W(\boldsymbol{V}_i,\overline{\boldsymbol{V}}_i)}{|\boldsymbol{V}_i|}\\
+\mathrm{RatioCut}(\boldsymbol{V}_1,\boldsymbol{V}_2,\dots,\boldsymbol{V}_k)=\frac{1}{2}\sum_{i=1}^k\boldsymbol{h}_i^T\boldsymbol{L}\boldsymbol{h}_i=\frac{1}{2}\sum_{i=1}^k(\boldsymbol{H}^T\boldsymbol{L}\boldsymbol{H})_{ii}\\
+=\frac{1}{2}\tr(\boldsymbol{H}^T\boldsymbol{L}\boldsymbol{H})\)
+注意到 $\boldsymbol{H}^T\boldsymbol{H}=\boldsymbol{I}$ 故而 $\boldsymbol{h}_i^T\boldsymbol{L}\boldsymbol{h}_i$ 均为 $\boldsymbol{L}$ 的特征值，寻找最小的 $k$ 个特征值后求取对应特征向量即为 $\boldsymbol{H}$</p>
+
+<p>由于我们在使用维度规约的时候损失了少量信息，导致得到的优化后的指示向量 $\boldsymbol{h}$ 对应的 $\boldsymbol{H}$ 现在不能完全指示各样本的归属，因此一般在得到 $n\times k$ 维度的矩阵 $\boldsymbol{H}$ 后还需要对每一行进行一次传统的聚类，比如使用 K-Means 聚类.</p>
+
+<h2 id="ncut">Ncut</h2>
+
+<table>
+  <tbody>
+    <tr>
+      <td>将 $1/\sqrt{</td>
+      <td>\boldsymbol{V}_j</td>
+      <td>}$ 更换为基于权重的 $1/\sqrt{vol(\boldsymbol{V}_j)}$</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>但此时 $\boldsymbol{H}^T\boldsymbol{H}\not=\boldsymbol{I},\boldsymbol{H}^T\boldsymbol{DH}=\boldsymbol{I}$</p>
+
+<p>构造 $\boldsymbol{H}=\boldsymbol{D}^{-1/2}\boldsymbol{F}$</p>
+
+<h2 id="reference">Reference</h2>
+
+<ul>
+  <li>https://www.cnblogs.com/pinard/p/6221564.html</li>
+</ul>
 
 
                 <hr style="visibility: hidden;">
@@ -227,19 +276,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2021/10/16/Virtualization_Technology/" data-toggle="tooltip" data-placement="top" title="虚拟化技术">
+                        <a href="/2022/01/23/Active_vision/" data-toggle="tooltip" data-placement="top" title="Active vision connectivity maintenance">
                         Previous<br>
-                        <span>虚拟化技术</span>
+                        <span>Active vision connectivity maintenance</span>
                         </a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2021/12/11/STM32/" data-toggle="tooltip" data-placement="top" title="STM32学习笔记">
-                        Next<br>
-                        <span>STM32学习笔记</span>
-                        </a>
-                    </li>
                     
                 </ul>
 

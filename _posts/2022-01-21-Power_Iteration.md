@@ -18,6 +18,7 @@ tags:
 对于矩阵 $\boldsymbol{A}$，其特征值为 $\lambda_i$，对应特征向量 $\boldsymbol{v}_i$
 
 任取 $\boldsymbol{x}_0$ 构造 $\boldsymbol{x}_k=\boldsymbol{A}^k\boldsymbol{x}_0$，前 $r$ 个（一般情况下 $r=1$）为绝对值最大的特征值
+
 $$
 \begin{aligned}
 |\lambda_1|=|\lambda_2|=\cdots=|\lambda_r|>|\lambda_{r+1}|\geq\cdots\geq|\lambda_n|
@@ -48,7 +49,7 @@ $$
 $$
 
 
-其中收敛速度由比值 $|\lambda_{r+1}/\lambda_1|$ 决定，越小收敛越快。
+其中收敛速度由比值 $\lvert\lambda_{r+1}/\lambda_1\rvert$ 决定，越小收敛越快。
 
 ## 幂法改进
 

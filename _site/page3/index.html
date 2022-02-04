@@ -39,15 +39,15 @@
     <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
     <!-- Equations -->
-    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
-    <script type="text/x-mathjax-config">
-        MathJax.Hub.Config({
-            tex2jax: {
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-            inlineMath: [['$','$']]
-            }
-        });
-    </script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
 
     <!-- Hux Delete, sad but pending in China
     <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
@@ -199,6 +199,32 @@
                 postlist-container
             ">
     			
+<div class="post-preview">
+    <a href="/2021/07/12/Gazebo_ROS/">
+        <h2 class="post-title">
+            Gazebo/ROS
+        </h2>
+        
+        <div class="post-content-preview">
+            配置安装
+
+Ubuntu18.04安装PX4并与ROS联合实验_boyhoodme的博客-CSDN博客_ubuntu18.04安装px4
+
+ROS安装
+
+http://wiki.ros.org/Installation/Ubuntu  注意版本号，完全安装即可，包含Gazebo
+
+Gazebo与ROS连接
+
+https://www.geek-share.com/detail/28076279...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on July 12, 2021
+    </p>
+</div>
+<hr>
+
 <div class="post-preview">
     <a href="/2021/07/01/Windows/">
         <h2 class="post-title">
@@ -530,10 +556,6 @@ del...
                             
                         
                             
-                                <a href="/2-tags/#Robotics" title="Robotics" rel="2">
-                                    Robotics
-                                </a>
-                            
                         
                             
                         
@@ -552,6 +574,12 @@ del...
                             
                                 <a href="/2-tags/#Cloud Computing" title="Cloud Computing" rel="2">
                                     Cloud Computing
+                                </a>
+                            
+                        
+                            
+                                <a href="/2-tags/#Swarm" title="Swarm" rel="2">
+                                    Swarm
                                 </a>
                             
                         

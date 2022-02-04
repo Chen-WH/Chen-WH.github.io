@@ -39,15 +39,15 @@
     <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
     <!-- Equations -->
-    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
-    <script type="text/x-mathjax-config">
-        MathJax.Hub.Config({
-            tex2jax: {
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-            inlineMath: [['$','$']]
-            }
-        });
-    </script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
 
     <!-- Hux Delete, sad but pending in China
     <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
@@ -199,6 +199,32 @@
                 postlist-container
             ">
     			
+<div class="post-preview">
+    <a href="/2022/02/03/Graph_Partition/">
+        <h2 class="post-title">
+            Spectral Clustering
+        </h2>
+        
+        <h3 class="post-subtitle">
+            图划分/谱聚类
+        </h3>
+        
+        <div class="post-content-preview">
+            Graph Partition
+
+图 $V$ 的 $k$ 划分 $\mathcal{P}={\boldsymbol{V}1,\boldsymbol{V}_2,\dots,\boldsymbol{V}_k}$ 对应的关联矩阵 $\prod=[\pi]{vj}$ 定义如下
+\(\pi_{vj}=
+\left\{\begin{array}{ll}
+&amp;1 &amp; v\in V_j\\
+&...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ChenWH on February 3, 2022
+    </p>
+</div>
+<hr>
+
 <div class="post-preview">
     <a href="/2022/01/23/Active_vision/">
         <h2 class="post-title">
@@ -435,34 +461,6 @@ $ sudo apt update
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2021/09/08/FFT/">
-        <h2 class="post-title">
-            FFT笔记
-        </h2>
-        
-        <h3 class="post-subtitle">
-            快速傅里叶变换
-        </h3>
-        
-        <div class="post-content-preview">
-            快速傅里叶变换(FFT)
-
-原理介绍
-
-什么是离散傅里叶
-
-\[连续周期信号的傅里叶级数\ c_n=\frac{1}{T}\int_0^Tf(t)e^{-j\frac{2\pi}{T}nt}\mathbf{d}t\]
-
-​		傅里叶变换是用来处理连续系统的，那离散系统如何处理呢？假如 $x(t)$ 为连续系统信号，要转换成离散系统，就要先进行采样，采样频率为 $f_s$，对于连续信号 $x(...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by ChenWH on September 8, 2021
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -519,10 +517,6 @@ $ sudo apt update
                             
                         
                             
-                                <a href="/2-tags/#Robotics" title="Robotics" rel="2">
-                                    Robotics
-                                </a>
-                            
                         
                             
                         
@@ -541,6 +535,12 @@ $ sudo apt update
                             
                                 <a href="/2-tags/#Cloud Computing" title="Cloud Computing" rel="2">
                                     Cloud Computing
+                                </a>
+                            
+                        
+                            
+                                <a href="/2-tags/#Swarm" title="Swarm" rel="2">
+                                    Swarm
                                 </a>
                             
                         
